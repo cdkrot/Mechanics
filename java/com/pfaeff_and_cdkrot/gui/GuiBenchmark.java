@@ -9,15 +9,12 @@ import java.io.DataOutputStream;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.tileentity.TileEntityCommandBlock;
 
 import org.lwjgl.input.Keyboard;
 
 import com.pfaeff_and_cdkrot.net.GamePosition;
-import com.pfaeff_and_cdkrot.tileentity.TileEntityBenchmark;
 
 @SideOnly(Side.CLIENT)
 public class GuiBenchmark extends GuiScreen
@@ -38,7 +35,7 @@ public class GuiBenchmark extends GuiScreen
         this.buttonList.clear();
         this.buttonList.add(this.done = new GuiButton(0, this.width / 2 - 100, this.height / 4 + 96 + 12, "Done"));
         this.buttonList.add(this.cancel = new GuiButton(1, this.width / 2 - 100, this.height / 4 + 120 + 12, "Cancel"));
-        this.text = new GuiTextField(this.fontRenderer, this.width / 2 - 150, 60, 300, 20);
+        this.text = new GuiTextField(this.fontRendererObj, this.width / 2 - 150, 60, 300, 20);
         this.text.setMaxStringLength(300);
         this.text.setFocused(true);
         this.text.setText(s);

@@ -198,9 +198,8 @@ public class BlockAllocator extends BlockContainer
 	/**
 	 * Handles the item output. Returns true, if item was successfully put out.
 	 * 
-	 * @param z
 	 */
-	private boolean outputItem(World world, int x, int y, int z, veci3 dir,
+	private boolean outputItem(World world, int x, int y, int z, dirvec dir,
 			ItemStack item, Random random)
 	{
 		int X_ = x + dir.x;
@@ -261,7 +260,7 @@ public class BlockAllocator extends BlockContainer
     {
 	    dirvec d = dirvec.list[world.getBlockMetadata(x, y, z)];
 
-    	TileEntityAllocator tile = (TileEntityAllocator) world.getBlockTileEntity(x, y, z);
+    	TileEntityAllocator tile = (TileEntityAllocator) world.getTileEntity(x, y, z);
     	ItemStack[] filter = tile.allocatorFilterItems;
     	IInventoryEX input = containerAtPos(world, x-d.x, y-d.y, z-d.z);
     	if (input == null)

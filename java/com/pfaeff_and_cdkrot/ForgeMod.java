@@ -26,7 +26,6 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -153,7 +152,8 @@ public class ForgeMod
 		
 		modLogger.info("Init state done.");
 		//proxy.doInit();
-		System.gc();// clean up.
+		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+		//TODO: register a network listener here
 	}
 	
 	@EventHandler

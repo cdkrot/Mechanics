@@ -9,6 +9,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -49,7 +50,7 @@ public class MechanicsHelpCommand extends CommandBase
 			if (args[0].equals("credits"))
 			{
 				SendLinesToPlayer(sender, LocaleDataTable.credits);
-				SendLineToPlayer(sender, "Text author: "+LocaleDataTable.translator);
+				SendLineToPlayer(sender, "Text author: " + LocaleDataTable.translator);
 				return;
 			}
 			if (args[0].equalsIgnoreCase("whatamilooking")||args[0].equalsIgnoreCase("look"))
@@ -124,7 +125,7 @@ public class MechanicsHelpCommand extends CommandBase
         look.xCoord=look.xCoord*dst+pos.xCoord;
         look.yCoord=look.yCoord*dst+pos.yCoord;
         look.zCoord=look.zCoord*dst+pos.zCoord;
-        MovingObjectPosition block = p.worldObj.rayTraceBlocks_do_do(pos, look, false, false);
+        MovingObjectPosition block = p.worldObj.rayTraceBlocks(pos, look);
         //p.worldObj
         return block;
     }
@@ -144,6 +145,9 @@ public class MechanicsHelpCommand extends CommandBase
 	@Override
 	public int compareTo(Object o)
 	{
-		return this.equals(o);
+		if (!(o instanceof ICommand))
+			return 666;
+		else
+			return this.getCommandName().compareTo(((ICommand)o).getCommandName());
 	}
 }

@@ -4,16 +4,12 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.util.logging.Level;
 
 import com.pfaeff_and_cdkrot.ForgeMod;
 import com.pfaeff_and_cdkrot.api.benchmark.BenchmarkRegistry;
 import com.pfaeff_and_cdkrot.tileentity.TileEntityBenchmark;
-import com.pfaeff_and_cdkrot.util.Utility;
 
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.WorldServerMulti;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.server.MinecraftServer;
@@ -77,9 +73,8 @@ public class NetworkHandler implements
 		}
 		catch (Throwable thr)
 		{
-			ForgeMod.modLogger.log(Level.SEVERE, "Exception during packet processing. Somebody is trying to hack or Network goes wrong?", thr);
+			ForgeMod.modLogger.warn("Exception during packet processing. Somebody is trying to hack or Network goes wrong?", thr);
 		}
-		return;
 	}
 	
 }

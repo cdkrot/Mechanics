@@ -6,6 +6,7 @@ import cpw.mods.fml.common.network.Player;
 
 public class BenchmarkRegistry implements INetworkBenchmarkProcessor
 {
+	public static final int API_VERSION = 3;
 	public static final BenchmarkRegistry instance = new BenchmarkRegistry();
 	private INetworkBenchmarkProcessor[] processors = null;
 	public void register(INetworkBenchmarkProcessor p)
@@ -19,7 +20,7 @@ public class BenchmarkRegistry implements INetworkBenchmarkProcessor
 		processors = temp;
 	}
 	
-	public boolean onTextChanged(TileEntityBenchmark tile, String newtext,Player p)
+	public boolean onTextChanged(TileEntityBenchmark tile, String newtext, Player p)
 	{
 		if (processors!=null)
 			for (INetworkBenchmarkProcessor proc: processors)

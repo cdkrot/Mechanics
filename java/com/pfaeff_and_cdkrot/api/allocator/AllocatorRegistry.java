@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 
 public class AllocatorRegistry
 {
+	public static final int API_VERSION = 5;
 	public static final AllocatorRegistry instance = new AllocatorRegistry();
 	
 	private List<IInventoryProvider> list = new ArrayList<IInventoryProvider>();
