@@ -1,0 +1,16 @@
+[
+{
+  "modid": "mechanics_mod",
+  "name": "Mechanics Mod",
+  "description": "Adds some new mechanisms to minecraft",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authors": ["cdkrot", "pfaeff"],
+  "credits": "pfaeff -- original mod, idea, textures, cdkrot -- for reimplementing this in new versions of mc, and for new stuff =)",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
