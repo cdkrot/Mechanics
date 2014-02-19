@@ -1,0 +1,10 @@
+# Ignore OS cache files
+.DS_Store
+_MACSOX
+
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
