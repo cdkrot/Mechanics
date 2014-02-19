@@ -1,15 +1,15 @@
 [
 {
-  "modid": "mechanics_mod",
+  "modid": "Mechanics_mod",
   "name": "Mechanics Mod",
-  "description": "Adds some new mechanisms to minecraft",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "url": "",
-  "updateUrl": "",
-  "authors": ["cdkrot", "pfaeff"],
-  "credits": "pfaeff -- original mod, idea, textures, cdkrot -- for reimplementing this in new versions of mc, and for new stuff =)",
-  "logoFile": "",
+  "description": "Mechanics Mods - Pfaeffs mods enhanced and brought to you by cdkrot. Version 1.6.4 :: 4.0",
+  "version": "4.0",
+  "mcversion": "1.6.4",
+  "url": "http://www.minecraftforum.net/topic/1976381-152mechanics-mod/",
+  "updateUrl": "http://www.minecraftforum.net/topic/1976381-152mechanics-mod/",
+  "authors": ["cdkrot", "Pfaeff"],
+  "credits": "Made by cdkrot and Pfaeff.",
+  "parent": "",
   "screenshots": [],
   "dependencies": []
 }

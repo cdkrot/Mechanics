@@ -1,9 +1,7 @@
 package com.pfaeff_and_cdkrot.tileentity;
 
-import com.pfaeff_and_cdkrot.ForgeMod;
 import com.pfaeff_and_cdkrot.api.allocator.IInventoryEX;
 
-import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -38,7 +36,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory, IInve
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player)
 	{
-        return worldObj.getTileEntity(xCoord, yCoord, zCoord) != this ?
+        return worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this ?
         	false : player.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64.0D;
 	}
 
@@ -85,15 +83,13 @@ public class TileEntityAllocator extends TileEntity implements IInventory, IInve
 	@Override
 		public ItemStack getStackInSlot(int s){return allocatorFilterItems[s];}
 	@Override
-		public void openInventory() {}
+		public void openChest() {}
 	@Override
-		public void closeInventory() {}
+		public void closeChest() {}
 	@Override
 		public int getSizeInventory(){return 16;}
 	@Override
-		public void markDirty(){throw new RuntimeException("Unsuported.");}
-	@Override
-		public String getInvName(){return ForgeMod.allocator.getLocalizedName();}//TODO: LOCALIZE
+		public String getInvName(){return "Allocator";}//TODO: LOCALIZE
 	@Override
 		public int getInventoryStackLimit(){return 1;}
 	@Override
@@ -116,13 +112,14 @@ public class TileEntityAllocator extends TileEntity implements IInventory, IInve
 	@Override
 	public void onOutputSuccessful(int slot, ItemStack left)
 	{
-		//TODO: OOPS
+		
 	}
 
 	@Override
 	public void onInputSuccessful(int slot, ItemStack stack)
 	{
-		//TODO: OOPS!
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override

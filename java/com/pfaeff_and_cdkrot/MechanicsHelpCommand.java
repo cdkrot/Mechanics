@@ -9,11 +9,10 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;
-import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -32,6 +31,7 @@ public class MechanicsHelpCommand extends CommandBase
 	{
 		if (args.length==0)// /mechanics
 		{
+			System.out.println(">"+Arrays.deepToString(LocaleDataTable.mechanics_home));
 			SendLinesToPlayer(sender, LocaleDataTable.mechanics_home);
 			return;
 		}
@@ -50,7 +50,6 @@ public class MechanicsHelpCommand extends CommandBase
 			if (args[0].equals("credits"))
 			{
 				SendLinesToPlayer(sender, LocaleDataTable.credits);
-				SendLineToPlayer(sender, "Text author: " + LocaleDataTable.translator);
 				return;
 			}
 			if (args[0].equalsIgnoreCase("whatamilooking")||args[0].equalsIgnoreCase("look"))
@@ -73,16 +72,20 @@ public class MechanicsHelpCommand extends CommandBase
 						int x = mop.blockX;
 						int y = mop.blockY;
 						int z = mop.blockZ;
-						Block b = world.getBlock(x, y, z);
+						int id =world.getBlockId(x, y, z);
 						int meta = world.getBlockMetadata(x, y, z);
-						String name = b.getLocalizedName();
+						String name = Block.blocksList[id].getLocalizedName();
 						SendLineToPlayer(sender,
-						String.format("BLOCK:%s; X:%d; Y:%d; Z:%d; META:%d; SIDE:%d; NAME:%s", b.toString(),x,y,z,meta,mop.sideHit, name));
+						String.format("ID:%d; X:%d; Y:%d; Z:%d; META:%d; SIDE:%d; NAME:%s",
+						id,x,y,z,meta,mop.sideHit, name));
 					}
 					//TODO: Fix entity support here.
 					else//entity
 					{
-						SendLineToPlayer(sender, "Entity works? really?");
+						Entity e = mop.entityHit;
+						SendLineToPlayer(sender, "You are looking at entity#");
+						String.format("ID:%d; X:%d; Y:%d; Z:%d; NAME:%s",
+						e.entityId, e.posX, e.posY, e.posZ, e.getEntityName());
 					}
 					return;
 				}
@@ -108,7 +111,7 @@ public class MechanicsHelpCommand extends CommandBase
 			
 	public static void SendLineToPlayer(ICommandSender sender, String data)
 	{
-		sender.addChatMessage(new ChatComponentText(data));//I hope this will work.
+		sender.sendChatToPlayer(ChatMessageComponent.createFromText(data));//I hope this will work.
 	}
 	
 	public static void SendLinesToPlayer(ICommandSender sender, String[] data)
@@ -125,7 +128,7 @@ public class MechanicsHelpCommand extends CommandBase
         look.xCoord=look.xCoord*dst+pos.xCoord;
         look.yCoord=look.yCoord*dst+pos.yCoord;
         look.zCoord=look.zCoord*dst+pos.zCoord;
-        MovingObjectPosition block = p.worldObj.rayTraceBlocks(pos, look);
+        MovingObjectPosition block = p.worldObj.rayTraceBlocks_do_do(pos, look, false, false);
         //p.worldObj
         return block;
     }
@@ -141,13 +144,4 @@ public class MechanicsHelpCommand extends CommandBase
         return 0;
     }
 
-	//TODO: NEED to implement this because it is required in 1.7, don't know the right way of impl, and why we need this
-	@Override
-	public int compareTo(Object o)
-	{
-		if (!(o instanceof ICommand))
-			return 666;
-		else
-			return this.getCommandName().compareTo(((ICommand)o).getCommandName());
-	}
 }

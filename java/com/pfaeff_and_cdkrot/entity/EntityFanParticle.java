@@ -6,7 +6,7 @@ import net.minecraft.world.World;
 
 public class EntityFanParticle extends Entity
 {
-	///UNIMPLEMENTED IDEA of fan particles...
+
 	public EntityFanParticle(World world) {super(world); }
 
 	@Override protected void entityInit(){}

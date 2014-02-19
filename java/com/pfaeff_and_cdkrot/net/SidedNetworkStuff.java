@@ -14,7 +14,6 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
-//Sided network code
 public class SidedNetworkStuff
 {
 

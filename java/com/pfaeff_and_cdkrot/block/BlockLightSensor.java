@@ -9,34 +9,38 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.util.IIcon;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.Icon;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.world.*;
+import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
+
+//package moved; imports added
+//finished!
 
 public class BlockLightSensor extends BlockContainer
 {
 	@SideOnly(Side.CLIENT)
-	private IIcon[] iconArray;
+	private Icon[] iconArray;
 
-	public BlockLightSensor()
+	public BlockLightSensor(int id)
 	{
-		super(Material.wood);
+		super(id, Material.wood);
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.375F, 1.0F);
 		this.setHardness(3.5F);
-		this.setStepSound(Block.soundTypeStone);
-		this.setBlockName("mechanics::lightsensor");
+		this.setStepSound(Block.soundStoneFootstep);
+		this.setUnlocalizedName("mechanics::lightsensor");
 		this.setTickRandomly(true);
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister register)
+	public void registerIcons(IconRegister par1IconRegister)
 	{
-		this.iconArray = new IIcon[2];
-		this.iconArray[0] = register.registerIcon(ForgeMod.modid_lc+":lightsensor_top");
-		this.iconArray[1] = register
+		this.iconArray = new Icon[2];
+		this.iconArray[0] = par1IconRegister.registerIcon(ForgeMod.modid_lc+":lightsensor_top");
+		this.iconArray[1] = par1IconRegister
 				.registerIcon("minecraft:daylight_detector_side");//UPD: vanilla texture name changed
 	}
 
@@ -73,7 +77,7 @@ public class BlockLightSensor extends BlockContainer
 
 	// Should use "getIcon". (now this method called like this in super-class.
 	@Override
-	public IIcon getIcon(int par1, int par2)
+	public Icon getIcon(int par1, int par2)
 	{
 		return par1 == 1 ? this.iconArray[0] : this.iconArray[1];
 	}
@@ -85,7 +89,7 @@ public class BlockLightSensor extends BlockContainer
 	}
 	
 	@Override
-	public void onNeighborBlockChange(World w, int x, int y, int z, Block b)
+	public void onNeighborBlockChange(World w, int x, int y, int z, int par5)
 	{
 		this.updateTick(w, x, y, z, null);
 		this.updateSensorOutput(w, x, y, z);
@@ -100,22 +104,16 @@ public class BlockLightSensor extends BlockContainer
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world, int i)
-	{
-		return createNewTileEntity();
-	}
-
-	public TileEntity createNewTileEntity()
+	public TileEntity createNewTileEntity(World world)
 	{
 		return new TileEntityLightSensor();
 	}
-
-
+	
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random r)
 	{
-		if (world.getTileEntity(x, y, z)==null)
-			world.setTileEntity(x, y, z, this.createNewTileEntity());
+		if (world.getBlockTileEntity(x, y, z)==null)
+			world.setBlockTileEntity(x, y, z, this.createNewTileEntity(world));
 	}
 	
 	@Override
@@ -124,4 +122,4 @@ public class BlockLightSensor extends BlockContainer
 		super.setCreativeTab(ctab);
 		return this;
 	}
-}
+	}

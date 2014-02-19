@@ -5,13 +5,13 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -24,15 +24,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockFan extends BlockContainer
 {
-	//own implementation of Fan idea, bad implementation, in fact.
+	//own implementation of Fan idea, would like to see yours.
     // Icons
 	@SideOnly(Side.CLIENT)
-    private IIcon icons[];//[zero for inactive] [one for active]
+    private Icon icons[];//[zero for inactive] [one for active]
 
-	public BlockFan()
+	public BlockFan(int id)
 	{
-		super(Material.rock);
-		this.setHardness(3.5F).setStepSound(Block.soundTypeStone).setBlockName("mechanics::cdkrotFan");
+		super(id, Material.rock);
+		this.setHardness(3.5F).setStepSound(Block.soundStoneFootstep).setUnlocalizedName("mechanics::cdkrotFan");
 	}
     
     @Override
@@ -48,7 +48,7 @@ public class BlockFan extends BlockContainer
     }
 
     @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block b)
+    public void onNeighborBlockChange(World world, int x, int y, int z, int id)
     {
     	this.updatePowered(world, x, y, z);
     }
@@ -64,16 +64,10 @@ public class BlockFan extends BlockContainer
 
 
 	@Override
-	public TileEntity createNewTileEntity(World world, int i)
+	public TileEntity createNewTileEntity(World world)
 	{
-		return createNewTileEntity(world);
+		return new TileEntityFanON();//TileEntityTimerBase.getTileEntityFor(this);
 	}
-
-	public TileEntity createNewTileEntity(World w)
-	{
-		return new TileEntityFanON();
-	}
-
 
     public TileEntity createTileEntity(World world, int metadata)
     {   
@@ -96,7 +90,7 @@ public class BlockFan extends BlockContainer
         	if ((meta & 8)==0)
         	{
         		world.setBlockMetadataWithNotify(x, y, z, meta|8, 2);//unpow->pow
-        		world.setTileEntity(x, y, z, this.createNewTileEntity(world));
+        		world.setBlockTileEntity(x, y, z, this.createNewTileEntity(world));
         	}
         	return true;
         }
@@ -105,7 +99,7 @@ public class BlockFan extends BlockContainer
         	if ((meta & 8)!=0)
         	{
         		world.setBlockMetadataWithNotify(x, y, z, meta&7, 2);
-        		world.removeTileEntity(x, y, z);//pow->unpow
+        		world.removeBlockTileEntity(x, y, z);//pow->unpow
         	}
         	return false;
         }
@@ -114,32 +108,31 @@ public class BlockFan extends BlockContainer
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister)
+    public void registerIcons(IconRegister iconRegister)
 	{
-		icons = new IIcon[2];
+		icons = new Icon[2];
         icons[0] = iconRegister.registerIcon(ForgeMod.modid_lc+":fanfront");
         icons[1] = iconRegister.registerIcon(ForgeMod.modid_lc+":fanfrontactive");
         this.blockIcon = iconRegister.registerIcon(ForgeMod.modid_lc+":pfaeff_topbottom");
     }
 	
 	//Soooo dirty item view
-	//TODO: is changed in 1.7?
     @Override
     @SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int StupidMetaAlwaysZero)
+	public Icon getIcon(int side, int StupidMetaAlwaysZero)
     {
     	return getIconForTerrain(side, 3);
     }
 	
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getIcon(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5)
+    public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5)
     {
         return this.getIconForTerrain(par5, par1IBlockAccess.getBlockMetadata(par2, par3, par4));
     }
     
     @SideOnly(Side.CLIENT)
-	private IIcon getIconForTerrain(int side, int meta)
+	private Icon getIconForTerrain(int side, int meta)
 	{
 		return side==(meta&7) ? ((meta & 8)==0 ? icons[0]:icons[1] ): this.blockIcon;
 	}

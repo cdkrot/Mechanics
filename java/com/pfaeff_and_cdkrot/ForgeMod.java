@@ -1,15 +1,16 @@
 package com.pfaeff_and_cdkrot;
 
-import com.sun.org.apache.xerces.internal.parsers.XMLParser;
-
-import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.block.*;
 import net.minecraft.item.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.Configuration;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.Level;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.google.common.base.Objects;
 import com.pfaeff_and_cdkrot.api.allocator.AllocatorRegistry;
 import com.pfaeff_and_cdkrot.api.allocator.MechanicsModProvider;
 import com.pfaeff_and_cdkrot.api.allocator.VannilaProvider;
@@ -21,20 +22,23 @@ import com.pfaeff_and_cdkrot.tileentity.*;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.Mod.PreInit;
+import cpw.mods.fml.common.Mod.ServerStarting;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.LanguageRegistry;
 
-import java.io.File;
-import java.io.IOException;
-
-@Mod(modid = "Mechanics_mod", version = "5.0", name = "Mechanics mod")
-//@NetworkMod(clientSideRequired = true, serverSideRequired = false, channels={"mechanics|1", "mechanics|2"},
-//packetHandler=NetworkHandler.class)
+@Mod(modid = "Mechanics_mod", version = "4.0", name = "Mechanics mod")
+@NetworkMod(clientSideRequired = true, serverSideRequired = false, channels={"mechanics|1", "mechanics|2"},
+packetHandler=NetworkHandler.class)
 public class ForgeMod
 {
 	public static Block allocator;
@@ -71,20 +75,30 @@ public class ForgeMod
 	{
 	}
 
+	// aka @PreInit
 	@EventHandler
 	public void configure(FMLPreInitializationEvent event)
 	{
 		modLogger = event.getModLog();
-		File config = event.getSuggestedConfigurationFile();
-		modLogger.info("Going to preinit updated mod_Allocator, mod_LightSensor, mod_JumpPad, cdkrot_Fan, using configuration " + config.getAbsolutePath());
-		//TODO: MAKE AN CONFIGURATION LOADER ( parsing JSON config)
-		Configuration c = new Configuration(event.getSuggestedConfigurationFile());
+		modLogger
+				.info("PreIniting mod_Allocator, mod_LightSensor, mod_JumpPad, cdkrot_Fan");
+		Configuration c = new Configuration(
+				event.getSuggestedConfigurationFile());
 		c.load();
+		allocatorID = c.getBlock("allocator_ID", 3560).getInt(3560);
 
+		LightSensorID = c.getBlock("lightsensor", 3561).getInt(3561);
+
+		jumpPadID = c.getBlock("jumppad_ID", 3562).getInt(3562);
+
+		fanID = c.getBlock("FanID", 3563).getInt(3563);
+
+		BenchmarkID = c.getBlock("BenchmarkID", 3564).getInt(3564);
 			BlockBenchmark.radius = c.get("Benchmark", "radius", 32).getInt(32);
 			BlockBenchmark.def = c.get("Benchmark", "defPattern", "Benchmark: (&&x, &&y, &&z) time: &time").getString();
+		creativeTab = new ModCreativeTab();
 
-		lang = "en";
+		lang = (c.get("general", "langID", "en").getString());
 
 		modLogger.info("PreInit state done.");
 		c.save();
@@ -95,7 +109,7 @@ public class ForgeMod
 	public void construct(FMLInitializationEvent event) throws IllegalArgumentException, IllegalAccessException
 	{
 		modLogger.info("Initializing.");
-		allocator = new BlockAllocator().setCreativeTab(creativeTab);
+		allocator = new BlockAllocator(allocatorID).setCreativeTab(creativeTab);
 		TileEntity.addMapping(TileEntityAllocator.class, "Allocator");
 		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
 		GameRegistry.registerBlock(allocator, "Allocator_Pfaeff");
@@ -104,7 +118,8 @@ public class ForgeMod
 				Character.valueOf('#'), Item.redstone, Character.valueOf('$'),
 				Item.ingotGold });
 		/////////////////////////LightSensor
-		LightSensor = new BlockLightSensor().setCreativeTab(creativeTab);
+		LightSensor = new BlockLightSensor(LightSensorID)
+				.setCreativeTab(creativeTab);
 		TileEntity.addMapping(TileEntityLightSensor.class, "pfaeffs_lsensor");
 		GameRegistry.registerBlock(LightSensor, "LightSensor_Pfaeff");
 		GameRegistry.addRecipe(new ItemStack(LightSensor, 1),
@@ -112,24 +127,24 @@ public class ForgeMod
 						Block.glass, Character.valueOf('B'), Item.netherQuartz,
 						Character.valueOf('C'), Block.woodSingleSlab });
 		/////////////////////////JumpPad
-		jumpPad = new BlockJumpPad().setCreativeTab(creativeTab);
+		jumpPad = new BlockJumpPad(jumpPadID).setCreativeTab(creativeTab);
 		GameRegistry.registerBlock(jumpPad, "JumpPad_Pfaeff");
 		GameRegistry.addRecipe(new ItemStack(jumpPad, 4),
 				new Object[] { "X", "#", Character.valueOf('X'),
 						Item.slimeBall, Character.valueOf('#'),
 						Block.pressurePlatePlanks });
 		//////////////////FAN
-		fan = new BlockFan().setCreativeTab(creativeTab);
+		fan = new BlockFan(fanID).setCreativeTab(creativeTab);
 		TileEntity.addMapping(TileEntityFanON.class, "cdkrot_fan");
 		GameRegistry.registerBlock(fan, "cdkrot_Fan");
 		GameRegistry.addRecipe(
 				new ItemStack(fan),
 				new Object[] { "CsC", "sSs", "RsR", Character.valueOf('C'),
-						Block. cobblestone, Character.valueOf('s'), Item.stick,
+						Block.cobblestone, Character.valueOf('s'), Item.stick,
 						Character.valueOf('S'), Item.slimeBall,
 						Character.valueOf('R'), Block.blockRedstone });
 		/////////////////Benchmark Block
-		Benchmark = new BlockBenchmark().setCreativeTab(creativeTab);
+		Benchmark = new BlockBenchmark(BenchmarkID).setCreativeTab(creativeTab);
 		GameRegistry.registerBlock(Benchmark, "mechanics_Benchmark");
 		GameRegistry.addRecipe(new ItemStack(Benchmark),
 		new Object[] { "WSW", "WDW", "RRR", Character.valueOf('W'),
@@ -152,8 +167,7 @@ public class ForgeMod
 		
 		modLogger.info("Init state done.");
 		//proxy.doInit();
-		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
-		//TODO: register a network listener here
+		System.gc();// clean up.
 	}
 	
 	@EventHandler

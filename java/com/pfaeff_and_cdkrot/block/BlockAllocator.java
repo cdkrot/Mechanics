@@ -1,14 +1,17 @@
 package com.pfaeff_and_cdkrot.block;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
 
 import com.pfaeff_and_cdkrot.BehaviourDispenseItemStack;
 import com.pfaeff_and_cdkrot.ForgeMod;
 import com.pfaeff_and_cdkrot.api.allocator.*;
 import com.pfaeff_and_cdkrot.tileentity.TileEntityAllocator;
+import com.pfaeff_and_cdkrot.tileentity.TileEntityBenchmark;
 import com.pfaeff_and_cdkrot.util.Utility;
-import com.pfaeff_and_cdkrot.util.dirvec;
 import com.pfaeff_and_cdkrot.util.veci3;
 
 import net.minecraft.block.*;
@@ -22,9 +25,12 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.item.*;
 import net.minecraft.entity.player.*;
 import net.minecraft.nbt.*;
+import net.minecraft.dispenser.*;
+import net.minecraft.client.renderer.texture.*;
 import cpw.mods.fml.relauncher.Side;
-import net.minecraft.util.IIcon;
 import cpw.mods.fml.relauncher.SideOnly;
+//Gui open func modified; imports added; package moved;
+//unfinished
 
 public class BlockAllocator extends BlockContainer
 {
@@ -32,35 +38,40 @@ public class BlockAllocator extends BlockContainer
 	
 	
 	@SideOnly(Side.CLIENT)
-	public IIcon[] icons;
+	public Icon[] icons;
 
 	/**
 	 * Constructor
 	 * 
 	 */
-	public BlockAllocator()
+	public BlockAllocator(int i)
 	{
-		super(Material.rock);
-		this.setHardness(3.5F).setStepSound(Block.soundTypeStone).setBlockName("mechanics::allocator");
+		super(i, Material.rock);
+		this.setHardness(3.5F).setStepSound(Block.soundStoneFootstep)
+				.setUnlocalizedName("mechanics::allocator");
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World w, int i)
+	public TileEntity createNewTileEntity(World w)
 	{
-		return new TileEntityAllocator();
+		TileEntity tile = new TileEntityAllocator();
+		tile.setWorldObj(w);
+		return tile;
 	}
 
 	@Override
-	public void breakBlock(World world, int i, int j, int k, Block par5, int par6)
+	public void breakBlock(World world, int i, int j, int k, int par5, int par6)
 	{
-		TileEntityAllocator allocator = (TileEntityAllocator) world.getTileEntity(i, j, k);
+		TileEntityAllocator allocator = (TileEntityAllocator) world
+				.getBlockTileEntity(i, j, k);
 		if (allocator != null)
 		{
 			ItemStack itemStack = allocator.getStackInSlot(0);
 			if (itemStack != null)
 			{
 				EntityItem entityItem = new EntityItem(world, i, j, k,
-						new ItemStack(itemStack.getItem(), 1, itemStack.getItemDamage()));
+						new ItemStack(itemStack.itemID, 1,
+								itemStack.getItemDamage()));
 
 				if (itemStack.hasTagCompound())
 					entityItem.getEntityItem().setTagCompound(
@@ -98,6 +109,13 @@ public class BlockAllocator extends BlockContainer
 	/**
 	 * Returns true, if the item is allowed to pass
 	 * (Filter is array filled with filter items. Lists filled with null will not pass correctly.
+	 * @param world
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @param itemID
+	 *            item to check
+	 * @return
 	 */
 	private boolean passesFilter(ItemStack item, ItemStack[] filter)
 	{
@@ -109,7 +127,7 @@ public class BlockAllocator extends BlockContainer
 			if (filter_ == null)
 				continue;
 			t = false;
-			if ((item.getItem() == filter_.getItem())
+			if ((item.itemID == filter_.itemID)
 				&& (item.getItemDamage() == filter_.getItemDamage()))
 				if (item.getTagCompound()==null)
 					if (filter_.getTagCompound()==null)
@@ -128,7 +146,7 @@ public class BlockAllocator extends BlockContainer
 	 */
 	protected IInventoryEX containerAtPos(World world, int x, int y, int z)
 	{
-		TileEntity tile = world.getTileEntity(x, y, z);
+		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		IInventoryEX inv = AllocatorRegistry.instance.getIInventoryFor(world, x, y, z);
 		
 		if (inv!=null)
@@ -198,8 +216,9 @@ public class BlockAllocator extends BlockContainer
 	/**
 	 * Handles the item output. Returns true, if item was successfully put out.
 	 * 
+	 * @param z
 	 */
-	private boolean outputItem(World world, int x, int y, int z, dirvec dir,
+	private boolean outputItem(World world, int x, int y, int z, veci3 dir,
 			ItemStack item, Random random)
 	{
 		int X_ = x + dir.x;
@@ -215,7 +234,7 @@ public class BlockAllocator extends BlockContainer
 				output = invs.get(random.nextInt(invs.size()));
 	        else
 	        {
-				if (!(world.getBlock(X_, Y_, Z_).isOpaqueCube()))
+				if (!(Block.opaqueCubeLookup[world.getBlockId(X_, Y_, Z_)]))
 				{
 					dispense(world, x, y, z, item);
 					return true;
@@ -230,6 +249,7 @@ public class BlockAllocator extends BlockContainer
 				inventorySize--;
 			for (int l = output.getInventoryInputBegin(); l < output.getInventoryInputEnd(); l++)
 			{
+				boolean canStack = false;// Check if stacking is possible
 				ItemStack baseStack = base.getStackInSlot(l);
 				if (baseStack == null && item.stackSize<= base.getInventoryStackLimit() 
 					&& base.isItemValidForSlot(l, item))
@@ -239,7 +259,7 @@ public class BlockAllocator extends BlockContainer
 				}
 				if (
 					((baseStack.isStackable())&&(item.isStackable()))
-					&&(baseStack.getItem() == item.getItem()) &&
+					&&(baseStack.getItem().itemID == item.itemID) &&
 					(baseStack.getItemDamage() == item.getItemDamage())
 					&&(baseStack.stackSize+item.stackSize <= 
 						Math.min(base.getInventoryStackLimit(), item.getMaxStackSize())))
@@ -258,14 +278,14 @@ public class BlockAllocator extends BlockContainer
 	 */
 	private void allocateItems(World world, int x, int y, int z, Random random)
     {
-	    dirvec d = dirvec.list[world.getBlockMetadata(x, y, z)];
-
-    	TileEntityAllocator tile = (TileEntityAllocator) world.getTileEntity(x, y, z);
+    	veci3 d = Utility.getDirectionVectorFori(world.getBlockMetadata(x, y, z));
+    	
+    	TileEntityAllocator tile = (TileEntityAllocator) world.getBlockTileEntity(x, y, z);
     	ItemStack[] filter = tile.allocatorFilterItems;
     	IInventoryEX input = containerAtPos(world, x-d.x, y-d.y, z-d.z);
     	if (input == null)
     	{
-        	List<Entity> entities = (List<Entity>)world.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox((double)(x-d.x), (double)y-d.y, (double)(z-d.z), (double)(x -d.x+ 1), (double)(y -d.y+ 1), (float)(z -d.z+ 1)));
+        	List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox((double)(x-d.x), (double)y-d.y, (double)(z-d.z), (double)(x -d.x+ 1), (double)(y -d.y+ 1), (float)(z -d.z+ 1)));
         	List<IInventoryEX> invs = AllocatorRegistry.instance.getIInventoryAllInFor(entities, true);
         	if (invs.size()>0)
         		input = invs.get(random.nextInt(invs.size()));
@@ -297,13 +317,13 @@ public class BlockAllocator extends BlockContainer
 	}
 
 	@Override
-	public void onNeighborBlockChange(IBlockAccess world, int x, int y, int z, Block b)
+	public void onNeighborBlockChange(World world, int x, int y, int z, int id)
 	{
-		if (b.canProvidePower())
+		if (id > 0 && Block.blocksList[id].canProvidePower())
 		{
 			if (world.isBlockIndirectlyGettingPowered(x, y, z)
 					|| world.isBlockIndirectlyGettingPowered(x, y + 1, z))
-				world.scheduleBlockUpdate(x, y, z, this, tickRate(world));
+				world.scheduleBlockUpdate(x, y, z, blockID, tickRate(world));
 		}
 	}
 
@@ -330,11 +350,12 @@ public class BlockAllocator extends BlockContainer
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(net.minecraft.client.renderer.texture.IIconRegister iconRegister)
+	public void registerIcons(IconRegister iconRegister)
 	{
-		this.blockIcon = iconRegister.registerIcon(ForgeMod.modid_lc+ ":pfaeff_topbottom");
-		icons = new IIcon[] {
-				iconRegister.registerIcon(ForgeMod.modid_lc + ":allocator_sidel"),//0
+		this.blockIcon = iconRegister.registerIcon(ForgeMod.modid_lc
+				+ ":pfaeff_topbottom");
+		icons = new Icon[] {
+				iconRegister.registerIcon(ForgeMod.modid_lc+":allocator_sidel"),//0
 				iconRegister.registerIcon(ForgeMod.modid_lc+":allocator_sider"),//1
 				iconRegister.registerIcon(ForgeMod.modid_lc+":allocator_in"),//2
 				iconRegister.registerIcon(ForgeMod.modid_lc+":allocator_out"),//3
@@ -345,23 +366,22 @@ public class BlockAllocator extends BlockContainer
 	}
 
 	// Soooo dirty item view
-	// TODO: check if this changed since 1.6
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int metaAlwaysZero)
+	public Icon getIcon(int side, int metaAlwaysZero)
 	{
 		return getIconForTerrain(side, 2);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(IBlockAccess iba, int x, int y, int z, int s)
+	public Icon getBlockTexture(IBlockAccess iba, int x, int y, int z, int s)
 	{
 		return this.getIconForTerrain(s, iba.getBlockMetadata(x, y, z));
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IIcon getIconForTerrain(int side, int meta)
+	public Icon getIconForTerrain(int side, int meta)
 	{
 		if (meta == 0)//facing down
 			if (side == meta)
@@ -398,17 +418,15 @@ public class BlockAllocator extends BlockContainer
 					return icons[1];//sider
 		}		
 	}
-
-	@Override
+	
 	public boolean hasComparatorInputOverride()
     {
         return true;
     }
 
-	@Override
     public int getComparatorInputOverride(World world, int x, int y, int z, int s)
     {
-        TileEntityAllocator tileentity = (TileEntityAllocator) world.getTileEntity(x, y, z);
+        TileEntityAllocator tileentity = (TileEntityAllocator) world.getBlockTileEntity(x, y, z);
         return Container.calcRedstoneFromInventory(tileentity);
     }
 }

@@ -8,7 +8,6 @@ import java.util.logging.Level;
 import com.pfaeff_and_cdkrot.ForgeMod;
 import com.pfaeff_and_cdkrot.util.Utility;
 
-//TODO: use vanilla lang system
 
 public class LocaleDataTable
 {
@@ -27,14 +26,18 @@ public class LocaleDataTable
 				{
 					String arr[] = Utility.loadFileAsStringArray("localizations/mechanics/"+l.localeKey()+"."+ForgeMod.lang, "UTF-16");
 					f.set(null, arr);
+					System.out.println(Arrays.deepToString(arr));
 				}
 			}
 			catch (Throwable t)
 			{
-				ForgeMod.modLogger.warn("[Language Localizer] Exception occured during localization phase.", t);
+				ForgeMod.modLogger.log
+				(Level.WARNING,"[Language Localizer] Exception occured during localization phase.",t);
 			}
-
 		}
+		System.out.println("[]"+Arrays.deepToString(LocaleDataTable.mechanics_home));
+		
+
 	}
 	@Localizable(localeKey = "chatJmppad")
 	public static String chatJumppad;

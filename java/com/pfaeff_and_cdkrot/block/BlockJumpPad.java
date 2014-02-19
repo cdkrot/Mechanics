@@ -1,9 +1,9 @@
 package com.pfaeff_and_cdkrot.block;
 
+import java.util.List;
 import java.util.Random;
 
 import com.pfaeff_and_cdkrot.ForgeMod;
-import com.pfaeff_and_cdkrot.MechanicsHelpCommand;
 import com.pfaeff_and_cdkrot.lang.LocaleDataTable;
 import com.pfaeff_and_cdkrot.util.Utility;
 
@@ -11,14 +11,16 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.common.ForgeDirection;
 
 //Constructor modified; imports added; package moved; added additional icon for Side(texturepack special)
 //work finished
@@ -26,7 +28,7 @@ public class BlockJumpPad extends Block
 {
 	
 	@SideOnly(Side.CLIENT)
-	private IIcon iconSide;
+	private Icon iconSide;
 	private static float pws[];
 	private Random r = new Random();
 	static
@@ -43,13 +45,16 @@ public class BlockJumpPad extends Block
 
 	}
 	
-	public BlockJumpPad()
+	public BlockJumpPad(int i)
 	{
-		super(Material.ground);
+		super(i, Material.ground);
 
+		// 1/4 height
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.25F, 1.0F);
+		//this.maxY=0.25f;
 
-		this.setHardness(1.0F).setStepSound(Block.soundTypeStone).setBlockName("mechanics::jumppad");
+		this.setHardness(1.0F).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("mechanics::jumppad");
+		//this.slipperiness = 0.8f;
 	}
 
 	//Launches "entity" into the air
@@ -91,7 +96,7 @@ public class BlockJumpPad extends Block
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-    public void registerBlockIcons(IIconRegister ir)
+    public void registerIcons(IconRegister ir)
     {
         this.blockIcon = ir.registerIcon(ForgeMod.modid_lc+":jumppad");
         this.iconSide = ir.registerIcon(ForgeMod.modid_lc+":jumppad_side");
@@ -99,7 +104,7 @@ public class BlockJumpPad extends Block
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-    public IIcon getIcon(int s, int m)
+    public Icon getIcon(int s, int m)
 	{
     	if (s==0||s==1)
     		return this.blockIcon;
@@ -118,14 +123,14 @@ public class BlockJumpPad extends Block
         meta++;
         meta&=15;//0...15
         w.setBlockMetadataWithNotify(x, y, z, meta, 6);//send upd, suppress rerendering.
-	    MechanicsHelpCommand.SendLineToPlayer(player, "\u00A7A"+LocaleDataTable.chatJumppad+" \u00A74"+getPwrDescr(meta)+"\u00A7A.");
+        player.addChatMessage("\u00A7A"+LocaleDataTable.chatJumppad+" \u00A74"+getPwrDescr(meta)+"\u00A7A.");
         return true;
     }
     
     @Override
-    public boolean isSideSolid(IBlockAccess iba, int x, int y, int z, ForgeDirection side)
+    public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side)
     {
-        return (side.ordinal()==0);//bottom
+        return (side.ordinal()==0);
     }
 
     @Override
