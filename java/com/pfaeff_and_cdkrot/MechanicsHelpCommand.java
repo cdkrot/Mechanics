@@ -49,6 +49,7 @@ public class MechanicsHelpCommand extends CommandBase
 			if (args[0].equals("credits"))
 			{
 				SendLinesToPlayer(sender, LocaleDataTable.credits);
+				SendLineToPlayer(sender, "Text author: "+LocaleDataTable.translator);
 				return;
 			}
 			if (args[0].equalsIgnoreCase("whatamilooking")||args[0].equalsIgnoreCase("look"))
