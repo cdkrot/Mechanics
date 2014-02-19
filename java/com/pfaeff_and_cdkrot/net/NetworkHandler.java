@@ -29,7 +29,7 @@ public class NetworkHandler implements
 		System.out.println(side);
 		try
 		{
-			//set benchmark text
+			//client-->server: set benchmark text
 			if (side.isServer() && packet.channel.equals("mechanics|1"))
 			{
 				DataInputStream dis = new DataInputStream(new ByteArrayInputStream(packet.data));
@@ -38,7 +38,7 @@ public class NetworkHandler implements
 				WorldServer ws = MinecraftServer.getServer().worldServers[worldid];	
 
 				String text = dis.readUTF();
-				TileEntityBenchmark tile = (TileEntityBenchmark) ws.getBlockTileEntity(x,y,z);
+				TileEntityBenchmark tile = (TileEntityBenchmark) ws.getTileEntity(x,y,z);
 				if (BenchmarkRegistry.instance.onTextChanged(tile, text, player))
 					tile.s=text;
 				return;
@@ -48,7 +48,7 @@ public class NetworkHandler implements
 				DataInputStream dis = new DataInputStream(new ByteArrayInputStream(packet.data));
 				GamePosition position = GamePosition.readFromStream(dis);
 
-				//!server player request GUI
+				//client-->server request benchmark GUI
 				if (side.isServer())
 				{
 					TileEntityBenchmark tile = (TileEntityBenchmark)position.getTileEntity
@@ -63,7 +63,7 @@ public class NetworkHandler implements
                     	(new Packet250CustomPayload("mechanics|2", baos.toByteArray()), player);
 					}
 				}
-				//!client - open gui
+				//server-->client recieve benhcmark gui data
 				else
 				{
 					SidedNetworkStuff.openBenchmarkGUI(position, dis.readUTF());

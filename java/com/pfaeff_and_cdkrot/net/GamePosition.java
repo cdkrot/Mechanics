@@ -7,6 +7,9 @@ import java.io.IOException;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 
+/**
+ * Class describes an block position in game
+ */
 public final class GamePosition
 {
 	public final int worldid;
@@ -37,6 +40,6 @@ public final class GamePosition
 	
 	public TileEntity getTileEntity(MinecraftServer server)
 	{
-		return server.worldServers[worldid].getBlockTileEntity(x, y, z);
+		return server.worldServers[worldid].getTileEntity(x, y, z);
 	}
 }
