@@ -1,5 +1,6 @@
 package com.pfaeff_and_cdkrot;
 
+import com.pfaeff_and_cdkrot.net.PacketTransformer;
 import com.sun.org.apache.xerces.internal.parsers.XMLParser;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -49,18 +50,11 @@ public class ForgeMod
 	public static String modid_lc = "Mechanics_mod";
 	
 	public static String lang;
-	
-//	@SidedProxy(clientSide = "com.pfaeff_and_cdkrot.ClientProxy", serverSide = "com.pfaeff_and_cdkrot.BaseProxy")
-//	public static BaseProxy proxy;
 
-	// public static LocaleData lang;
-	// public static LocaleHelpData help;
+	public static PacketTransformer networkHandler = new PacketTransformer();
+
 	@Instance("Mechanics_mod")
 	public static ForgeMod instance;
-
-	public ForgeMod()
-	{
-	}
 
 	@EventHandler
 	public void configure(FMLPreInitializationEvent event)
@@ -144,7 +138,7 @@ public class ForgeMod
 		modLogger.info("Init state done.");
 		//proxy.doInit();
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
-		//TODO: register a network listener here
+		networkHandler.initalise();
 	}
 	
 	@EventHandler
@@ -152,6 +146,8 @@ public class ForgeMod
 	{
 		AllocatorRegistry.instance.add(new VannilaProvider());
 		AllocatorRegistry.instance.add(new MechanicsModProvider());
+
+		networkHandler.postInitialise();
 	}
 	
 	public static void loginfo(String message, Object... data)
