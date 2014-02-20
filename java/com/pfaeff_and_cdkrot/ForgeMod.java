@@ -150,17 +150,6 @@ public class ForgeMod
 		networkHandler.postInitialise();
 	}
 	
-	public static void loginfo(String message, Object... data)
-	{
-		modLogger.info(String.format(message, data));
-	}
-
-	public static void loginfo(String message)
-	{
-		modLogger.info(message);
-	}
-
-	// aka @ServerStarting
 	@EventHandler
 	public void install(FMLServerStartingEvent event)
 	{
