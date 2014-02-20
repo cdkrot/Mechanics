@@ -32,9 +32,8 @@ public abstract class BasicPacket
 	/**
 	 * Handle a packet on the client side. Note this occurs after decoding has completed.
 	 *
-	 * @param player the player reference
 	 */
-	public abstract void handleClientSide(EntityPlayer player);
+	public abstract void handleClientSide();
 
 	/**
 	 * Handle a packet on the server side. Note this occurs after decoding has completed.

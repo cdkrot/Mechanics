@@ -18,15 +18,13 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 
-public class NetworkHandler implements
-		cpw.mods.fml.common.network.IPacketHandler
+public class NetworkHandler implements cpw.mods.fml.common.network.IPacketHandler
 {
 
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player)
 	{
 		Side side = FMLCommonHandler.instance().getEffectiveSide();
-		System.out.println(side);
 		try
 		{
 			//client-->server: set benchmark text

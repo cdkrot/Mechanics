@@ -30,14 +30,14 @@ public class PacketBenchmarkIO extends BasicPacket
 	}
 
 	@Override
-	public void handleClientSide(EntityPlayer player)
+	public void handleClientSide()
 	{
-
+		SidedNetworkStuff.openBenchmarkGUI(pos, text);
 	}
 
 	@Override
 	public void handleServerSide(EntityPlayer player)
 	{
-
+		SidedNetworkStuff.setBenchmarkText(pos, text, player);
 	}
 }

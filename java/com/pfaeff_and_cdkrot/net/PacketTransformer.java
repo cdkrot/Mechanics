@@ -124,7 +124,7 @@ public class PacketTransformer extends MessageToMessageCodec<FMLProxyPacket, Bas
 		});
 	}
 
-	//NOTE-FOR-FUTURE: for complicated situations it is better to use forge api directly, not wrappers by sirginalot.
+	//NOTE-FOR-FUTURE: for complicated situations it is better to use forge api directly, not wrappers by sirgingalot.
 
 	public void sendToAll(BasicPacket message)
 	{
