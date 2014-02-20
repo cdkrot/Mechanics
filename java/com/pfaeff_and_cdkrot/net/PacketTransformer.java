@@ -83,7 +83,7 @@ public class PacketTransformer extends MessageToMessageCodec<FMLProxyPacket, Bas
 		{
 			case CLIENT:
 				player = Minecraft.getMinecraft().thePlayer;
-				pkt.handleClientSide(player);
+				pkt.handleClientSide();
 				break;
 
 			case SERVER:

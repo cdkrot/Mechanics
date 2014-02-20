@@ -2,6 +2,8 @@ package com.pfaeff_and_cdkrot.net;
 
 
 import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,12 +32,14 @@ public class PacketBenchmarkIO extends BasicPacket
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleClientSide()
 	{
 		SidedNetworkStuff.openBenchmarkGUI(pos, text);
 	}
 
 	@Override
+	@SideOnly(Side.SERVER)
 	public void handleServerSide(EntityPlayer player)
 	{
 		SidedNetworkStuff.setBenchmarkText(pos, text, player);

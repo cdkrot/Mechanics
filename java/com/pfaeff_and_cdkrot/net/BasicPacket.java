@@ -1,11 +1,11 @@
 package com.pfaeff_and_cdkrot.net;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
 import net.minecraft.entity.player.EntityPlayer;
-
-import java.nio.charset.Charset;
 
 
 /**
@@ -33,6 +33,7 @@ public abstract class BasicPacket
 	 * Handle a packet on the client side. Note this occurs after decoding has completed.
 	 *
 	 */
+	@SideOnly(Side.CLIENT)
 	public abstract void handleClientSide();
 
 	/**
@@ -40,5 +41,6 @@ public abstract class BasicPacket
 	 *
 	 * @param player the player reference
 	 */
+	@SideOnly(Side.SERVER)
 	public abstract void handleServerSide(EntityPlayer player);
 }
