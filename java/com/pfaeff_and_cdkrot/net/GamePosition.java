@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 
@@ -25,21 +26,28 @@ public final class GamePosition
 		this.z=z;
 	}
 
+	public GamePosition(ByteBuf in)
+	{
+		this(in.readInt(), in.readInt(), in.readInt(), in.readInt());
+	}
+
 	public static GamePosition readFromStream(DataInputStream dis) throws IOException
 	{
 		return new GamePosition(dis.readInt(), dis.readInt(), dis.readInt(), dis.readInt());
 	}
-	
-	public void writeToStream(DataOutputStream dos) throws IOException
-	{
-		dos.writeInt(worldid);
-		dos.writeInt(x);
-		dos.writeInt(y);
-		dos.writeInt(z);
-	}
-	
+
+	//TODO: cleanup this. Reason: Code quality.
+	@Deprecated
 	public TileEntity getTileEntity(MinecraftServer server)
 	{
 		return server.worldServers[worldid].getTileEntity(x, y, z);
+	}
+
+	public void writeTo(ByteBuf buffer)
+	{
+		buffer.writeInt(worldid);
+		buffer.writeInt(x);
+		buffer.writeInt(y);
+		buffer.writeInt(z);
 	}
 }
