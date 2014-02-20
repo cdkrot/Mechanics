@@ -38,19 +38,10 @@ import java.io.IOException;
 public class ForgeMod
 {
 	public static Block allocator;
-	public static int allocatorID;
-
 	public static BlockLightSensor LightSensor;
-	public static int LightSensorID;
-
 	public static Block jumpPad;
-	public static int jumpPadID;
-
 	public static BlockFan fan;
-	public static int fanID;
-
 	public static Block Benchmark;
-	public static int BenchmarkID;
 
 	public static Logger modLogger;
 	public static ModCreativeTab creativeTab;
