@@ -93,7 +93,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory, IInve
 	@Override
 		public void markDirty(){throw new RuntimeException("Unsuported.");}
 	@Override
-		public String getInvName(){return ForgeMod.allocator.getLocalizedName();}//TODO: LOCALIZE
+		public String getInvName(){return ForgeMod.allocator.getLocalizedName();}
 	@Override
 		public int getInventoryStackLimit(){return 1;}
 	@Override
