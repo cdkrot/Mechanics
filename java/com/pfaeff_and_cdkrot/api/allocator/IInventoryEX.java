@@ -3,6 +3,7 @@ package com.pfaeff_and_cdkrot.api.allocator;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
+//TODO: something wrong here,
 public interface IInventoryEX
 {
 	/**
@@ -34,12 +35,4 @@ public interface IInventoryEX
 	 */
 	void onOutputSuccessful(int slot, ItemStack left);
 	void onInputSuccessful(int slot, ItemStack stack);
-	
-	/**
-	 * Return null to Any item acceptable.
-	 * Or something
-	 * [Unimplemented Yet] May come soon
-	 * @return
-	 */
-	Object acceptableItems();
 }

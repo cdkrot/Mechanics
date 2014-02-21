@@ -34,8 +34,6 @@ import java.io.File;
 import java.io.IOException;
 
 @Mod(modid = "Mechanics_mod", version = "5.0", name = "Mechanics mod")
-//@NetworkMod(clientSideRequired = true, serverSideRequired = false, channels={"mechanics|1", "mechanics|2"},
-//packetHandler=NetworkHandler.class)
 public class ForgeMod
 {
 	public static Block allocator;
@@ -68,7 +66,7 @@ public class ForgeMod
 
 			BlockBenchmark.radius = c.get("Benchmark", "radius", 32).getInt(32);
 			BlockBenchmark.def = c.get("Benchmark", "defPattern", "Benchmark: (&&x, &&y, &&z) time: &time").getString();
-
+			//TODO:  do we need this configuration? I think no.
 		lang = "en";
 
 		modLogger.info("PreInit state done.");
@@ -149,7 +147,7 @@ public class ForgeMod
 
 		networkHandler.postInitialise();
 	}
-	
+
 	@EventHandler
 	public void install(FMLServerStartingEvent event)
 	{
