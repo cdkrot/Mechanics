@@ -36,13 +36,6 @@ public final class GamePosition
 		return new GamePosition(dis.readInt(), dis.readInt(), dis.readInt(), dis.readInt());
 	}
 
-	//TODO: cleanup this. Reason: Code quality.
-	@Deprecated
-	public TileEntity getTileEntity(MinecraftServer server)
-	{
-		return server.worldServers[worldid].getTileEntity(x, y, z);
-	}
-
 	public void writeTo(ByteBuf buffer)
 	{
 		buffer.writeInt(worldid);
