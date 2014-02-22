@@ -7,7 +7,7 @@
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authors": ["cdkrot", "T145"],
+  "authors": ["cdkrot", "T145", "Pfaeff"],
   "credits": "Inspired by Pfaeff's original mod and ideas; Updated and maintained by cdkrot and T145.",
   "logoFile": "",
   "screenshots": [],
