@@ -9,7 +9,6 @@ import java.util.Set;
 
 import com.pfaeff_and_cdkrot.ForgeMod;
 
-import cpw.mods.fml.common.registry.LanguageRegistry;
 public class LocaleStringMap
 {
 

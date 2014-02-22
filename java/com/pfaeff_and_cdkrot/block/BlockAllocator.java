@@ -43,7 +43,6 @@ public class BlockAllocator extends BlockContainer
 
 	/**
 	 * Constructor
-	 * 
 	 */
 	public BlockAllocator()
 	{
@@ -178,6 +177,7 @@ public class BlockAllocator extends BlockContainer
 	/**
 	 * Spits out an item (like the dropper, but the whole stack)
 	 */
+	@SuppressWarnings("unused") //TODO: remove the need for suppression
 	protected void dispense(World world, int i, int j, int k, ItemStack item)
 	{
 		BlockSourceImpl blockImpl = new BlockSourceImpl(world, i, j, k);
@@ -195,7 +195,7 @@ public class BlockAllocator extends BlockContainer
 			// (double) (j + Facing.offsetsYForSide[meta]), //unfinished?
 			// (double) (k + Facing.offsetsZForSide[meta]));
 			
-			//TODO: todo
+			//TODO: use stack
 			ItemStack stack = this.dispenser.dispense(blockImpl, item);
 			//if (stack != null && stack.stackSize == 0)
 			//	stack = null;
@@ -207,8 +207,8 @@ public class BlockAllocator extends BlockContainer
 	 * Handles the item output. Returns true, if item was successfully put out.
 	 * 
 	 */
-	private boolean outputItem(World world, int x, int y, int z, dirvec dir,
-			ItemStack item, Random random)
+	@SuppressWarnings({"unused", "unchecked"}) //TODO: remove the need for suppression
+	private boolean outputItem(World world, int x, int y, int z, dirvec dir, ItemStack item, Random random)
 	{
 		int X_ = x + dir.x;
 		int Y_ = y + dir.y;
@@ -264,6 +264,7 @@ public class BlockAllocator extends BlockContainer
 	/**
 	 * Handles all the item input/output
 	 */
+	@SuppressWarnings("unchecked") //TODO: remove the need for suppression
 	private void allocateItems(World world, int x, int y, int z, Random random)
     {
 	    dirvec d = dirvec.list[world.getBlockMetadata(x, y, z)];

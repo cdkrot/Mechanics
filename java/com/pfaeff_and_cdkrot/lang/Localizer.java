@@ -3,6 +3,7 @@ package com.pfaeff_and_cdkrot.lang;
 import java.util.Map;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;
+
 public class Localizer extends LocaleStringMap
 {
 	private LanguageRegistry registry = LanguageRegistry.instance();
@@ -18,11 +19,13 @@ public class Localizer extends LocaleStringMap
 	}
 	
 	
+	@SuppressWarnings("deprecation")
 	public void NameObject(Object obj, String key)
 	{
-		registry.addName(obj, get(key));
+		LanguageRegistry.addName(obj, get(key));
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void NameCreativeTab(String tabkey, String key)
 	{
 		registry.addStringLocalization("itemGroup."+tabkey, get(key));

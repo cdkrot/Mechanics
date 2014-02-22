@@ -1,17 +1,13 @@
 package com.pfaeff_and_cdkrot.api.allocator;
 
-import java.util.List;
-
 import net.minecraft.entity.Entity;
-import net.minecraft.world.World;
 
-public interface IInventoryProviderEntity
-{
+public interface IInventoryProviderEntity {
 	/**
-	 * if Entity recognized return it as IInventory IInventories
-	 * and return IInventory array
+	 * If Entity recognized return it as IInventory array
+	 * 
 	 * @param entity
-	 * @return
+	 * @return IInventory[]
 	 */
 	IInventoryEX createIInventory(Entity entity);
 }

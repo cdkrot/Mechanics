@@ -88,9 +88,8 @@ public class BlockBenchmark extends BlockContainer
     		if (!BenchmarkRegistry.instance.onBenchmark(tile, string))
     			return;
     		//do the stuff
-    		List<ICommandSender> list = (List<ICommandSender>) world.getEntitiesWithinAABB(ICommandSender.class, AxisAlignedBB.
-    			getBoundingBox(mx-radius, my-radius, mz-radius,
-    					mx+radius, my+radius, mz+radius));
+    		@SuppressWarnings("unchecked")
+			List<ICommandSender> list = (List<ICommandSender>) world.getEntitiesWithinAABB(ICommandSender.class, AxisAlignedBB.getBoundingBox(mx-radius, my-radius, mz-radius, mx+radius, my+radius, mz+radius));
     		for (ICommandSender sender: list)
     			MechanicsHelpCommand.SendLineToPlayer(sender, string);
     		world.setBlockMetadataWithNotify(x, y, z, 1, 4);

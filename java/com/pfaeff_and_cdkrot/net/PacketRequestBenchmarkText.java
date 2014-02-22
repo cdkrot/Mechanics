@@ -1,21 +1,20 @@
 package com.pfaeff_and_cdkrot.net;
 
-import com.pfaeff_and_cdkrot.ForgeMod;
-import com.pfaeff_and_cdkrot.api.benchmark.BenchmarkRegistry;
-import com.pfaeff_and_cdkrot.tileentity.TileEntityBenchmark;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
+import com.pfaeff_and_cdkrot.ForgeMod;
+import com.pfaeff_and_cdkrot.api.benchmark.BenchmarkRegistry;
+import com.pfaeff_and_cdkrot.tileentity.TileEntityBenchmark;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+// packet from client to server
 public class PacketRequestBenchmarkText extends BasicPacket
 {
-//this packet sent by CLIENT to SERVER.
 	public GamePosition pos;
 
 	@Override

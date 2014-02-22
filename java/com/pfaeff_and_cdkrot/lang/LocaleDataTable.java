@@ -1,9 +1,6 @@
 package com.pfaeff_and_cdkrot.lang;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.logging.Level;
 
 import com.pfaeff_and_cdkrot.ForgeMod;
 import com.pfaeff_and_cdkrot.util.Utility;

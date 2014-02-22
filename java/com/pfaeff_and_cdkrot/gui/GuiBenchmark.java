@@ -1,17 +1,17 @@
 package com.pfaeff_and_cdkrot.gui;
 
-import com.pfaeff_and_cdkrot.ForgeMod;
-import com.pfaeff_and_cdkrot.net.PacketBenchmarkIO;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 
 import org.lwjgl.input.Keyboard;
 
+import com.pfaeff_and_cdkrot.ForgeMod;
 import com.pfaeff_and_cdkrot.net.GamePosition;
+import com.pfaeff_and_cdkrot.net.PacketBenchmarkIO;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiBenchmark extends GuiScreen
@@ -25,6 +25,7 @@ public class GuiBenchmark extends GuiScreen
 	@Override
 		public void updateScreen() {this.text.updateCursorCounter();}
 
+	@SuppressWarnings("unchecked")
 	public void initGui()
 	{
 		Keyboard.enableRepeatEvents(true);
