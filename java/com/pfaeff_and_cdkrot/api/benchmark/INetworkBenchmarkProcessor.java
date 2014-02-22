@@ -2,7 +2,7 @@ package com.pfaeff_and_cdkrot.api.benchmark;
 
 import com.pfaeff_and_cdkrot.tileentity.TileEntityBenchmark;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 /**
 Benchmark action preprocessor.
@@ -18,7 +18,7 @@ public interface INetworkBenchmarkProcessor
 	 * @param p - player. Note since 1.7 it is entityPlayer
 	 * @return false to cancel event
 	 */
-	public boolean onTextChanged(TileEntityBenchmark tile, String newtext, EntityPlayer p);
+	public boolean onTextChanged(TileEntityBenchmark tile, String newtext, EntityPlayerMP p);
 	
 	/**
 	 * Called when bencmark is echos text. Can cancel event
@@ -28,11 +28,11 @@ public interface INetworkBenchmarkProcessor
 	 */
 	public boolean onBenchmark(TileEntityBenchmark tile, String echotext);
 
-	/**
+	/**check
 	* Called when player requesting an editing GUI open 
 	* (gui is open by client side, but text requires to be send from server).
 	* (Note since 1.7 player is entityPlayer)
 	* @return false to cancel event
 	*/
-	public boolean requestEditor(TileEntityBenchmark tile, EntityPlayer p);
+	public boolean requestEditor(TileEntityBenchmark tile, EntityPlayerMP p);
 }

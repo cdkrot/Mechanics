@@ -2,7 +2,7 @@ package com.pfaeff_and_cdkrot.api.benchmark;
 
 import com.pfaeff_and_cdkrot.tileentity.TileEntityBenchmark;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 public class BenchmarkRegistry implements INetworkBenchmarkProcessor
 {
@@ -18,10 +18,11 @@ public class BenchmarkRegistry implements INetworkBenchmarkProcessor
 		INetworkBenchmarkProcessor[] temp = new INetworkBenchmarkProcessor[processors.length+1];
 		System.arraycopy(processors, 0, temp, 0, processors.length);
 		temp[processors.length]=p;
+
 		processors = temp;
 	}
 	
-	public boolean onTextChanged(TileEntityBenchmark tile, String newtext, EntityPlayer p)
+	public boolean onTextChanged(TileEntityBenchmark tile, String newtext, EntityPlayerMP p)
 	{
 		if (processors!=null)
 			for (INetworkBenchmarkProcessor proc: processors)
@@ -39,7 +40,7 @@ public class BenchmarkRegistry implements INetworkBenchmarkProcessor
 		return true;
 	}
 	
-	public boolean requestEditor(TileEntityBenchmark tile, EntityPlayer player)
+	public boolean requestEditor(TileEntityBenchmark tile, EntityPlayerMP player)
 	{
 		if (processors!=null)
 			for (INetworkBenchmarkProcessor proc: processors)
