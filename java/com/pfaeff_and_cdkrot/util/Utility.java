@@ -2,22 +2,14 @@ package com.pfaeff_and_cdkrot.util;
 
 import java.util.List;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
 import com.pfaeff_and_cdkrot.ForgeMod;
 
-import cpw.mods.fml.relauncher.ReflectionHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
@@ -26,18 +18,10 @@ import net.minecraft.world.World;
 public class Utility
 {
 	//a BIG utility class
-	@Deprecated
-	private static veci3 dirVectorsi[];
 	private static java.lang.reflect.Method EntityFallMethod;
 	
 	static
 	{
-		dirVectorsi = new veci3[]
-		{
-		new veci3(0, -1, 0), new veci3(0, +1, 0),
-		new veci3(0, 0, -1), new veci3(0, 0, +1),
-		new veci3(-1, 0, 0), new veci3(+1, 0, 0)
-		};
 		try
 		{
 			EntityFallMethod = Entity.class.
@@ -75,6 +59,7 @@ public class Utility
     /**
      * This will return suggested metadata(Side) for block which placed on side
      */
+    //IDE reports that this method never used, however keeping it for future.
     public static int getMetadataForBlockSidePlaced(float rotationYaw)
     {
         //int l = MathHelper.floor_double((double)((rotationYaw * 4F) / 360F) + 0.5D) & 3;
@@ -95,7 +80,7 @@ public class Utility
      * This will return suggested metadata(Side) for block which placed on any side
      * Mostly copypaste of BlockPistonBase.determineOrientation
      */
-    public static int getMetadataForBlockAnyPlaced(World world, int x, int y, int z, EntityLivingBase entity)
+    public static int getMetadataForBlockAnyPlaced(int x, int y, int z, EntityLivingBase entity)
     {
         if (MathHelper.abs((float)entity.posX - (float)x) < 2.0F && MathHelper.abs((float)entity.posZ - (float)z) < 2.0F)
         {
@@ -115,17 +100,7 @@ public class Utility
         int l = MathHelper.floor_double((double)(entity.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
         return l == 0 ? 2 : (l == 1 ? 5 : (l == 2 ? 3 : (l == 3 ? 4 : 0)));
     }
-    /**
-     * Get a directional vector for specified meta (side);
-     * @param meta
-     * @return
-     */
-    @Deprecated
-    public static veci3 getDirectionVectorFori(int meta)
-    {
-    	return ((meta>=0)&&(meta<=6)) ? dirVectorsi[meta] : null;
-    }
-    
+
     /**
      * if use veci3 as a x,y,z container it can be required to swap components to get
      * components of one vec strict more than of other.
@@ -162,28 +137,25 @@ public class Utility
     
     public static int getDefaultDirectionsMeta(World world, int x, int y, int z)
     {    	
-    	int front = world.getBlockId(x, y, z - 1);
-    	int back = world.getBlockId(x, y, z + 1);
-    	int left = world.getBlockId(x - 1, y, z);
-    	int right = world.getBlockId(x + 1, y, z);
+    	boolean front = world.getBlock(x, y, z - 1).isOpaqueCube();
+    	boolean back = world.getBlock(x, y, z + 1).isOpaqueCube();
+    	boolean left = world.getBlock(x - 1, y, z).isOpaqueCube();
+    	boolean right = world.getBlock(x + 1, y, z).isOpaqueCube();
     	int meta = 3;
 
-    	if (Block.opaqueCubeLookup[front] && !Block.opaqueCubeLookup[back])
-    		meta = 3;
+    	//if (front && !back) meta = 3; //logic: this assignment makes no sense
 
-    	if (Block.opaqueCubeLookup[back] && !Block.opaqueCubeLookup[front])
-    		meta = 2;
+    	if (back && !front) meta = 2;
 
-    	if (Block.opaqueCubeLookup[left] && !Block.opaqueCubeLookup[right])
-    		meta = 5;
+    	if (left && !right) meta = 5;
 
-    	if (Block.opaqueCubeLookup[right] && !Block.opaqueCubeLookup[left])
-    		meta = 4;
+    	if (right && !left)	meta = 4;
 
     	return meta;
     }
-    
-    public static vecd3 vecFromEntity(Entity e)
+
+	//TODO: warning, IDE reports that this method never used.
+	public static vecd3 vecFromEntity(Entity e)
     {
     	return new vecd3(e.posX, e.posY, e.posZ);
     }
@@ -198,7 +170,8 @@ public class Utility
 			throw new RuntimeException(ex);
 		}
     }
-    
+
+	//TODO: warning, IDE reports that this method never used.
     public static EnumFacing getDirectionVectorInVanillaFormat(int side)
     {
     	return EnumFacing.getFront(side);
@@ -214,7 +187,7 @@ public class Utility
 		InputStream in = ForgeMod.class.getClassLoader().getResourceAsStream(file);
 		if (in == null)
 		{
-			ForgeMod.modLogger.warning("[FLoader] Failed loading file "+file+" with encoding "+encoding);
+			ForgeMod.modLogger.warn("[FLoader] Failed loading file " + file + " with encoding " + encoding);
 			return null;
 		}
 		List<String> list = new ArrayList<String>();
@@ -235,9 +208,6 @@ public class Utility
 	
 	/**
 	 * Returns random object from list or null, if empty
-	 * @param list
-	 * @param r
-	 * @return
 	 */
 	public static <T> T randomFromList(List<T> list, Random r)
 	{

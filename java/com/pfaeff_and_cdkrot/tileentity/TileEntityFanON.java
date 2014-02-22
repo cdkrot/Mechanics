@@ -1,21 +1,19 @@
 package com.pfaeff_and_cdkrot.tileentity;
 
-import java.util.List;
-
-import com.pfaeff_and_cdkrot.block.BlockFan;
 import com.pfaeff_and_cdkrot.util.Utility;
-import com.pfaeff_and_cdkrot.util.vecd3;
 import com.pfaeff_and_cdkrot.util.veci3;
 import com.pfaeff_and_cdkrot.ForgeMod;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
 import com.pfaeff_and_cdkrot.util.dirvec;
 
+import java.util.List;
+
+//TODO: something wrong here too, should fix it.
 public class TileEntityFanON extends TileEntity
 {
 
@@ -34,7 +32,7 @@ public class TileEntityFanON extends TileEntity
     	base = new veci3(xCoord, yCoord, zCoord);
     	/*power_base = dirvec.cloneAsVeci3()
     		.multiply3f(0.1f, 0.05f, 0.1f).tovecd3();//vertical pwr 2xless than horizontal
-    	
+
     	power_base.multiply(12.0d);//power is reverse-linear to destination
 */
     }
@@ -60,7 +58,7 @@ public class TileEntityFanON extends TileEntity
 			e.addVelocity(power_local.x, power_local.y, power_local.z);
 			if (e.motionY>0)
 				e.fallDistance=0.0f;
-		}*/;
+		}*/
     }
     
     public void goOnAndTrace()
@@ -70,10 +68,10 @@ public class TileEntityFanON extends TileEntity
     	while (power>0)
     	{
     		AxisAlignedBB selection = Utility.SelectPoolBasingOnVectorAndInc(base, dirvec);
-    		Block b = Block.blocksList[worldObj.getBlockId(cur.x, cur.y, cur.z)];
+    		Block b = worldObj.getBlock(cur.x, cur.y, cur.z);
     		b.setBlockBoundsBasedOnState(worldObj, cur.x, cur.y, cur.z);
     		
-    		Entity e = Utility.randomFromList(worldObj.getEntitiesWithinAABB(Entity.class, selection),worldObj.rand);
+    		Entity e = Utility.randomFromList((List<Entity>)worldObj.getEntitiesWithinAABB(Entity.class, selection), worldObj.rand);
     		if (e!=null)
     			e.addVelocity(dirvec.x*power, dirvec.y*power, dirvec.z*power);
     		power-=1;
@@ -90,10 +88,8 @@ public class TileEntityFanON extends TileEntity
 		{
 			for (int i=0; i<12; i++, vec2.add(dirvec))
 			{
-				int id = worldObj.getBlockId(vec2.x, vec2.y, vec2.z);
-				Block b = Block.blocksList[id];
-				if (b!=null//not air
-					&& (b.isOpaqueCube() && Block.isNormalCube(id)))
+				Block b = worldObj.getBlock(vec2.x, vec2.y, vec2.z);
+				if (b!=null	&& b.isOpaqueCube() && b.isNormalCube())
 				{
 					vec2.substract(dirvec);
 					break;//stop here

@@ -28,8 +28,8 @@ public interface IInventoryEX
 	IInventory asIInventory();
 
 	/**
-	 * On outputSuccesful - when taken succesful
-	 * On input succesful - when put succesful
+	 * On outputSuccesful - when taken succesful. (update stack data yourself)
+	 * On input succesful - when put succesful (update stack data yourself)
 	 * @param slot
 	 * @param left
 	 */
