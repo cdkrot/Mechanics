@@ -1,12 +1,17 @@
 package com.pfaeff_and_cdkrot.net;
 
 
+import com.pfaeff_and_cdkrot.api.benchmark.BenchmarkRegistry;
+import com.pfaeff_and_cdkrot.gui.GuiBenchmark;
+import com.pfaeff_and_cdkrot.tileentity.TileEntityBenchmark;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
 
 
 public class PacketBenchmarkIO extends BasicPacket
@@ -35,13 +40,15 @@ public class PacketBenchmarkIO extends BasicPacket
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide()
 	{
-		SidedNetworkStuff.openBenchmarkGUI(pos, text);
+		Minecraft.getMinecraft().displayGuiScreen(new GuiBenchmark(pos, text));
 	}
 
 	@Override
 	@SideOnly(Side.SERVER)
 	public void handleServerSide(EntityPlayerMP player)
 	{
-		SidedNetworkStuff.setBenchmarkText(pos, text, player);
+		TileEntityBenchmark tile = (TileEntityBenchmark) MinecraftServer.getServer().worldServers[pos.worldid].getTileEntity(pos.x, pos.y, pos.z);
+		if (BenchmarkRegistry.instance.onTextChanged(tile, text, player))
+			tile.s=text;
 	}
 }
