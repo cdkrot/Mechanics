@@ -2,6 +2,17 @@ package com.pfaeff_and_cdkrot.block;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import com.pfaeff_and_cdkrot.ForgeMod;
 import com.pfaeff_and_cdkrot.MechanicsHelpCommand;
 import com.pfaeff_and_cdkrot.lang.LocaleDataTable;
@@ -9,16 +20,6 @@ import com.pfaeff_and_cdkrot.util.Utility;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 //Constructor modified; imports added; package moved; added additional icon for Side(texturepack special)
 //work finished
@@ -93,8 +94,7 @@ public class BlockJumpPad extends Block
 	@Override
     public void registerBlockIcons(IIconRegister ir)
     {
-        this.blockIcon = ir.registerIcon(ForgeMod.modid_lc+":jumppad");
-        this.iconSide = ir.registerIcon(ForgeMod.modid_lc+":jumppad_side");
+        this.blockIcon = ir.registerIcon(ForgeMod.modid+":jumppad");
     }
 	
 	@SideOnly(Side.CLIENT)

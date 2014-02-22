@@ -1,5 +1,10 @@
 package com.pfaeff_and_cdkrot.gui;
 
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
+
 import org.lwjgl.opengl.GL11;
 
 import com.pfaeff_and_cdkrot.ForgeMod;
@@ -7,15 +12,11 @@ import com.pfaeff_and_cdkrot.tileentity.TileEntityAllocator;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.gui.inventory.*;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 
 @SideOnly(Side.CLIENT)
 public class GuiAllocator extends GuiContainer
 {
-	public ResourceLocation texture = new ResourceLocation(ForgeMod.modid_lc+":gui/allocator.png");
+	public ResourceLocation texture = new ResourceLocation(ForgeMod.modid+":gui/allocator.png");
     public GuiAllocator(InventoryPlayer invPlayer, TileEntityAllocator allocator)
     {
         super(new ContainerAllocator(invPlayer, allocator));

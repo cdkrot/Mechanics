@@ -3,26 +3,34 @@ package com.pfaeff_and_cdkrot.block;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.BlockSourceImpl;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+
 import com.pfaeff_and_cdkrot.BehaviourDispenseItemStack;
 import com.pfaeff_and_cdkrot.ForgeMod;
-import com.pfaeff_and_cdkrot.api.allocator.*;
+import com.pfaeff_and_cdkrot.api.allocator.AllocatorRegistry;
+import com.pfaeff_and_cdkrot.api.allocator.IInventoryEX;
+import com.pfaeff_and_cdkrot.api.allocator.IInventoryWrapper;
 import com.pfaeff_and_cdkrot.tileentity.TileEntityAllocator;
 import com.pfaeff_and_cdkrot.util.Utility;
 import com.pfaeff_and_cdkrot.util.dirvec;
 
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.*;
-import net.minecraft.world.*;
-import net.minecraft.item.*;
-import net.minecraft.tileentity.*;
-import net.minecraft.inventory.*;
-import net.minecraft.entity.*;
-import net.minecraft.entity.item.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.nbt.*;
 import cpw.mods.fml.relauncher.Side;
-import net.minecraft.util.IIcon;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockAllocator extends BlockContainer
@@ -332,16 +340,16 @@ public class BlockAllocator extends BlockContainer
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(net.minecraft.client.renderer.texture.IIconRegister iconRegister)
 	{
-		this.blockIcon = iconRegister.registerIcon(ForgeMod.modid_lc+ ":pfaeff_topbottom");
+		this.blockIcon = iconRegister.registerIcon(ForgeMod.modid+ ":pfaeff_topbottom");
 		icons = new IIcon[] {
-				iconRegister.registerIcon(ForgeMod.modid_lc + ":allocator_sidel"),//0
-				iconRegister.registerIcon(ForgeMod.modid_lc+":allocator_sider"),//1
-				iconRegister.registerIcon(ForgeMod.modid_lc+":allocator_in"),//2
-				iconRegister.registerIcon(ForgeMod.modid_lc+":allocator_out"),//3
-				iconRegister.registerIcon(ForgeMod.modid_lc+":allocator_m_in"),//4
-				iconRegister.registerIcon(ForgeMod.modid_lc+":allocator_m_out"),//5
-				iconRegister.registerIcon(ForgeMod.modid_lc+":allocator_m_sideup"),//6
-				iconRegister.registerIcon(ForgeMod.modid_lc+":allocator_m_sidedown") };//7
+				iconRegister.registerIcon(ForgeMod.modid + ":allocator_sidel"),//0
+				iconRegister.registerIcon(ForgeMod.modid+":allocator_sider"),//1
+				iconRegister.registerIcon(ForgeMod.modid+":allocator_in"),//2
+				iconRegister.registerIcon(ForgeMod.modid+":allocator_out"),//3
+				iconRegister.registerIcon(ForgeMod.modid+":allocator_m_in"),//4
+				iconRegister.registerIcon(ForgeMod.modid+":allocator_m_out"),//5
+				iconRegister.registerIcon(ForgeMod.modid+":allocator_m_sideup"),//6
+				iconRegister.registerIcon(ForgeMod.modid+":allocator_m_sidedown") };//7
 	}
 
 	// Soooo dirty item view

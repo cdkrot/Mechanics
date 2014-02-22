@@ -2,6 +2,18 @@ package com.pfaeff_and_cdkrot.block;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+
 import com.pfaeff_and_cdkrot.ForgeMod;
 import com.pfaeff_and_cdkrot.MechanicsHelpCommand;
 import com.pfaeff_and_cdkrot.api.benchmark.BenchmarkRegistry;
@@ -10,17 +22,6 @@ import com.pfaeff_and_cdkrot.tileentity.TileEntityBenchmark;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.Material;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 
 public class BlockBenchmark extends BlockContainer
 {
@@ -39,11 +40,11 @@ public class BlockBenchmark extends BlockContainer
 	@Override
 	public void registerBlockIcons(IIconRegister ir)
 	{
-		this.blockIcon = ir.registerIcon(ForgeMod.modid_lc + ":benchmark_block_top");
+		this.blockIcon = ir.registerIcon(ForgeMod.modid + ":benchmark_block_top");
 		icons = new IIcon[]
 			{
-				ir.registerIcon(ForgeMod.modid_lc + ":benchmark_block_bottom"),
-				ir.registerIcon(ForgeMod.modid_lc+":benchmark_block_side")
+				ir.registerIcon(ForgeMod.modid + ":benchmark_block_bottom"),
+				ir.registerIcon(ForgeMod.modid+":benchmark_block_side")
 			};
 	}
 

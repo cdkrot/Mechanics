@@ -1,20 +1,17 @@
 package com.pfaeff_and_cdkrot.api.allocator;
 
-import com.pfaeff_and_cdkrot.tileentity.TileEntityAllocator;
-
+import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class MechanicsModProvider implements IInventoryProvider
-{
+import com.pfaeff_and_cdkrot.tileentity.TileEntityAllocator;
 
+public class MechanicsModProvider implements IInventoryProvider {
 	@Override
-	public IInventoryEX createIInventory(World w, int x, int y, int z, int id)
-	{
+	public IInventoryEX createIInventory(World w, int x, int y, int z, Block b) {
 		TileEntity tile = w.getTileEntity(x, y, z);
 		if (tile instanceof TileEntityAllocator)
-			return (TileEntityAllocator)tile;
+			return (TileEntityAllocator) tile;
 		return null;
 	}
-
 }

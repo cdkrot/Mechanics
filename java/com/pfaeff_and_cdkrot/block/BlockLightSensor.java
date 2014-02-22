@@ -2,18 +2,21 @@ package com.pfaeff_and_cdkrot.block;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+
 import com.pfaeff_and_cdkrot.ForgeMod;
 import com.pfaeff_and_cdkrot.tileentity.TileEntityLightSensor;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.IIcon;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.world.*;
-import net.minecraft.tileentity.TileEntity;
 
 public class BlockLightSensor extends BlockContainer
 {
@@ -35,9 +38,8 @@ public class BlockLightSensor extends BlockContainer
 	public void registerBlockIcons(IIconRegister register)
 	{
 		this.iconArray = new IIcon[2];
-		this.iconArray[0] = register.registerIcon(ForgeMod.modid_lc+":lightsensor_top");
-		this.iconArray[1] = register
-				.registerIcon("minecraft:daylight_detector_side");//UPD: vanilla texture name changed
+		this.iconArray[0] = register.registerIcon(ForgeMod.modid+":lightsensor_top");
+		this.iconArray[1] = register.registerIcon("minecraft:daylight_detector_side");//UPD: vanilla texture name changed
 	}
 
 	public void updateSensorOutput(World world, int x, int y, int z)

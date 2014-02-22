@@ -1,16 +1,16 @@
 package com.pfaeff_and_cdkrot.tileentity;
 
-import com.pfaeff_and_cdkrot.util.Utility;
-import com.pfaeff_and_cdkrot.util.veci3;
-import com.pfaeff_and_cdkrot.ForgeMod;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import com.pfaeff_and_cdkrot.util.dirvec;
 
-import java.util.List;
+import com.pfaeff_and_cdkrot.ForgeMod;
+import com.pfaeff_and_cdkrot.util.Utility;
+import com.pfaeff_and_cdkrot.util.dirvec;
+import com.pfaeff_and_cdkrot.util.veci3;
 
 //TODO: should work, however MUST be tested.
 public class TileEntityFanON extends TileEntity
@@ -27,7 +27,7 @@ public class TileEntityFanON extends TileEntity
     		return;
     	initialized=true;
     	int meta = this.worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
-    	dirvec = dirvec.list[meta&7];
+    	dirvec = com.pfaeff_and_cdkrot.util.dirvec.list[meta&7];
     	base = new veci3(xCoord, yCoord, zCoord);
 
 	    ePs = dirvec.y==0? 1 : 3;
@@ -65,7 +65,8 @@ public class TileEntityFanON extends TileEntity
 		}*/
     }
     
-    public void goOnAndTrace()
+    @SuppressWarnings("unchecked")
+	public void goOnAndTrace()
     {
     	veci3 cur = this.base.clone();
     	int power = 12;

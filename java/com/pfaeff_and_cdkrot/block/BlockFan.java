@@ -116,9 +116,9 @@ public class BlockFan extends BlockContainer
     public void registerBlockIcons(IIconRegister iconRegister)
 	{
 		icons = new IIcon[2];
-        icons[0] = iconRegister.registerIcon(ForgeMod.modid_lc+":fanfront");
-        icons[1] = iconRegister.registerIcon(ForgeMod.modid_lc+":fanfrontactive");
-        this.blockIcon = iconRegister.registerIcon(ForgeMod.modid_lc+":pfaeff_topbottom");
+        icons[0] = iconRegister.registerIcon(ForgeMod.modid+":fanfront");
+        icons[1] = iconRegister.registerIcon(ForgeMod.modid+":fanfrontactive");
+        this.blockIcon = iconRegister.registerIcon(ForgeMod.modid+":pfaeff_topbottom");
     }
 	
 	//Soooo dirty item view
