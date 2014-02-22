@@ -26,23 +26,6 @@ public class SidedNetworkStuff
 	{
 		Minecraft.getMinecraft().displayGuiScreen(new GuiBenchmark(position, text));
 	}
-	
-	@SideOnly(Side.CLIENT)
-	public static void requestBenchmarkGUI(World w, int x, int y, int z)
-	{
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		DataOutputStream dos = new DataOutputStream(baos);
-		try
-		{
-			dos.writeInt(w.provider.dimensionId);
-			dos.writeInt(x); dos.writeInt(y); dos.writeInt(z);
-		} catch (IOException e)
-		{
-			;
-		}
-		Minecraft.getMinecraft().getNetHandler()
-		.addToSendQueue(new Packet250CustomPayload("mechanics|2", baos.toByteArray()));
-	}
 
 	@SideOnly(Side.CLIENT)
 	public static void setBenchmarkText(GamePosition pos, String text, EntityPlayer player)
