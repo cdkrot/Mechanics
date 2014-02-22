@@ -108,7 +108,7 @@ public class BlockBenchmark extends BlockContainer
 		return tile;
 	}
 	
-    public boolean onBlockActivated(World w,int x,int y,int z,EntityPlayer p,int a,float b,float c,float d)
+    public boolean onBlockActivated(World w,int x,int y,int z, EntityPlayer p,int a,float b,float c,float d)
     {
     	if (!(w instanceof WorldServer))
     		SidedNetworkStuff.requestBenchmarkGUI(w, x, y, z);
