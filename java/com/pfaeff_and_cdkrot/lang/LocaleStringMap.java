@@ -48,7 +48,7 @@ public class LocaleStringMap
 		InputStream input = Localizer.class.getClassLoader().getResourceAsStream("localizations/mechanics/"+file);
 		if (input==null)
 		{
-			ForgeMod.modLogger.warning("[Language Localizer] Failed opening locale file :"+file+".");
+			ForgeMod.modLogger.warn("[Language Localizer] Failed opening locale file :"+file+".");
 			return map;
 		}
 		Scanner scanner = new Scanner(input, "UTF-16");
@@ -65,7 +65,7 @@ public class LocaleStringMap
 			else if(!map.containsKey(parts[0]))
 				map.put(parts[0], parts[1]);
 			else
-				ForgeMod.modLogger.warning("[Language Localizer] Key allready registered: "+parts[0]+".");
+				ForgeMod.modLogger.warn("[Language Localizer] Key allready registered: "+parts[0]+".");
 		}
 		scanner.close();
 		return map;

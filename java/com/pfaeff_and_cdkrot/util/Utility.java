@@ -1,10 +1,7 @@
 package com.pfaeff_and_cdkrot.util;
 
-import java.util.List;
+import java.util.*;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Scanner;
 
 import com.pfaeff_and_cdkrot.ForgeMod;
 
@@ -205,7 +202,33 @@ public class Utility
 		System.out.println("load scs"+list.size());
 		return list.toArray(new String[list.size()]);
 	}
-	
+
+	public static Map<String, String> loadKeyValueMap(InputStream input)
+	{
+		Map<String, String> map = new HashMap<String,String>();
+		if (input==null)
+			return null;
+		Scanner scanner = new Scanner(input, "UTF-16");
+		if (scanner.hasNext())//at least 1 line
+			scanner.nextLine();//first line is skipped because of encoding problem
+		while (scanner.hasNextLine())
+		{
+			String l = scanner.nextLine();
+			if (l.startsWith("#")||l.equals(""))
+				continue;//ignored
+			String parts[] = l.split("::", 2);
+			if (parts.length<2)
+				ForgeMod.modLogger.warn("[Key-Value Loader] Bad line in kv file: "+l);
+			else if(!map.containsKey(parts[0]))
+				map.put(parts[0], parts[1]);
+			else
+				ForgeMod.modLogger.warn("[Key-Value Loader] Key allready registered: "+parts[0]+".");
+		}
+		scanner.close();
+		return map;
+	}
+
+
 	/**
 	 * Returns random object from list or null, if empty
 	 */

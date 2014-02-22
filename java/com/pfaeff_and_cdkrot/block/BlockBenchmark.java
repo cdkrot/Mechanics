@@ -27,8 +27,8 @@ public class BlockBenchmark extends BlockContainer
 
 	@SideOnly(Side.CLIENT)
 	private IIcon[] icons;
-	public static int radius = 32;
-	public static String def = "Benchmark: (&&x, &&y, &&z) time: &time.&msec";
+	public static int radius;
+	public static String def;
 	public BlockBenchmark()
 	{
 		super(Material.rock);

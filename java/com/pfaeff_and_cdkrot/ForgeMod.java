@@ -1,6 +1,7 @@
 package com.pfaeff_and_cdkrot;
 
 import com.pfaeff_and_cdkrot.net.PacketTransformer;
+import com.pfaeff_and_cdkrot.util.Utility;
 import com.sun.org.apache.xerces.internal.parsers.XMLParser;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -31,7 +32,10 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
 
 @Mod(modid = "Mechanics_mod", version = "5.0", name = "Mechanics mod")
 public class ForgeMod
@@ -58,22 +62,23 @@ public class ForgeMod
 	public void configure(FMLPreInitializationEvent event)
 	{
 		modLogger = event.getModLog();
-		File config = event.getSuggestedConfigurationFile();
-		modLogger.info("Going to preinit updated mod_Allocator, mod_LightSensor, mod_JumpPad, cdkrot_Fan, using configuration " + config.getAbsolutePath());
-		//TODO: MAKE AN CONFIGURATION LOADER ( parsing JSON config)
-		Configuration c = new Configuration(event.getSuggestedConfigurationFile());
-		c.load();
-
-			BlockBenchmark.radius = c.get("Benchmark", "radius", 32).getInt(32);
-			BlockBenchmark.def = c.get("Benchmark", "defPattern", "Benchmark: (&&x, &&y, &&z) time: &time").getString();
-			//TODO:  do we need this configuration? I think no.
-		lang = "en";
-
+		File conf_path = event.getSuggestedConfigurationFile();
+		modLogger.info("Going to preinit updated mod_Allocator, mod_LightSensor, mod_JumpPad, cdkrot_Fan, using configuration " + conf_path.getAbsolutePath());
+		try
+		{
+			Map<String, String> config = Utility.loadKeyValueMap(new FileInputStream(conf_path));
+			String benchmark_radius = config.get("benchmark.radius");
+			String benchmark_def = config.get("benchmark_def");
+			BlockBenchmark.radius = (benchmark_radius==null) ? 32 : Integer.parseInt(benchmark_radius);
+			BlockBenchmark.def = (benchmark_def==null)? "Benchmark: (&&x, &&y, &&z) time: &time" : benchmark_def;
+		}
+		catch (IOException e)
+		{
+			modLogger.info("Config not exist, using default values.");
+		}
 		modLogger.info("PreInit state done.");
-		c.save();
 	}
 
-	// aka @Init
 	@EventHandler
 	public void construct(FMLInitializationEvent event) throws IllegalArgumentException, IllegalAccessException
 	{
