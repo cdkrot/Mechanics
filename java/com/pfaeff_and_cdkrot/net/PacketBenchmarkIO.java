@@ -6,7 +6,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 
 public class PacketBenchmarkIO extends BasicPacket
@@ -40,7 +40,7 @@ public class PacketBenchmarkIO extends BasicPacket
 
 	@Override
 	@SideOnly(Side.SERVER)
-	public void handleServerSide(EntityPlayer player)
+	public void handleServerSide(EntityPlayerMP player)
 	{
 		SidedNetworkStuff.setBenchmarkText(pos, text, player);
 	}

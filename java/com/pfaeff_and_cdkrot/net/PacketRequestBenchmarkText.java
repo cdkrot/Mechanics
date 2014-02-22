@@ -1,10 +1,17 @@
 package com.pfaeff_and_cdkrot.net;
 
+import com.pfaeff_and_cdkrot.ForgeMod;
+import com.pfaeff_and_cdkrot.api.benchmark.BenchmarkRegistry;
+import com.pfaeff_and_cdkrot.tileentity.TileEntityBenchmark;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
+
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 
 public class PacketRequestBenchmarkText extends BasicPacket
 {
@@ -27,13 +34,21 @@ public class PacketRequestBenchmarkText extends BasicPacket
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide()
 	{
-		throw new UnsupportedOperationException("Wrong side");
+		throw new UnsupportedOperationException("This packet is unapplicable on client side");
 	}
 
 	@Override
 	@SideOnly(Side.SERVER)
-	public void handleServerSide(EntityPlayer player)
+	public void handleServerSide(EntityPlayerMP player)
 	{
+		TileEntityBenchmark tile = (TileEntityBenchmark)MinecraftServer.getServer().worldServers[pos.worldid].getTileEntity(pos.x, pos.y, pos.z);
+		if (BenchmarkRegistry.instance.requestEditor(tile, player))
+		{
+			PacketBenchmarkIO packet = new PacketBenchmarkIO();
+			packet.pos = pos;
+			packet.text = tile.s;
 
+			ForgeMod.networkHandler.sendTo(packet, player);
+		}
 	}
 }

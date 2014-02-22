@@ -5,7 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 
 /**
@@ -42,5 +42,5 @@ public abstract class BasicPacket
 	 * @param player the player reference
 	 */
 	@SideOnly(Side.SERVER)
-	public abstract void handleServerSide(EntityPlayer player);
+	public abstract void handleServerSide(EntityPlayerMP player);
 }

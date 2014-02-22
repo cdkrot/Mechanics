@@ -24,6 +24,7 @@ import cpw.mods.fml.relauncher.Side;
 /**
  * Packet pipeline class. Directs all registered packet data to be handled by the packets themselves.
  * original author: sirgingalot, (and cpw)
+ * added some accuracy fixes (such as EntityPlayerMP..)
  */
 @ChannelHandler.Sharable
 public class PacketTransformer extends MessageToMessageCodec<FMLProxyPacket, BasicPacket>
@@ -78,18 +79,14 @@ public class PacketTransformer extends MessageToMessageCodec<FMLProxyPacket, Bas
 		BasicPacket pkt = clazz.newInstance();
 		pkt.decodeInto(ctx, payload.slice());
 
-		EntityPlayer player;
 		switch (FMLCommonHandler.instance().getEffectiveSide())
 		{
 			case CLIENT:
-				player = Minecraft.getMinecraft().thePlayer;
 				pkt.handleClientSide();
 				break;
 
 			case SERVER:
-				INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
-				player = ((NetHandlerPlayServer) netHandler).playerEntity;
-				pkt.handleServerSide(player);
+				pkt.handleServerSide(((NetHandlerPlayServer) ctx.channel().attr(NetworkRegistry.NET_HANDLER).get()).playerEntity);
 				break;
 
 			default:
