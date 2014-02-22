@@ -8,12 +8,11 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.ForgeDirection;
 import com.pfaeff_and_cdkrot.util.dirvec;
 
 import java.util.List;
 
-//TODO: something wrong here too, should fix it.
+//TODO: should work, however MUST be tested.
 public class TileEntityFanON extends TileEntity
 {
 
@@ -21,7 +20,7 @@ public class TileEntityFanON extends TileEntity
 	private veci3 base;//base
 	//private vecd3 power_base;
 	private boolean initialized=false;
-	private double ePs;//energy per step
+	private int ePs;//energy per step
     public void init()
     {
     	if (initialized)
@@ -30,6 +29,8 @@ public class TileEntityFanON extends TileEntity
     	int meta = this.worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
     	dirvec = dirvec.list[meta&7];
     	base = new veci3(xCoord, yCoord, zCoord);
+
+	    ePs = dirvec.y==0? 1 : 3;
     	/*power_base = dirvec.cloneAsVeci3()
     		.multiply3f(0.1f, 0.05f, 0.1f).tovecd3();//vertical pwr 2xless than horizontal
 
@@ -42,7 +43,10 @@ public class TileEntityFanON extends TileEntity
     {
     	init();
 		if (!ForgeMod.fan.updatePowered(worldObj, xCoord, yCoord, zCoord))//update meta
-			return;//exit, TileEntity destructed.
+			return;
+
+		goOnAndTrace();
+		//exit, TileEntity destructed.
 		/*AxisAlignedBB pool = updatePool();
 		List<Entity> list = worldObj.getEntitiesWithinAABB(Entity.class, pool);
 		for (Entity e: list)
@@ -64,21 +68,25 @@ public class TileEntityFanON extends TileEntity
     public void goOnAndTrace()
     {
     	veci3 cur = this.base.clone();
-    	double power = 12.0/ePs;
+    	int power = 12;
     	while (power>0)
     	{
     		AxisAlignedBB selection = Utility.SelectPoolBasingOnVectorAndInc(base, dirvec);
     		Block b = worldObj.getBlock(cur.x, cur.y, cur.z);
-    		b.setBlockBoundsBasedOnState(worldObj, cur.x, cur.y, cur.z);
-    		
+			if (b!=null)
+				return;
     		Entity e = Utility.randomFromList((List<Entity>)worldObj.getEntitiesWithinAABB(Entity.class, selection), worldObj.rand);
-    		if (e!=null)
+		    if (e!=null)
+		    {
     			e.addVelocity(dirvec.x*power, dirvec.y*power, dirvec.z*power);
-    		power-=1;
+    		    return;
+			}
+			power-=ePs;
     		cur.add(dirvec);//move forward
     	}
     }
-    
+
+	/*
 	public AxisAlignedBB updatePool()
 	{
 		
@@ -99,5 +107,7 @@ public class TileEntityFanON extends TileEntity
 		Utility.SwapVectorsComponentsi(vec, vec2);
 		vec2.incAllByOne();
 		return AxisAlignedBB.getAABBPool().getAABB(vec.x, vec.y, vec.z, vec2.x, vec2.y, vec2.z);
+
 	}
+*/
 }

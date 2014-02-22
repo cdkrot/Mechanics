@@ -7,7 +7,6 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -56,7 +55,7 @@ public class BlockFan extends BlockContainer
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack unused)
     {
-    	int suggested = Utility.getMetadataForBlockAnyPlaced(world, x, y, z, entity);
+    	int suggested = Utility.getMetadataForBlockAnyPlaced(x, y, z, entity);
     	boolean ispow = world.isBlockIndirectlyGettingPowered(x, y, z);
     	world.setBlockMetadataWithNotify(x, y, z, ispow ? suggested|8 : suggested, 2);//side+8 : side
     }
@@ -66,19 +65,19 @@ public class BlockFan extends BlockContainer
 	@Override
 	public TileEntity createNewTileEntity(World world, int i)
 	{
-		return createNewTileEntity(world);
+		return createNewTileEntity();
 	}
 
-	public TileEntity createNewTileEntity(World w)
+	public TileEntity createNewTileEntity()
 	{
 		return new TileEntityFanON();
 	}
 
-
+	@Override
     public TileEntity createTileEntity(World world, int metadata)
     {   
     	if ((metadata&8)!=0)
-    		return createNewTileEntity(world);
+    		return createNewTileEntity();
         return null;
     }
 
@@ -96,7 +95,7 @@ public class BlockFan extends BlockContainer
         	if ((meta & 8)==0)
         	{
         		world.setBlockMetadataWithNotify(x, y, z, meta|8, 2);//unpow->pow
-        		world.setTileEntity(x, y, z, this.createNewTileEntity(world));
+        		world.setTileEntity(x, y, z, this.createNewTileEntity());
         	}
         	return true;
         }
@@ -147,6 +146,5 @@ public class BlockFan extends BlockContainer
     public int getMobilityFlag()
     {
     	return 0;
-    	//return 2;
     }
 }
