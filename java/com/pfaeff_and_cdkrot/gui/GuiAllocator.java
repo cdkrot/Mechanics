@@ -7,7 +7,6 @@ import com.pfaeff_and_cdkrot.tileentity.TileEntityAllocator;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.gui.*;
 import net.minecraft.client.gui.inventory.*;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -17,17 +16,16 @@ import net.minecraft.util.StatCollector;
 public class GuiAllocator extends GuiContainer
 {
 	public ResourceLocation texture = new ResourceLocation(ForgeMod.modid_lc+":gui/allocator.png");
-    public GuiAllocator(InventoryPlayer invPlayer, TileEntityAllocator tileentityallocator)
+    public GuiAllocator(InventoryPlayer invPlayer, TileEntityAllocator allocator)
     {
-        super(new ContainerAllocator(invPlayer, tileentityallocator));
-        allocatorInv = tileentityallocator;
+        super(new ContainerAllocator(invPlayer, allocator));
     }
 
     protected void drawGuiContainerForegroundLayer(int i1, int i2)
     {
     	//use allocator name
-        this.fontRenderer.drawString(StatCollector.translateToLocal("tile.mechanics::allocator.name"), 60, 6, 0x404040);
-        this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
+        this.fontRendererObj.drawString(StatCollector.translateToLocal("tile.mechanics::allocator.name"), 60, 6, 0x404040);
+        this.fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 
 	@Override
@@ -43,5 +41,4 @@ public class GuiAllocator extends GuiContainer
 	
 	
 	
-	private TileEntityAllocator allocatorInv;
 }

@@ -132,7 +132,7 @@ public class ForgeMod
 			names_map.NameCreativeTab("Mod_Pfaeff_and_cdkrot", "creativetab");
 		modLogger.info("Forcing lang assets to preload.");
 		LocaleDataTable.chatJumppad.charAt(0);//do static
-		
+		Block.blockRegistry.
 		modLogger.info("Init state done.");
 		//proxy.doInit();
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
