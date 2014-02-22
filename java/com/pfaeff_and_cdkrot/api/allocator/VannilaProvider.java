@@ -28,31 +28,27 @@ public class VannilaProvider implements IInventoryProvider {
 		// decided that nobody should use goto's if i will find you, i will
 		// tell you all i am thinking of you, your company, and java language.
 
-		int cblockID = w.getBlockId(x, y, z);
+		int cblockID = w.getBlockMetadata(x, y, z);
 
-		if (w.getBlockId(x + 1, y, z) == cblockID) {
+		if (w.getBlockMetadata(x + 1, y, z) == cblockID) {
 			TileEntity chest2 = (w.getTileEntity(x + 1, y, z));
 			if (chest2 instanceof IInventory)
-				return IInventoryWrapper.createDefault(new InventoryLargeChest(
-						"", (IInventory) tile, (IInventory) chest2));
+				return IInventoryWrapper.createDefault(new InventoryLargeChest("", (IInventory) tile, (IInventory) chest2));
 		}
-		if (w.getBlockId(x - 1, y, z) == cblockID) {
+		if (w.getBlockMetadata(x - 1, y, z) == cblockID) {
 			TileEntity chest2 = (w.getTileEntity(x - 1, y, z));
 			if (chest2 instanceof IInventory)
-				return IInventoryWrapper.createDefault(new InventoryLargeChest(
-						"", (IInventory) chest2, (IInventory) tile));
+				return IInventoryWrapper.createDefault(new InventoryLargeChest("", (IInventory) chest2, (IInventory) tile));
 		}
-		if (w.getBlockId(x, y, z + 1) == cblockID) {
+		if (w.getBlockMetadata(x, y, z + 1) == cblockID) {
 			TileEntity chest2 = (w.getTileEntity(x, y, z + 1));
 			if (chest2 instanceof IInventory)
-				return IInventoryWrapper.createDefault(new InventoryLargeChest(
-						"", (IInventory) tile, (IInventory) chest2));
+				return IInventoryWrapper.createDefault(new InventoryLargeChest("", (IInventory) tile, (IInventory) chest2));
 		}
-		if (w.getBlockId(x, y, z - 1) == cblockID) {
+		if (w.getBlockMetadata(x, y, z - 1) == cblockID) {
 			TileEntity chest2 = (w.getTileEntity(x, y, z - 1));
 			if (chest2 instanceof IInventory)
-				return IInventoryWrapper.createDefault(new InventoryLargeChest(
-						"", (IInventory) chest2, (IInventory) tile));
+				return IInventoryWrapper.createDefault(new InventoryLargeChest("", (IInventory) chest2, (IInventory) tile));
 		}
 		return null;
 	}
@@ -71,15 +67,15 @@ public class VannilaProvider implements IInventoryProvider {
 
 		@Override
 		public ItemStack getStackInSlot(int i) {
-			return (i == 0) ? te.func_96097_a() : null;
+			return (i == 0) ? te.func_145856_a() : null;
 		}
 
 		@Override
 		public ItemStack decrStackSize(int i, int j) {
 			if (i != 0 && j > 0)
 				return null;
-			ItemStack stack = te.func_96097_a();
-			te.func_96098_a(null);
+			ItemStack stack = te.func_145856_a();
+			te.func_145828_a(null);
 			return stack;
 		}
 
@@ -91,7 +87,7 @@ public class VannilaProvider implements IInventoryProvider {
 		@Override
 		public void setInventorySlotContents(int i, ItemStack itemstack) {
 			if (i == 0)
-				te.func_96098_a(itemstack);
+				te.func_145857_a(itemstack);
 		}
 
 		@Override
@@ -106,7 +102,7 @@ public class VannilaProvider implements IInventoryProvider {
 
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-			return (i == 0) && (itemstack.getItem() instanceof ItemRecord) && (te.func_96097_a() == null);
+			return (i == 0) && (itemstack.getItem() instanceof ItemRecord) && (te.func_145856_a() == null);
 		}
 
 		@Override
@@ -136,17 +132,17 @@ public class VannilaProvider implements IInventoryProvider {
 
 		@Override
 		public void onOutputSuccessful(int slot, ItemStack left) {
-			te.worldObj.playAuxSFX(1005, te.xCoord, te.yCoord, te.zCoord, 0);
-			te.worldObj.playRecord(null, te.xCoord, te.yCoord, te.zCoord);
-			te.func_96098_a(null);
-			te.onInventoryChanged();
-			te.worldObj.setBlockMetadataWithNotify(te.xCoord, te.yCoord, te.zCoord, 0, 4);
+			te.getWorldObj().playAuxSFX(1005, te.xCoord, te.yCoord, te.zCoord, 0);
+			te.getWorldObj().playRecord(null, te.xCoord, te.yCoord, te.zCoord);
+			te.func_145828_a(null);
+			te.getWorldObj().setBlockMetadataWithNotify(te.xCoord, te.yCoord, te.zCoord, 0, 4);
 		}
 
 		public void onInputSuccessful(int slot, ItemStack stack) {
 			ItemRecord record = (ItemRecord) stack.getItem();
-			record.onItemUse(stack, null, te.worldObj, te.xCoord, te.yCoord, te.zCoord, 0, 0, 0, 0);
-			((BlockJukebox) Blocks.jukebox).insertRecord(te.worldObj, te.xCoord, te.yCoord, te.zCoord, stack);
+			record.onItemUse(stack, null, te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord, 0, 0, 0, 0);
+			//((BlockJukebox) Blocks.jukebox).insertRecord(te.worldObj, te.xCoord, te.yCoord, te.zCoord, stack);
+			((BlockJukebox) Blocks.jukebox).func_149925_e(te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord);
 		}
 
 		@Override
