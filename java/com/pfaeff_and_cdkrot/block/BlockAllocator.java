@@ -9,7 +9,6 @@ import com.pfaeff_and_cdkrot.api.allocator.*;
 import com.pfaeff_and_cdkrot.tileentity.TileEntityAllocator;
 import com.pfaeff_and_cdkrot.util.Utility;
 import com.pfaeff_and_cdkrot.util.dirvec;
-import com.pfaeff_and_cdkrot.util.veci3;
 
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -179,7 +178,7 @@ public class BlockAllocator extends BlockContainer
 
 		if (allocator != null)
 		{
-			int meta = world.getBlockMetadata(i, j, k) & 7;
+			// int meta = world.getBlockMetadata(i, j, k) & 7;
 			// IInventory hopper = TileEntityHopper.func_96117_b(world,
 			// //WARNING: Hopper doesn't have following (or equiv. with other
 			// name) method!!!
@@ -190,8 +189,9 @@ public class BlockAllocator extends BlockContainer
 			
 			//TODO: todo
 			ItemStack stack = this.dispenser.dispense(blockImpl, item);
-			if (stack != null && stack.stackSize == 0)
-				stack = null;//so strange code
+			//if (stack != null && stack.stackSize == 0)
+			//	stack = null;
+			//removed this, because the code above did nothing anyways. so strange code
 		}
 	}
 
@@ -297,7 +297,7 @@ public class BlockAllocator extends BlockContainer
 	}
 
 	@Override
-	public void onNeighborBlockChange(IBlockAccess world, int x, int y, int z, Block b)
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block b)
 	{
 		if (b.canProvidePower())
 		{
@@ -311,7 +311,7 @@ public class BlockAllocator extends BlockContainer
 	public void onBlockPlacedBy(World world, int x, int y, int z,
 			EntityLivingBase e, ItemStack stack)
 	{
-		int side = Utility.getMetadataForBlockAnyPlaced(world, x, y, z, e);
+		int side = Utility.getMetadataForBlockAnyPlaced(x, y, z, e);
 		world.setBlockMetadataWithNotify(x, y, z, side, 4);
 	}
 

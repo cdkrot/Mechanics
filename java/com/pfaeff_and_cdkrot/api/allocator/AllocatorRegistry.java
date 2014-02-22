@@ -3,6 +3,7 @@ package com.pfaeff_and_cdkrot.api.allocator;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
@@ -21,16 +22,17 @@ public class AllocatorRegistry
 		
 	public IInventoryEX getIInventoryFor(World w, int x, int y, int z)
 	{
-		int id = w.getBlockId(x, y, z);
+		Block b = w.getBlock(x, y, z);
 		for (IInventoryProvider provider: list)
 		{
-			IInventoryEX inv = provider.createIInventory(w, x, y, z, id);
+			IInventoryEX inv = provider.createIInventory(w, x, y, z, b);
 			if (inv!=null)
 				return inv;
 		}
 		return null;
 	}
-	
+
+	//TODO: Never used.
 	public IInventoryEX getIInventoryFor(Entity entity)
 	{
 		for (IInventoryProviderEntity provider: list2)

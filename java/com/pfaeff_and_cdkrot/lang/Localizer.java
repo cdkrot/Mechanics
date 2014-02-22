@@ -1,12 +1,6 @@
 package com.pfaeff_and_cdkrot.lang;
 
-import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
-
-import com.pfaeff_and_cdkrot.ForgeMod;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;
 public class Localizer extends LocaleStringMap

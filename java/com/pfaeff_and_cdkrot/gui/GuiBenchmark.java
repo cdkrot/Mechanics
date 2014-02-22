@@ -1,5 +1,7 @@
 package com.pfaeff_and_cdkrot.gui;
 
+import com.pfaeff_and_cdkrot.ForgeMod;
+import com.pfaeff_and_cdkrot.net.PacketBenchmarkIO;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -9,8 +11,6 @@ import java.io.DataOutputStream;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet250CustomPayload;
 
 import org.lwjgl.input.Keyboard;
 
@@ -64,9 +64,10 @@ public class GuiBenchmark extends GuiScreen
 
                 try
                 {
-                	benchmark.writeToStream(dos);
-                	dos.writeUTF(text.getText());
-                    this.mc.getNetHandler().addToSendQueue(new Packet250CustomPayload("mechanics|1", baos.toByteArray()));
+	                PacketBenchmarkIO packet = new PacketBenchmarkIO();
+	                packet.pos = benchmark;
+                	packet.text = text.getText();
+	                ForgeMod.networkHandler.sendToServer(packet);
                 }
                 catch (Exception exception)
                 {
@@ -103,8 +104,8 @@ public class GuiBenchmark extends GuiScreen
     public void drawScreen(int p1, int p2, float p3)
     {
         this.drawDefaultBackground();
-        this.drawCenteredString(this.fontRenderer, "Benchmark", this.width / 2, 20, 16777215);
-        this.drawString(this.fontRenderer, "Set text:", this.width / 2 - 150, 47, 10526880);
+        this.drawCenteredString(this.fontRendererObj, "Benchmark", this.width / 2, 20, 16777215);
+        this.drawString(this.fontRendererObj, "Set text:", this.width / 2 - 150, 47, 10526880);
         this.text.drawTextBox();
         super.drawScreen(p1, p2, p3);
     }
