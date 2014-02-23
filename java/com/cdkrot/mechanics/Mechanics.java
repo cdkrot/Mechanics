@@ -44,7 +44,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(modid = Mechanics.modid, version = "0.0.6", name = "Mechanics mod")
 public class Mechanics {
-	public static final String modid = "Mechanics_mod";
+	public static final String modid = "mechanics_mod";
 
 	public static Logger modLogger;
 
