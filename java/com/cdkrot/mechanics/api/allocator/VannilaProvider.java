@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
-
+//TODO: needs checking!
 public class VannilaProvider implements IInventoryProvider {
 	@Override
 	public IInventoryEX createIInventory(World w, int x, int y, int z, Block b) {
@@ -28,24 +28,28 @@ public class VannilaProvider implements IInventoryProvider {
 		// decided that nobody should use goto's if i will find you, i will
 		// tell you all i am thinking of you, your company, and java language.
 
-		int cblockID = w.getBlockMetadata(x, y, z);
+		Block cblock = w.getBlock(x, y, z);
 
-		if (w.getBlockMetadata(x + 1, y, z) == cblockID) {
+		if (w.getBlock(x + 1, y, z) == cblock)//using just links compare (like comparing blockids before)
+		{
 			TileEntity chest2 = (w.getTileEntity(x + 1, y, z));
 			if (chest2 instanceof IInventory)
 				return IInventoryWrapper.createDefault(new InventoryLargeChest("", (IInventory) tile, (IInventory) chest2));
 		}
-		if (w.getBlockMetadata(x - 1, y, z) == cblockID) {
+		if (w.getBlock(x - 1, y, z) == cblock)
+		{
 			TileEntity chest2 = (w.getTileEntity(x - 1, y, z));
 			if (chest2 instanceof IInventory)
 				return IInventoryWrapper.createDefault(new InventoryLargeChest("", (IInventory) chest2, (IInventory) tile));
 		}
-		if (w.getBlockMetadata(x, y, z + 1) == cblockID) {
+		if (w.getBlock(x, y, z + 1) == cblock)
+		{
 			TileEntity chest2 = (w.getTileEntity(x, y, z + 1));
 			if (chest2 instanceof IInventory)
 				return IInventoryWrapper.createDefault(new InventoryLargeChest("", (IInventory) tile, (IInventory) chest2));
 		}
-		if (w.getBlockMetadata(x, y, z - 1) == cblockID) {
+		if (w.getBlock(x, y, z - 1) == cblock)
+		{
 			TileEntity chest2 = (w.getTileEntity(x, y, z - 1));
 			if (chest2 instanceof IInventory)
 				return IInventoryWrapper.createDefault(new InventoryLargeChest("", (IInventory) chest2, (IInventory) tile));

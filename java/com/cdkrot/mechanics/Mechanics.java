@@ -138,7 +138,7 @@ public class Mechanics {
 		networkHandler.postInitialise();
 	}
 
-	public static void warning(String message) {
-		modLogger.warn(message);
-	}
+//	public static void warning(String message) {
+//		modLogger.warn(message);
+//	}
 }
