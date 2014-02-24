@@ -115,23 +115,14 @@ public class Mechanics {
 	}
 
 	@EventHandler
-	public void postInit(FMLPostInitializationEvent e) {
+	public void postInit(FMLPostInitializationEvent e)
+	{
 		// load recipes and register Allocator provision
-		GameRegistry.addRecipe(new ItemStack(allocator, 1), new Object[] {
-			"X#X", "X$X", "X#X", 'X', Blocks.cobblestone, '#', Items.redstone, '$', Items.gold_ingot
-		});
-		GameRegistry.addRecipe(new ItemStack(LightSensor, 1), new Object[] {
-			"A", "B", "C", 'A', Blocks.glass, 'B', Items.quartz, 'C', Blocks.wooden_slab
-		});
-		GameRegistry.addRecipe(new ItemStack(jumpPad, 4), new Object[] {
-			"X", "#", 'X', Items.slime_ball, '#', Blocks.wooden_pressure_plate
-		});
-		GameRegistry.addRecipe(new ItemStack(fan), new Object[] {
-			"CsC", "sSs", "RsR", 'C', Blocks.cobblestone, 's', Items.stick, 'S', Items.slime_ball, 'R', Blocks.redstone_block
-		});
-		GameRegistry.addRecipe(new ItemStack(Benchmark), new Object[] {
-			"WSW", "WDW", "RRR", 'W', new ItemStack(Blocks.wool, 1, 14), 'S', Items.sign, 'D', Blocks.dispenser, 'R', Items.redstone
-		});
+		GameRegistry.addRecipe(new ItemStack(allocator, 1), "X#X", "X$X", "X#X", 'X', Blocks.cobblestone, '#', Items.redstone, '$', Items.gold_ingot);
+		GameRegistry.addRecipe(new ItemStack(LightSensor, 1),  "A", "B", "C", 'A', Blocks.glass, 'B', Items.quartz, 'C', Blocks.wooden_slab);
+		GameRegistry.addRecipe(new ItemStack(jumpPad, 4), "X", "#", 'X', Items.slime_ball, '#', Blocks.wooden_pressure_plate);
+		GameRegistry.addRecipe(new ItemStack(fan),"CsC", "sSs", "RsR", 'C', Blocks.cobblestone, 's', Items.stick, 'S', Items.slime_ball, 'R', Blocks.redstone_block);
+		GameRegistry.addRecipe(new ItemStack(Benchmark), "WSW", "WDW", "RRR", 'W', new ItemStack(Blocks.wool, 1, 14), 'S', Items.sign, 'D', Blocks.dispenser, 'R', Items.redstone);
 
 		AllocatorRegistry.instance.add(new VannilaProvider());
 		AllocatorRegistry.instance.add(new MechanicsModProvider());
