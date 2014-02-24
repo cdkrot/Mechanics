@@ -18,6 +18,7 @@ public class TileEntityBenchmark extends TileEntity
 	public static final SimpleDateFormat date =  new SimpleDateFormat("dd.MMMMM.yyyy");
 	public static final SimpleDateFormat msec = new SimpleDateFormat("S");
 
+	@Override
     public void validate()
     {
     	super.validate();
@@ -29,6 +30,7 @@ public class TileEntityBenchmark extends TileEntity
     /**
      * Reads a tile entity from NBT.
      */
+	@Override
     public void readFromNBT(NBTTagCompound nbt)
     {
     	super.readFromNBT(nbt);
@@ -39,6 +41,7 @@ public class TileEntityBenchmark extends TileEntity
     /**
      * Writes a tile entity to NBT.
      */
+	@Override
     public void writeToNBT(NBTTagCompound nbt)
     {
     	super.writeToNBT(nbt);
@@ -54,4 +57,11 @@ public class TileEntityBenchmark extends TileEntity
 		.replace("&date", date.format(d))
 		.replace("&msec", msec.format(d));
     }
+
+	@Override
+	public String toString()
+	{
+		return "TEBenchmark{x="+xCoord+",y="+yCoord+",z="+zCoord+",text="+s+"}";
+	}
+
 }

@@ -24,9 +24,11 @@ public class AllocatorRegistry {
 		list2.add(p);
 	}
 
-	public IInventoryEX getIInventoryFor(World w, int x, int y, int z) {
+	public IInventoryEX getIInventoryFor(World w, int x, int y, int z)
+	{
 		Block b = w.getBlock(x, y, z);
-		for (IInventoryProvider provider : list) {
+		for (IInventoryProvider provider : list)
+		{
 			IInventoryEX inv = provider.createIInventory(w, x, y, z, b);
 			if (inv != null)
 				return inv;
