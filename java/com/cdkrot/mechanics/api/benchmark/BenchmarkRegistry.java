@@ -5,15 +5,15 @@ import net.minecraft.entity.player.EntityPlayerMP;
 
 import com.cdkrot.mechanics.tileentity.TileEntityBenchmark;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BenchmarkRegistry implements INetworkBenchmarkProcessor
 {
 
 	public static final int API_VERSION = 3;
 	public static final BenchmarkRegistry instance = new BenchmarkRegistry();
-	private INetworkBenchmarkProcessor[] processors = null;
+	private List<INetworkBenchmarkProcessor> processors = new ArrayList<INetworkBenchmarkProcessor>();
 
 	static
 	{
@@ -23,13 +23,8 @@ public class BenchmarkRegistry implements INetworkBenchmarkProcessor
 
 	public void register(INetworkBenchmarkProcessor p)
 	{
-		if (processors == null)
-			processors = new INetworkBenchmarkProcessor[] { p };
-		INetworkBenchmarkProcessor[] temp = new INetworkBenchmarkProcessor[processors.length + 1];
-		System.arraycopy(processors, 0, temp, 0, processors.length);
-		temp[processors.length] = p;
-
-		processors = temp;
+		processors.add(p);
+		Mechanics.modLogger.info("[BenchmarkSecurity] Registered security addon "+p.toString());
 	}
 
 	public boolean onTextChanged(TileEntityBenchmark tile, String newtext, EntityPlayerMP p)

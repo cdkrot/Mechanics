@@ -316,7 +316,9 @@ public class BlockAllocator extends BlockContainer {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IIcon getIconForTerrain(int side, int meta) {
+	public IIcon getIconForTerrain(int side, int meta)
+	{
+		if (icons == null)
 		if (meta == 0)// facing down
 			if (side == meta)
 				return icons[5];// out
