@@ -13,6 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
+import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Logger;
 
 import com.cdkrot.mechanics.api.allocator.AllocatorRegistry;
@@ -25,7 +26,6 @@ import com.cdkrot.mechanics.block.BlockJumpPad;
 import com.cdkrot.mechanics.block.BlockLightSensor;
 import com.cdkrot.mechanics.gui.GuiHandler;
 import com.cdkrot.mechanics.net.PacketTransformer;
-import com.cdkrot.mechanics.network.CommonProxy;
 import com.cdkrot.mechanics.tileentity.TileEntityAllocator;
 import com.cdkrot.mechanics.tileentity.TileEntityBenchmark;
 import com.cdkrot.mechanics.tileentity.TileEntityFanON;
@@ -35,7 +35,6 @@ import com.cdkrot.mechanics.util.Utility;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -64,24 +63,20 @@ public class Mechanics {
 	@Instance(modid)
 	public static Mechanics instance;
 
-	@SidedProxy(clientSide = "com.cdkrot.mechanics.network.ClientProxy", serverSide = "com.cdkrot.mechanics.network.CommonProxy")
-	public static CommonProxy proxy;
+	//@SidedProxy(clientSide = "com.cdkrot.mechanics.network.ClientProxy", serverSide = "com.cdkrot.mechanics.network.CommonProxy")
+	//public static CommonProxy proxy;
+	//in fact proxy's are unused nowadays, so commenting out.
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		// load configuration properties
 		modLogger = event.getModLog();
-		File conf_path = event.getSuggestedConfigurationFile();
-		modLogger.info("Going to preinit updated mod_Allocator, mod_LightSensor, mod_JumpPad, cdkrot_Fan, using configuration " + conf_path.getAbsolutePath());
-		try {
-			Map<String, String> config = Utility.loadKeyValueMap(new FileInputStream(conf_path));
-			String benchmark_radius = config.get("benchmark.radius");
-			String benchmark_def = config.get("benchmark_def");
-			BlockBenchmark.radius = (benchmark_radius == null) ? 32 : Integer.parseInt(benchmark_radius);
-			BlockBenchmark.def = (benchmark_def == null) ? "Benchmark: (&&x, &&y, &&z) time: &time" : benchmark_def;
-		} catch (IOException e) {
-			modLogger.info("Config not exist, using default values.");
-		}
+		modLogger.info("Going to preinit updated mod_Allocator, mod_LightSensor, mod_JumpPad, cdkrot_Fan");
+		Configuration c = new Configuration(event.getSuggestedConfigurationFile());
+		c.load();
+			BlockBenchmark.radius = c.get("GENERAL", "benchmark.radius", 32).getInt();
+			BlockBenchmark.def = c.get("GENERAL", "benchmark.radius", "Benchmark: (&&x, &&y, &&z) time: &time.&msec").getString();
+		c.save();
 		modLogger.info("PreInit state done.");
 	}
 
@@ -109,14 +104,13 @@ public class Mechanics {
 		TileEntity.addMapping(TileEntityFanON.class, "cdkrot_fan");
 		TileEntity.addMapping(TileEntityBenchmark.class, "mechanics::benchmark");
 
-		proxy.doInit();
+		//proxy.doInit();
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 		networkHandler.initalise();
 	}
 
 	@EventHandler
-	public void postInit(FMLPostInitializationEvent e)
-	{
+	public void postInit(FMLPostInitializationEvent e) {
 		// load recipes and register Allocator provision
 		GameRegistry.addRecipe(new ItemStack(allocator, 1), "X#X", "X$X", "X#X", 'X', Blocks.cobblestone, '#', Items.redstone, '$', Items.gold_ingot);
 		GameRegistry.addRecipe(new ItemStack(LightSensor, 1),  "A", "B", "C", 'A', Blocks.glass, 'B', Items.quartz, 'C', Blocks.wooden_slab);
@@ -128,8 +122,4 @@ public class Mechanics {
 		AllocatorRegistry.instance.add(new MechanicsModProvider());
 		networkHandler.postInitialise();
 	}
-
-//	public static void warning(String message) {
-//		modLogger.warn(message);
-//	}
 }

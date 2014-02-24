@@ -168,6 +168,7 @@ public class Utility
 		}
     }
 
+
 	//TODO: warning, IDE reports that this method never used.
     public static EnumFacing getDirectionVectorInVanillaFormat(int side)
     {
