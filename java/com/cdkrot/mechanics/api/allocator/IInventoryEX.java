@@ -28,12 +28,17 @@ public interface IInventoryEX {
 	IInventory asIInventory();
 
 	/**
-	 * On outputSuccesful - when taken succesful. (update stack data yourself)
-	 * On input succesful - when put succesful (update stack data yourself)
-	 * 
-	 * @param slot
-	 * @param left
+	 * Taken succesful some items. (update stack data yourself)
+	 *
+	 * @param slot slot id
+	 * @param left the left stack (can be null)
 	 */
-	void onOutputSuccessful(int slot, ItemStack left);
-	void onInputSuccessful(int slot, ItemStack stack);
+	void onTakenSuccessful(int slot, ItemStack left);
+
+	/**
+	 * When put succesful (update stack data yourself)
+	 * @param slot slot id
+	 * @param stack the new stack, to replace previous.
+	 */
+	void onPutSuccessful(int slot, ItemStack stack);
 }

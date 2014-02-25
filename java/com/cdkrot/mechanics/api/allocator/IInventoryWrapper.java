@@ -46,16 +46,12 @@ public class IInventoryWrapper implements IInventoryEX {
 	}
 
 	@Override
-	public void onOutputSuccessful(int slot, ItemStack left) {
+	public void onTakenSuccessful(int slot, ItemStack left) {
 		inv.setInventorySlotContents(slot, left);
 	}
 
 	@Override
-	public void onInputSuccessful(int slot, ItemStack stack) {
+	public void onPutSuccessful(int slot, ItemStack stack) {
 		inv.setInventorySlotContents(slot, stack);
-	}
-
-	public ItemStack[] acceptableItems() {
-		return null;
 	}
 }

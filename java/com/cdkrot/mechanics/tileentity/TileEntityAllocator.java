@@ -98,15 +98,15 @@ public class TileEntityAllocator extends TileEntity implements IInventory, IInve
 	@Override
 		public IInventory asIInventory(){return this;}
 	@Override
-	public void onOutputSuccessful(int slot, ItemStack left)
+	public void onTakenSuccessful(int slot, ItemStack left)
 	{
-		//TODO: OOPS
+		setInventorySlotContents(slot, left);
 	}
 
 	@Override
-	public void onInputSuccessful(int slot, ItemStack stack)
+	public void onPutSuccessful(int slot, ItemStack stack)
 	{
-		//TODO: OOPS!
+		setInventorySlotContents(slot, stack);
 	}
 
 }

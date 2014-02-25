@@ -135,14 +135,15 @@ public class VannilaProvider implements IInventoryProvider {
 		}
 
 		@Override
-		public void onOutputSuccessful(int slot, ItemStack left) {
+		public void onTakenSuccessful(int slot, ItemStack left) {
 			te.getWorldObj().playAuxSFX(1005, te.xCoord, te.yCoord, te.zCoord, 0);
 			te.getWorldObj().playRecord(null, te.xCoord, te.yCoord, te.zCoord);
 			te.func_145828_a(null);
 			te.getWorldObj().setBlockMetadataWithNotify(te.xCoord, te.yCoord, te.zCoord, 0, 4);
 		}
 
-		public void onInputSuccessful(int slot, ItemStack stack) {
+		public void onPutSuccessful(int slot, ItemStack stack)
+		{//TODO: not sure what following code does, needs checking.
 			ItemRecord record = (ItemRecord) stack.getItem();
 			record.onItemUse(stack, null, te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord, 0, 0, 0, 0);
 			//((BlockJukebox) Blocks.jukebox).insertRecord(te.worldObj, te.xCoord, te.yCoord, te.zCoord, stack);
@@ -202,7 +203,7 @@ public class VannilaProvider implements IInventoryProvider {
 		}
 
 		@Override
-		public void onOutputSuccessful(int slot, ItemStack left) {
+		public void onTakenSuccessful(int slot, ItemStack left) {
 			if (left == null)
 				stacks[slot].setDead();
 			else
@@ -262,8 +263,8 @@ public class VannilaProvider implements IInventoryProvider {
 		}
 
 		@Override
-		public void onInputSuccessful(int slot, ItemStack stack) {
-			throw new IllegalArgumentException("NO INPUT HERE!");
+		public void onPutSuccessful(int slot, ItemStack stack) {
+			throw new UnsupportedOperationException("NO INPUT HERE!");
 		}
 
 		@Override

@@ -179,8 +179,7 @@ public class BlockAllocator extends BlockContainer {
 	/**
 	 * Handles the item output. Returns true, if item was successfully put out.
 	 */
-	@SuppressWarnings({ "unused", "unchecked" })
-	// TODO: remove the need for suppression
+	@SuppressWarnings({ "unchecked" })
 	private boolean outputItem(World world, int x, int y, int z, dirvec dir, ItemStack item, Random random) {
 		int X_ = x + dir.x, Y_ = y + dir.y, Z_ = z + dir.z;
 		IInventoryEX output = containerAtPos(world, X_, Y_, Z_);
@@ -190,30 +189,33 @@ public class BlockAllocator extends BlockContainer {
 			List<IInventoryEX> invs = AllocatorRegistry.instance.getIInventoryAllInFor(entities, false);
 			if (invs.size() > 0)
 				output = invs.get(random.nextInt(invs.size()));
-			else {
-				if (!(world.getBlock(X_, Y_, Z_).isOpaqueCube())) {
+			else
+				if (!(world.getBlock(X_, Y_, Z_).isOpaqueCube()))
+				{
 					dispense(world, x, y, z, item);
 					return true;
 				}
-				return false;
-			}
+				else
+					return false;
 		}
 		IInventory base = output.asIInventory();
 
-		int index = -1;
-		int inventorySize = base.getSizeInventory();
-		inventorySize--;
 		for (int l = output.getInventoryInputBegin(); l < output.getInventoryInputEnd(); l++) {
 			ItemStack baseStack = base.getStackInSlot(l);
-			if (baseStack == null && item.stackSize <= base.getInventoryStackLimit() && base.isItemValidForSlot(l, item)) {
-				base.setInventorySlotContents(l, item);
-				return true;
-			}
-			if (((baseStack.isStackable()) && (item.isStackable())) && (baseStack.getItem() == item.getItem()) && (baseStack.getItemDamage() == item.getItemDamage()) && (baseStack.stackSize + item.stackSize <= Math.min(base.getInventoryStackLimit(), item.getMaxStackSize())))
-				// item is valid for stack (i am sure).
-
+			if (baseStack == null)
+				if(item.stackSize <= base.getInventoryStackLimit() && base.isItemValidForSlot(l, item))
+				{
+					output.onPutSuccessful(l, item);
+					return true;
+				}
+				else
+					return false;
+			else if (((baseStack.isStackable()) && (item.isStackable())) && (baseStack.getItem() == item.getItem()) && (baseStack.getItemDamage() == item.getItemDamage()) && (baseStack.stackSize + item.stackSize <= Math.min(base.getInventoryStackLimit(), item.getMaxStackSize())))
 			{
+				// item is valid for stack
+				baseStack = baseStack.copy();//should copy a stack
 				baseStack.stackSize += item.stackSize;
+				output.onPutSuccessful(l, baseStack);
 				return true;
 			}
 		}
@@ -232,9 +234,10 @@ public class BlockAllocator extends BlockContainer {
 		ItemStack[] filter = tile.allocatorFilterItems;
 		IInventoryEX input = containerAtPos(world, x - d.x, y - d.y, z - d.z);
 
-		if (input == null) {
+		if (input == null)
+		{
 			List<Entity> entities = (List<Entity>) world.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox((double) (x - d.x), (double) y - d.y, (double) (z - d.z), (double) (x - d.x + 1), (double) (y - d.y + 1), (float) (z - d.z + 1)));
-			List<IInventoryEX> invs = AllocatorRegistry.instance.getIInventoryAllInFor(entities, true);
+			List<IInventoryEX> invs = AllocatorRegistry.instance.getIInventoryAllInFor(entities, true);//TODO: entity inventories should be caught by other way [REFACTORING].
 
 			if (invs.size() > 0)
 				input = invs.get(random.nextInt(invs.size()));
@@ -242,15 +245,14 @@ public class BlockAllocator extends BlockContainer {
 				return;// no input.
 		}
 
-		int itemIndex = getRandomItemStackFromContainer(input, random, filter);
+		int itemIndex = getRandomItemStackFromContainer(input, random, filter);//TODO: should be inlined here.
 
-		if (itemIndex >= 0) {
-			IInventory base = input.asIInventory();
+		if (itemIndex >= 0)
+		{
 			ItemStack item = input.asIInventory().getStackInSlot(itemIndex);
-			if (outputItem(world, x, y, z, d, item, random)) {
-				base.decrStackSize(itemIndex, item.stackSize);
-				input.onOutputSuccessful(itemIndex, null);// TODO:
-				return;
+			if (outputItem(world, x, y, z, d, item, random))
+			{
+				input.onTakenSuccessful(itemIndex, null);
 			}
 		}
 	}
