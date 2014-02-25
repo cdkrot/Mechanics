@@ -1,6 +1,7 @@
 package com.cdkrot.mechanics.block;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -94,17 +95,13 @@ public class BlockAllocator extends BlockContainer {
 		if (filter == null)
 			return true;
 		boolean t = true;
-		for (ItemStack filter_ : filter) {
+		for (ItemStack filter_ : filter)
+		{
 			if (filter_ == null)
 				continue;
 			t = false;
 			if ((item.getItem() == filter_.getItem()) && (item.getItemDamage() == filter_.getItemDamage()))
-				if (item.getTagCompound() == null)
-					if (filter_.getTagCompound() == null)
-						return true;
-					else
-						;
-				else if (item.getTagCompound().equals(filter_.getTagCompound()))
+				if (Objects.equals(item.getTagCompound(), filter_.getTagCompound()))
 					return true;
 		}
 		return t;
@@ -248,13 +245,8 @@ public class BlockAllocator extends BlockContainer {
 		int itemIndex = getRandomItemStackFromContainer(input, random, filter);//TODO: should be inlined here.
 
 		if (itemIndex >= 0)
-		{
-			ItemStack item = input.asIInventory().getStackInSlot(itemIndex);
-			if (outputItem(world, x, y, z, d, item, random))
-			{
+			if (outputItem(world, x, y, z, d, input.asIInventory().getStackInSlot(itemIndex), random))
 				input.onTakenSuccessful(itemIndex, null);
-			}
-		}
 	}
 
 	@Override
