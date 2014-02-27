@@ -20,8 +20,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockJumpPad extends Block {
-	@SideOnly(Side.CLIENT)
-	private IIcon iconSide;
 	private static float pws[];
 	private Random r = new Random();
 

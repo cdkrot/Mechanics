@@ -197,7 +197,7 @@ public class BlockAllocator extends BlockContainer {
 		}
 		IInventory base = output.asIInventory();
 
-		for (int l = output.getInventoryInputBegin(); l < output.getInventoryInputEnd(); l++) {
+		for (int l = output.getInventoryOutputBegin(); l < output.getInventoryOutputEnd(); l++) {
 			ItemStack baseStack = base.getStackInSlot(l);
 			if (baseStack == null)
 				if(item.stackSize <= base.getInventoryStackLimit() && base.isItemValidForSlot(l, item))
@@ -282,7 +282,10 @@ public class BlockAllocator extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(net.minecraft.client.renderer.texture.IIconRegister iconRegister) {
+		Mechanics.modLogger.info("Icons loaded.");
 		this.blockIcon = iconRegister.registerIcon(Mechanics.modid + ":pfaeff_topbottom");
+		//icons = new IIcon[8];
+
 		icons = new IIcon[] {
 				iconRegister.registerIcon(Mechanics.modid + ":allocator_sidel"),// 0
 				iconRegister.registerIcon(Mechanics.modid + ":allocator_sider"),// 1

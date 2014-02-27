@@ -2,9 +2,6 @@ package com.cdkrot.mechanics.net;
 
 import io.netty.buffer.ByteBuf;
 
-import java.io.DataInputStream;
-import java.io.IOException;
-
 /**
  * Class describes an block position in game
  */
@@ -20,10 +17,6 @@ public final class GamePosition {
 
 	public GamePosition(ByteBuf in) {
 		this(in.readInt(), in.readInt(), in.readInt(), in.readInt());
-	}
-
-	public static GamePosition readFromStream(DataInputStream dis) throws IOException {
-		return new GamePosition(dis.readInt(), dis.readInt(), dis.readInt(), dis.readInt());
 	}
 
 	public void writeTo(ByteBuf buffer) {

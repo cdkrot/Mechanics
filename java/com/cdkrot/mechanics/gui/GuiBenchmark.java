@@ -77,11 +77,8 @@ public class GuiBenchmark extends GuiScreen
 		this.text.textboxKeyTyped(p1, p2);
 		this.done.enabled = this.text.getText().trim().length() != 0;
 
-		if (p1 != 28 && p2 != 156)
-			if (p2 == 1)
-				this.mc.displayGuiScreen(null);//cancel;
-			else
-				;
+		if (p1 != 28 && p2 == 1)
+			this.mc.displayGuiScreen(null);//cancel;
 		else
 			this.actionPerformed(this.done);
 	}

@@ -10,6 +10,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.world.World;
 
 public class AllocatorRegistry {
+	@SuppressWarnings("unused")
 	public static final int API_VERSION = 5;
 	public static final AllocatorRegistry instance = new AllocatorRegistry();
 
@@ -37,6 +38,7 @@ public class AllocatorRegistry {
 	}
 
 	// TODO: Never used.
+	/* Subject to remove.
 	public IInventoryEX getIInventoryFor(Entity entity) {
 		for (IInventoryProviderEntity provider : list2) {
 			IInventoryEX inv = provider.createIInventory(entity);
@@ -44,7 +46,7 @@ public class AllocatorRegistry {
 				return inv;
 		}
 		return null;
-	}
+	}*/
 
 	/**
 	 * Recognizes all inventories types: IInventory, IInventoryEX, provider; entityItems;

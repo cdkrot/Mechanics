@@ -10,7 +10,7 @@ import java.util.List;
 
 public class BenchmarkRegistry implements INetworkBenchmarkProcessor
 {
-
+	@SuppressWarnings("unused")
 	public static final int API_VERSION = 3;
 	public static final BenchmarkRegistry instance = new BenchmarkRegistry();
 	private List<INetworkBenchmarkProcessor> processors = new ArrayList<INetworkBenchmarkProcessor>();

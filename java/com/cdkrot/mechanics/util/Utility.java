@@ -57,6 +57,7 @@ public class Utility
      * This will return suggested metadata(Side) for block which placed on side
      */
     //IDE reports that this method never used, however keeping it for future.
+	@SuppressWarnings("unused")
     public static int getMetadataForBlockSidePlaced(float rotationYaw)
     {
         //int l = MathHelper.floor_double((double)((rotationYaw * 4F) / 360F) + 0.5D) & 3;
@@ -237,4 +238,6 @@ public class Utility
 	{
 		return list.size()==0 ? null : list.get(r.nextInt(list.size()));
 	}
+
+//note that some of code is unused, it was used before, and (maybe) will be needed in the future.
 }
