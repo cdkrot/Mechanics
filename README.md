@@ -2,8 +2,10 @@
 Mechanics Mod (Minecraft)
 * 1.7 update WIP
 
-### Update
-I (T145) will not be committing to this repository as frequently, as I have primarily turned my attention to developing Magistics: http://www.minecraftforum.net/topic/2424249-16-magistics-logistical-magic/
+### Contibutors
+cdkrot: main contibutor
+T145: will not be committing to this repository as frequently, as I have primarily turned my attention to developing Magistics: http://www.minecraftforum.net/topic/2424249-16-magistics-logistical-magic/
+*: want to become a contibutor? Contact me(cdkrot)!
 
 ## Latest News
 * 26 feb 14 Rewrited some code on Allocator, But still big question on textures! Tests shows that .registerBlockIcons is not called during initialization.
