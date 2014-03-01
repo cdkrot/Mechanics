@@ -4,7 +4,7 @@ Mechanics Mod (Minecraft)
 
 ### Contibutors
 cdkrot: main contibutor
-T145: will not be committing to this repository as frequently, as I have primarily turned my attention to developing Magistics: http://www.minecraftforum.net/topic/2424249-16-magistics-logistical-magic/
+T145: will not be committing to this repository as frequently, as he have primarily turned his attention to developing Magistics: http://www.minecraftforum.net/topic/2424249-/
 *: want to become a contibutor? Contact me(cdkrot)!
 
 ## Latest News

@@ -37,9 +37,11 @@ public class BlockLightSensor extends BlockContainer
 	@Override
 	public void registerBlockIcons(IIconRegister register)
 	{
-		this.iconArray = new IIcon[2];
-		this.iconArray[0] = register.registerIcon(Mechanics.modid+":lightsensor_top");
-		this.iconArray[1] = register.registerIcon("minecraft:daylight_detector_side");//UPD: vanilla texture name changed
+		this.iconArray = new IIcon[]
+		{
+			register.registerIcon(Mechanics.modid+":lightsensor_top"),
+			register.registerIcon("minecraft:daylight_detector_side")
+		};
 	}
 
 	public void updateSensorOutput(World world, int x, int y, int z)

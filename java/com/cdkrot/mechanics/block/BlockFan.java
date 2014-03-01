@@ -96,11 +96,12 @@ public class BlockFan extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
-		Mechanics.modLogger.info("Icons loaded.");
-		icons = new IIcon[2];
-		icons[0] = iconRegister.registerIcon(Mechanics.modid + ":fanfront.png");
-		icons[1] = iconRegister.registerIcon(Mechanics.modid + ":fanfrontactive.png");
-		this.blockIcon = iconRegister.registerIcon(Mechanics.modid + ":pfaeff_topbottom.png");
+		this.blockIcon = iconRegister.registerIcon(Mechanics.modid + ":pfaeff_topbottom");
+		icons = new IIcon[]
+		{
+			iconRegister.registerIcon(Mechanics.modid + ":fanfront"),
+			iconRegister.registerIcon(Mechanics.modid + ":fanfrontactive")
+		};
 	}
 
 	// Soooo dirty item view
@@ -113,6 +114,7 @@ public class BlockFan extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5) {
+
 		return this.getIconForTerrain(par5, par1IBlockAccess.getBlockMetadata(par2, par3, par4));
 	}
 

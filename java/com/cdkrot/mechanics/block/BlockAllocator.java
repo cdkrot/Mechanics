@@ -45,6 +45,7 @@ public class BlockAllocator extends BlockContainer {
 	 */
 	public BlockAllocator() {
 		super(Material.rock);
+		this.setBlockTextureName(Mechanics.modid+":allocator_in.png");
 	}
 
 	@Override
@@ -149,8 +150,6 @@ public class BlockAllocator extends BlockContainer {
 	/**
 	 * Spits out an item (like the dropper, but the whole stack)
 	 */
-	@SuppressWarnings("unused")
-	// TODO: remove the need for suppression
 	protected void dispense(World world, int i, int j, int k, ItemStack item) {
 		BlockSourceImpl blockImpl = new BlockSourceImpl(world, i, j, k);
 		TileEntityAllocator allocator = (TileEntityAllocator) blockImpl.getBlockTileEntity();
@@ -282,9 +281,7 @@ public class BlockAllocator extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(net.minecraft.client.renderer.texture.IIconRegister iconRegister) {
-		Mechanics.modLogger.info("Icons loaded.");
 		this.blockIcon = iconRegister.registerIcon(Mechanics.modid + ":pfaeff_topbottom");
-		//icons = new IIcon[8];
 
 		icons = new IIcon[] {
 				iconRegister.registerIcon(Mechanics.modid + ":allocator_sidel"),// 0

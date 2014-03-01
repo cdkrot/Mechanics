@@ -30,10 +30,13 @@ public class BlockBenchmark extends BlockContainer {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister ir) {
+	public void registerBlockIcons(IIconRegister ir)
+	{
 		this.blockIcon = ir.registerIcon(Mechanics.modid + ":benchmark_block_top");
-		icons = new IIcon[] {
-				ir.registerIcon(Mechanics.modid + ":benchmark_block_bottom"), ir.registerIcon(Mechanics.modid + ":benchmark_block_side")
+		icons = new IIcon[]
+		{
+			ir.registerIcon(Mechanics.modid + ":benchmark_block_bottom"),
+			ir.registerIcon(Mechanics.modid + ":benchmark_block_side")
 		};
 	}
 
