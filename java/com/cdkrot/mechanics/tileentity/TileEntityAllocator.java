@@ -81,7 +81,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory,
 
     @Override
     public void markDirty() {
-        throw new RuntimeException("Unsuported.");
+        Mechanics.modLogger.info("Marked dirty");
     }
 
     @Override
