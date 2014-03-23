@@ -61,10 +61,8 @@ public class BlockJumpPad extends Block {
             else
                 Utility.doEntityFall(entity);
 
-            double ThirdLevelDeltaX = MathHelper.getRandomDoubleInRange(r,
-                    -0.125, 0.125);
-            double ThirdLevelDeltaZ = MathHelper.getRandomDoubleInRange(r,
-                    -0.125, 0.125);
+            double ThirdLevelDeltaX = MathHelper.getRandomDoubleInRange(r, -0.125, 0.125);
+            double ThirdLevelDeltaZ = MathHelper.getRandomDoubleInRange(r, -0.125, 0.125);
             ThirdLevelDeltaX *= factor;
             ThirdLevelDeltaZ *= factor;
             entity.addVelocity(ThirdLevelDeltaX, pws[meta], ThirdLevelDeltaZ);
@@ -77,8 +75,7 @@ public class BlockJumpPad extends Block {
     }
 
     @Override
-    public void onEntityCollidedWithBlock(World world, int x, int y, int z,
-            Entity entity) {
+    public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
         if (entity.posY > y) { // on top
             jump(entity, world.getBlockMetadata(x, y, z));
         }
@@ -97,8 +94,7 @@ public class BlockJumpPad extends Block {
     }
 
     @Override
-    public boolean onBlockActivated(World w, int x, int y, int z,
-            EntityPlayer player, int side, float x_, float y_, float z_) {
+    public boolean onBlockActivated(World w, int x, int y, int z, EntityPlayer player, int side, float x_, float y_, float z_) {
         if (w.isRemote) {
             return player.isSneaking();
         }
@@ -113,8 +109,7 @@ public class BlockJumpPad extends Block {
     }
 
     @Override
-    public boolean isSideSolid(IBlockAccess iba, int x, int y, int z,
-            ForgeDirection side) {
+    public boolean isSideSolid(IBlockAccess iba, int x, int y, int z, ForgeDirection side) {
         return (side.ordinal() == 0); // bottom
     }
 

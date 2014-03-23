@@ -9,8 +9,7 @@ import org.lwjgl.opengl.GL11;
 
 public class RendererFanParticle extends Render {
     @Override
-    public void doRender(Entity entity, double x, double y, double z, float f,
-            float f1) {
+    public void doRender(Entity entity, double x, double y, double z, float f, float f1) {
         GL11.glPushMatrix();
         GL11.glTranslatef((float) x, (float) y, (float) z);
         GL11.glDisable(GL11.GL_LIGHTING_BIT);

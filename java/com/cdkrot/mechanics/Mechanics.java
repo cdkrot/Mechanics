@@ -51,8 +51,7 @@ public class Mechanics {
 
     public static PacketTransformer networkHandler = new PacketTransformer();
 
-    public static CreativeTabs tabMechanics = new CreativeTabs(
-            modid.toLowerCase()) {
+    public static CreativeTabs tabMechanics = new CreativeTabs(modid.toLowerCase()) {
         @Override
         public Item getTabIconItem() {
             return Item.getItemFromBlock(allocator);
@@ -71,15 +70,11 @@ public class Mechanics {
     public void preInit(FMLPreInitializationEvent event) {
         // load configuration properties
         modLogger = event.getModLog();
-        modLogger
-                .info("Going to preinit updated mod_Allocator, mod_LightSensor, mod_JumpPad, cdkrot_Fan");
-        Configuration c = new Configuration(
-                event.getSuggestedConfigurationFile());
+        modLogger.info("Going to preinit updated mod_Allocator, mod_LightSensor, mod_JumpPad, cdkrot_Fan");
+        Configuration c = new Configuration(event.getSuggestedConfigurationFile());
         c.load();
-        BlockBenchmark.radius = c.get("GENERAL", "benchmark.radius", 32)
-                .getInt();
-        BlockBenchmark.def = c.get("GENERAL", "benchmark.radius",
-                "Benchmark: (&&x, &&y, &&z) time: &time.&msec").getString();
+        BlockBenchmark.radius = c.get("GENERAL", "benchmark.radius", 32).getInt();
+        BlockBenchmark.def = c.get("GENERAL", "benchmark.radius", "Benchmark: (&&x, &&y, &&z) time: &time.&msec").getString();
         c.save();
         modLogger.info("PreInit state done.");
 
@@ -88,18 +83,13 @@ public class Mechanics {
         // load blocks and such
         modLogger.info("Mechanics mod Initializing.");
 
-        allocator = new BlockAllocator().setCreativeTab(tabMechanics)
-                .setHardness(3.5F).setStepSound(Block.soundTypeStone)
-                .setBlockName("mechanics::allocator");
-        benchmark = new BlockBenchmark().setCreativeTab(tabMechanics)
-                .setHardness(2.0F).setBlockName("mechanics::benchmark");
+        allocator = new BlockAllocator().setCreativeTab(tabMechanics).setHardness(3.5F).setStepSound(Block.soundTypeStone).setBlockName("mechanics::allocator");
+        benchmark = new BlockBenchmark().setCreativeTab(tabMechanics).setHardness(2.0F).setBlockName("mechanics::benchmark");
 
         fan = new BlockFan().setCreativeTab(tabMechanics);
 
         lightSensor = new BlockLightSensor().setCreativeTab(tabMechanics);
-        jumpPad = new BlockJumpPad().setCreativeTab(tabMechanics)
-                .setHardness(1.0F).setStepSound(Block.soundTypeStone)
-                .setBlockName("mechanics::jumppad");
+        jumpPad = new BlockJumpPad().setCreativeTab(tabMechanics).setHardness(1.0F).setStepSound(Block.soundTypeStone).setBlockName("mechanics::jumppad");
 
         GameRegistry.registerBlock(allocator, "Allocator_Pfaeff");
         GameRegistry.registerBlock(lightSensor, "LightSensor_Pfaeff");
@@ -110,8 +100,7 @@ public class Mechanics {
         TileEntity.addMapping(TileEntityAllocator.class, "Allocator");
         TileEntity.addMapping(TileEntityLightSensor.class, "pfaeffs_lsensor");
         TileEntity.addMapping(TileEntityFanON.class, "cdkrot_fan");
-        TileEntity
-                .addMapping(TileEntityBenchmark.class, "mechanics::benchmark");
+        TileEntity.addMapping(TileEntityBenchmark.class, "mechanics::benchmark");
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
         networkHandler.initalise();
     }
@@ -119,19 +108,11 @@ public class Mechanics {
     @EventHandler
     public void postInit(FMLPostInitializationEvent e) {
         // load recipes and register Allocator provision
-        GameRegistry.addRecipe(new ItemStack(allocator, 1), "X#X", "X$X",
-                "X#X", 'X', Blocks.cobblestone, '#', Items.redstone, '$',
-                Items.gold_ingot);
-        GameRegistry.addRecipe(new ItemStack(lightSensor, 1), "A", "B", "C",
-                'A', Blocks.glass, 'B', Items.quartz, 'C', Blocks.wooden_slab);
-        GameRegistry.addRecipe(new ItemStack(jumpPad, 4), "X", "#", 'X',
-                Items.slime_ball, '#', Blocks.wooden_pressure_plate);
-        GameRegistry.addRecipe(new ItemStack(fan), "CsC", "sSs", "RsR", 'C',
-                Blocks.cobblestone, 's', Items.stick, 'S', Items.slime_ball,
-                'R', Blocks.redstone_block);
-        GameRegistry.addRecipe(new ItemStack(benchmark), "WSW", "WDW", "RRR",
-                'W', new ItemStack(Blocks.wool, 1, 14), 'S', Items.sign, 'D',
-                Blocks.dispenser, 'R', Items.redstone);
+        GameRegistry.addRecipe(new ItemStack(allocator, 1), "X#X", "X$X", "X#X", 'X', Blocks.cobblestone, '#', Items.redstone, '$', Items.gold_ingot);
+        GameRegistry.addRecipe(new ItemStack(lightSensor, 1), "A", "B", "C", 'A', Blocks.glass, 'B', Items.quartz, 'C', Blocks.wooden_slab);
+        GameRegistry.addRecipe(new ItemStack(jumpPad, 4), "X", "#", 'X', Items.slime_ball, '#', Blocks.wooden_pressure_plate);
+        GameRegistry.addRecipe(new ItemStack(fan), "CsC", "sSs", "RsR", 'C', Blocks.cobblestone, 's', Items.stick, 'S', Items.slime_ball, 'R', Blocks.redstone_block);
+        GameRegistry.addRecipe(new ItemStack(benchmark), "WSW", "WDW", "RRR", 'W', new ItemStack(Blocks.wool, 1, 14), 'S', Items.sign, 'D', Blocks.dispenser, 'R', Items.redstone);
 
         AllocatorRegistry.instance.add(new VannilaProvider());
         AllocatorRegistry.instance.add(new MechanicsModProvider());

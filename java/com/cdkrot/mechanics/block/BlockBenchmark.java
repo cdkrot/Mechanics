@@ -31,11 +31,8 @@ public class BlockBenchmark extends BlockContainer {
     @SideOnly(Side.CLIENT)
     @Override
     public void registerBlockIcons(IIconRegister ir) {
-        this.blockIcon = ir.registerIcon(Mechanics.modid
-                + ":benchmark_block_top");
-        icons = new IIcon[] {
-                ir.registerIcon(Mechanics.modid + ":benchmark_block_bottom"),
-                ir.registerIcon(Mechanics.modid + ":benchmark_block_side") };
+        this.blockIcon = ir.registerIcon(Mechanics.modid + ":benchmark_block_top");
+        icons = new IIcon[] { ir.registerIcon(Mechanics.modid + ":benchmark_block_bottom"), ir.registerIcon(Mechanics.modid + ":benchmark_block_side") };
     }
 
     @SideOnly(Side.CLIENT)
@@ -61,14 +58,12 @@ public class BlockBenchmark extends BlockContainer {
     }
 
     public void updatePowerState(World world, int x, int y, int z) {
-        boolean powered = world.isBlockIndirectlyGettingPowered(x, y, z), waspowered = world
-                .getBlockMetadata(x, y, z) == 1;
+        boolean powered = world.isBlockIndirectlyGettingPowered(x, y, z), waspowered = world.getBlockMetadata(x, y, z) == 1;
 
         if (waspowered == powered)
             return;
         if (!waspowered) {
-            TileEntityBenchmark tile = (TileEntityBenchmark) world
-                    .getTileEntity(x, y, z);
+            TileEntityBenchmark tile = (TileEntityBenchmark) world.getTileEntity(x, y, z);
             String string = tile.getCurText();
 
             if (!BenchmarkRegistry.instance.onBenchmark(tile, string))
@@ -89,8 +84,7 @@ public class BlockBenchmark extends BlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World w, int x, int y, int z,
-            EntityPlayer p, int a, float b, float c, float d) {
+    public boolean onBlockActivated(World w, int x, int y, int z, EntityPlayer p, int a, float b, float c, float d) {
         if (!(w instanceof WorldServer))
             SidedNetworkStuff.requestBenchmarkGUI(w, x, y, z);
         return true;

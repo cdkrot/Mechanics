@@ -20,8 +20,7 @@ public interface INetworkBenchmarkProcessor {
      *            - player. Note since 1.7 it is entityPlayer
      * @return false to cancel event
      */
-    public boolean onTextChanged(TileEntityBenchmark tile, String newtext,
-            EntityPlayerMP p);
+    public boolean onTextChanged(TileEntityBenchmark tile, String newtext, EntityPlayerMP p);
 
     /**
      * Called when bencmark is echos text. Can cancel event

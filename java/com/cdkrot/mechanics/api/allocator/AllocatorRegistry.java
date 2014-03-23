@@ -52,8 +52,7 @@ public class AllocatorRegistry {
      *            Varifies if there is an input
      * @return list of IInventories in IInventoryEX format
      */
-    public List<IInventoryEX> getIInventoryAllInFor(List<Entity> entities,
-            boolean isInput) {
+    public List<IInventoryEX> getIInventoryAllInFor(List<Entity> entities, boolean isInput) {
         List<IInventoryEX> res = new ArrayList<IInventoryEX>();
         for (IInventoryProviderEntity provider : list2) {
             for (int i = entities.size() - 1; i >= 0; i--) {
@@ -75,8 +74,7 @@ public class AllocatorRegistry {
                 res.add(IInventoryWrapper.createDefault((IInventory) e));
         }
         if (items.size() > 0 && isInput)
-            res.add(new VannilaProvider.ItemStacksInventory(items
-                    .toArray(new EntityItem[items.size()])));
+            res.add(new VannilaProvider.ItemStacksInventory(items.toArray(new EntityItem[items.size()])));
         return res;
     }
 }

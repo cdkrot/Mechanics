@@ -28,8 +28,7 @@ public class BlockFan extends BlockContainer {
 
     public BlockFan() {
         super(Material.rock);
-        this.setHardness(3.5F).setStepSound(Block.soundTypeStone)
-                .setBlockName("mechanics::cdkrotFan");
+        this.setHardness(3.5F).setStepSound(Block.soundTypeStone).setBlockName("mechanics::cdkrotFan");
     }
 
     @Override
@@ -48,12 +47,12 @@ public class BlockFan extends BlockContainer {
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z,
-            EntityLivingBase entity, ItemStack unused) {
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack unused) {
         int suggested = Utility.getMetadataForBlockAnyPlaced(x, y, z, entity);
         boolean ispow = world.isBlockIndirectlyGettingPowered(x, y, z);
-        world.setBlockMetadataWithNotify(x, y, z, ispow ? suggested | 8
-                : suggested, 2);// side+8 : side
+        world.setBlockMetadataWithNotify(x, y, z, ispow ? suggested | 8 : suggested, 2);// side+8
+                                                                                        // :
+                                                                                        // side
     }
 
     @Override
@@ -100,11 +99,8 @@ public class BlockFan extends BlockContainer {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
-        this.blockIcon = iconRegister.registerIcon(Mechanics.modid
-                + ":pfaeff_topbottom");
-        icons = new IIcon[] {
-                iconRegister.registerIcon(Mechanics.modid + ":fanfront"),
-                iconRegister.registerIcon(Mechanics.modid + ":fanfrontactive") };
+        this.blockIcon = iconRegister.registerIcon(Mechanics.modid + ":pfaeff_topbottom");
+        icons = new IIcon[] { iconRegister.registerIcon(Mechanics.modid + ":fanfront"), iconRegister.registerIcon(Mechanics.modid + ":fanfrontactive") };
     }
 
     // Soooo dirty item view
@@ -116,17 +112,14 @@ public class BlockFan extends BlockContainer {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getIcon(IBlockAccess par1IBlockAccess, int par2, int par3,
-            int par4, int par5) {
+    public IIcon getIcon(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5) {
 
-        return this.getIconForTerrain(par5,
-                par1IBlockAccess.getBlockMetadata(par2, par3, par4));
+        return this.getIconForTerrain(par5, par1IBlockAccess.getBlockMetadata(par2, par3, par4));
     }
 
     @SideOnly(Side.CLIENT)
     private IIcon getIconForTerrain(int side, int meta) {
-        return side == (meta & 7) ? ((meta & 8) == 0 ? icons[0] : icons[1])
-                : this.blockIcon;
+        return side == (meta & 7) ? ((meta & 8) == 0 ? icons[0] : icons[1]) : this.blockIcon;
     }
 
     @Override

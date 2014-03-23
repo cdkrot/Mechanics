@@ -55,20 +55,15 @@ public class BlockAllocator extends BlockContainer {
     }
 
     @Override
-    public void breakBlock(World world, int i, int j, int k, Block par5,
-            int par6) {
-        TileEntityAllocator allocator = (TileEntityAllocator) world
-                .getTileEntity(i, j, k);
+    public void breakBlock(World world, int i, int j, int k, Block par5, int par6) {
+        TileEntityAllocator allocator = (TileEntityAllocator) world.getTileEntity(i, j, k);
         if (allocator != null) {
             ItemStack itemStack = allocator.getStackInSlot(0);
             if (itemStack != null) {
-                EntityItem entityItem = new EntityItem(world, i, j, k,
-                        new ItemStack(itemStack.getItem(), 1,
-                                itemStack.getItemDamage()));
+                EntityItem entityItem = new EntityItem(world, i, j, k, new ItemStack(itemStack.getItem(), 1, itemStack.getItemDamage()));
 
                 if (itemStack.hasTagCompound())
-                    entityItem.getEntityItem().setTagCompound(
-                            (NBTTagCompound) itemStack.getTagCompound().copy());
+                    entityItem.getEntityItem().setTagCompound((NBTTagCompound) itemStack.getTagCompound().copy());
 
                 final double var15 = 0.05;
                 entityItem.motionX = world.rand.nextGaussian() * var15;
@@ -108,10 +103,8 @@ public class BlockAllocator extends BlockContainer {
             if (filter_ == null)
                 continue;
             t = false;
-            if ((item.getItem() == filter_.getItem())
-                    && (item.getItemDamage() == filter_.getItemDamage()))
-                if (Objects.equals(item.getTagCompound(),
-                        filter_.getTagCompound()))
+            if ((item.getItem() == filter_.getItem()) && (item.getItemDamage() == filter_.getItemDamage()))
+                if (Objects.equals(item.getTagCompound(), filter_.getTagCompound()))
                     return true;
         }
         return t;
@@ -122,8 +115,7 @@ public class BlockAllocator extends BlockContainer {
      */
     protected IInventoryEX containerAtPos(World world, int x, int y, int z) {
         TileEntity tile = world.getTileEntity(x, y, z);
-        IInventoryEX inv = AllocatorRegistry.instance.getIInventoryFor(world,
-                x, y, z);
+        IInventoryEX inv = AllocatorRegistry.instance.getIInventoryFor(world, x, y, z);
 
         if (inv != null)
             return inv;
@@ -139,8 +131,7 @@ public class BlockAllocator extends BlockContainer {
      * INPUT! Returns a random item (index) from the container, using the same
      * rule as the dispenser
      */
-    public int getRandomItemStackFromContainer(IInventoryEX inventory,
-            Random rand, ItemStack[] filter) {
+    public int getRandomItemStackFromContainer(IInventoryEX inventory, Random rand, ItemStack[] filter) {
         if (inventory == null)
             return -1;
         IInventory base = inventory.asIInventory();
@@ -148,11 +139,9 @@ public class BlockAllocator extends BlockContainer {
             return -1;
         int ret = -1, j = 1;
 
-        for (int k = inventory.getInventoryInputBegin(); k <= inventory
-                .getInventoryInputEnd(); k++) {
+        for (int k = inventory.getInventoryInputBegin(); k <= inventory.getInventoryInputEnd(); k++) {
             ItemStack s = base.getStackInSlot(k);
-            if ((s != null) && passesFilter(s, filter)
-                    && (rand.nextInt(j) == 0)) {
+            if ((s != null) && passesFilter(s, filter) && (rand.nextInt(j) == 0)) {
                 ret = k;
                 j++;
             }
@@ -165,8 +154,7 @@ public class BlockAllocator extends BlockContainer {
      */
     protected void dispense(World world, int i, int j, int k, ItemStack item) {
         BlockSourceImpl blockImpl = new BlockSourceImpl(world, i, j, k);
-        TileEntityAllocator allocator = (TileEntityAllocator) blockImpl
-                .getBlockTileEntity();
+        TileEntityAllocator allocator = (TileEntityAllocator) blockImpl.getBlockTileEntity();
 
         if (allocator != null) {
             // int meta = world.getBlockMetadata(i, j, k) & 7;
@@ -191,17 +179,13 @@ public class BlockAllocator extends BlockContainer {
      * Handles the item output. Returns true, if item was successfully put out.
      */
     @SuppressWarnings({ "unchecked" })
-    private boolean outputItem(World world, int x, int y, int z, VecI3Base dir,
-            ItemStack item, Random random) {
+    private boolean outputItem(World world, int x, int y, int z, VecI3Base dir, ItemStack item, Random random) {
         int X_ = x + dir.x, Y_ = y + dir.y, Z_ = z + dir.z;
         IInventoryEX output = containerAtPos(world, X_, Y_, Z_);
 
         if (output == null) {
-            List<Entity> entities = world.getEntitiesWithinAABB(Entity.class,
-                    AxisAlignedBB
-                            .getBoundingBox(X_, Y_, Z_, X_ + 1, Y_ + 1, Z_));
-            List<IInventoryEX> invs = AllocatorRegistry.instance
-                    .getIInventoryAllInFor(entities, false);
+            List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox(X_, Y_, Z_, X_ + 1, Y_ + 1, Z_));
+            List<IInventoryEX> invs = AllocatorRegistry.instance.getIInventoryAllInFor(entities, false);
             if (invs.size() > 0)
                 output = invs.get(random.nextInt(invs.size()));
             else if (!(world.getBlock(X_, Y_, Z_).isOpaqueCube())) {
@@ -212,22 +196,15 @@ public class BlockAllocator extends BlockContainer {
         }
         IInventory base = output.asIInventory();
 
-        for (int l = output.getInventoryOutputBegin(); l < output
-                .getInventoryOutputEnd(); l++) {
+        for (int l = output.getInventoryOutputBegin(); l < output.getInventoryOutputEnd(); l++) {
             ItemStack baseStack = base.getStackInSlot(l);
             if (baseStack == null)
-                if (item.stackSize <= base.getInventoryStackLimit()
-                        && base.isItemValidForSlot(l, item)) {
+                if (item.stackSize <= base.getInventoryStackLimit() && base.isItemValidForSlot(l, item)) {
                     output.onPutSuccessful(l, item);
                     return true;
                 } else
                     return false;
-            else if (((baseStack.isStackable()) && (item.isStackable()))
-                    && (baseStack.getItem() == item.getItem())
-                    && (baseStack.getItemDamage() == item.getItemDamage())
-                    && (baseStack.stackSize + item.stackSize <= Math.min(
-                            base.getInventoryStackLimit(),
-                            item.getMaxStackSize()))) {
+            else if (((baseStack.isStackable()) && (item.isStackable())) && (baseStack.getItem() == item.getItem()) && (baseStack.getItemDamage() == item.getItemDamage()) && (baseStack.stackSize + item.stackSize <= Math.min(base.getInventoryStackLimit(), item.getMaxStackSize()))) {
                 // item is valid for stack
                 baseStack = baseStack.copy();// should copy a stack
                 baseStack.stackSize += item.stackSize;
@@ -246,20 +223,15 @@ public class BlockAllocator extends BlockContainer {
     private void allocateItems(World world, int x, int y, int z, Random random) {
         VecI3Base d = DirectionalVecs.list[world.getBlockMetadata(x, y, z)];
 
-        TileEntityAllocator tile = (TileEntityAllocator) world.getTileEntity(x,
-                y, z);
+        TileEntityAllocator tile = (TileEntityAllocator) world.getTileEntity(x, y, z);
         ItemStack[] filter = tile.allocatorFilterItems;
         IInventoryEX input = containerAtPos(world, x - d.x, y - d.y, z - d.z);
 
         if (input == null) {
-            List<Entity> entities = (List<Entity>) world.getEntitiesWithinAABB(
-                    Entity.class, AxisAlignedBB.getBoundingBox(
-                            (double) (x - d.x), (double) y - d.y,
-                            (double) (z - d.z), (double) (x - d.x + 1),
-                            (double) (y - d.y + 1), (float) (z - d.z + 1)));
-            List<IInventoryEX> invs = AllocatorRegistry.instance
-                    .getIInventoryAllInFor(entities, true);
-            // TODO: entity inventories should be caught by other way [REFACTORING].
+            List<Entity> entities = (List<Entity>) world.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox((double) (x - d.x), (double) y - d.y, (double) (z - d.z), (double) (x - d.x + 1), (double) (y - d.y + 1), (float) (z - d.z + 1)));
+            List<IInventoryEX> invs = AllocatorRegistry.instance.getIInventoryAllInFor(entities, true);
+            // TODO: entity inventories should be caught by other way
+            // [REFACTORING].
 
             if (invs.size() > 0)
                 input = invs.get(random.nextInt(invs.size()));
@@ -271,15 +243,13 @@ public class BlockAllocator extends BlockContainer {
         int itemIndex = getRandomItemStackFromContainer(input, random, filter);
 
         if (itemIndex >= 0)
-            if (outputItem(world, x, y, z, d, input.asIInventory()
-                    .getStackInSlot(itemIndex), random))
+            if (outputItem(world, x, y, z, d, input.asIInventory().getStackInSlot(itemIndex), random))
                 input.onTakenSuccessful(itemIndex, null);
     }
 
     @Override
     public void updateTick(World world, int i, int j, int k, Random random) {
-        if (world.isBlockIndirectlyGettingPowered(i, j, k)
-                || world.isBlockIndirectlyGettingPowered(i, j + 1, k)) {
+        if (world.isBlockIndirectlyGettingPowered(i, j, k) || world.isBlockIndirectlyGettingPowered(i, j + 1, k)) {
             allocateItems(world, i, j, k, random);
         }
     }
@@ -287,23 +257,19 @@ public class BlockAllocator extends BlockContainer {
     @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block b) {
         if (b.canProvidePower()) {
-            if (world.isBlockIndirectlyGettingPowered(x, y, z)
-                    || world.isBlockIndirectlyGettingPowered(x, y + 1, z))
+            if (world.isBlockIndirectlyGettingPowered(x, y, z) || world.isBlockIndirectlyGettingPowered(x, y + 1, z))
                 world.scheduleBlockUpdate(x, y, z, this, tickRate(world));
         }
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z,
-            EntityLivingBase e, ItemStack stack) {
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase e, ItemStack stack) {
         int side = Utility.getMetadataForBlockAnyPlaced(x, y, z, e);
         world.setBlockMetadataWithNotify(x, y, z, side, 4);
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z,
-            EntityPlayer entityplayer, int par6, float par7, float par8,
-            float par9) {
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityplayer, int par6, float par7, float par8, float par9) {
         if (!world.isRemote)
             entityplayer.openGui(Mechanics.instance, 0, world, x, y, z);
         return true;
@@ -313,22 +279,17 @@ public class BlockAllocator extends BlockContainer {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(
-            net.minecraft.client.renderer.texture.IIconRegister iconRegister) {
-        this.blockIcon = iconRegister.registerIcon(Mechanics.modid
-                + ":pfaeff_topbottom");
+    public void registerBlockIcons(net.minecraft.client.renderer.texture.IIconRegister iconRegister) {
+        this.blockIcon = iconRegister.registerIcon(Mechanics.modid + ":pfaeff_topbottom");
 
-        icons = new IIcon[] {
-                iconRegister.registerIcon(Mechanics.modid + ":allocator_sidel"),// 0
-                iconRegister.registerIcon(Mechanics.modid + ":allocator_sider"),// 1
-                iconRegister.registerIcon(Mechanics.modid + ":allocator_in"),// 2
-                iconRegister.registerIcon(Mechanics.modid + ":allocator_out"),// 3
-                iconRegister.registerIcon(Mechanics.modid + ":allocator_m_in"),// 4
-                iconRegister.registerIcon(Mechanics.modid + ":allocator_m_out"),// 5
-                iconRegister.registerIcon(Mechanics.modid
-                        + ":allocator_m_sideup"),// 6
-                iconRegister.registerIcon(Mechanics.modid
-                        + ":allocator_m_sidedown") // 7
+        icons = new IIcon[] { iconRegister.registerIcon(Mechanics.modid + ":allocator_sidel"),// 0
+        iconRegister.registerIcon(Mechanics.modid + ":allocator_sider"),// 1
+        iconRegister.registerIcon(Mechanics.modid + ":allocator_in"),// 2
+        iconRegister.registerIcon(Mechanics.modid + ":allocator_out"),// 3
+        iconRegister.registerIcon(Mechanics.modid + ":allocator_m_in"),// 4
+        iconRegister.registerIcon(Mechanics.modid + ":allocator_m_out"),// 5
+        iconRegister.registerIcon(Mechanics.modid + ":allocator_m_sideup"),// 6
+        iconRegister.registerIcon(Mechanics.modid + ":allocator_m_sidedown") // 7
         };
     }
 
@@ -372,8 +333,7 @@ public class BlockAllocator extends BlockContainer {
             return this.blockIcon;// topbottom
         else {
             boolean t = (side == 2) || (side == 3);
-            if (((Math.abs(side - meta) == 2) && (t))
-                    || ((Math.abs(side - Utility.getOppositeSide(meta)) == 2) && (!t))) {
+            if (((Math.abs(side - meta) == 2) && (t)) || ((Math.abs(side - Utility.getOppositeSide(meta)) == 2) && (!t))) {
                 return icons[0];// sidel
             } else
                 return icons[1];// sider
@@ -386,10 +346,8 @@ public class BlockAllocator extends BlockContainer {
     }
 
     @Override
-    public int getComparatorInputOverride(World world, int x, int y, int z,
-            int s) {
-        TileEntityAllocator tileentity = (TileEntityAllocator) world
-                .getTileEntity(x, y, z);
+    public int getComparatorInputOverride(World world, int x, int y, int z, int s) {
+        TileEntityAllocator tileentity = (TileEntityAllocator) world.getTileEntity(x, y, z);
         return Container.calcRedstoneFromInventory(tileentity);
     }
 }

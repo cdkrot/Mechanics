@@ -19,20 +19,15 @@ public class BenchmarkRegistry implements INetworkBenchmarkProcessor {
 
     public void register(INetworkBenchmarkProcessor p) {
         processors.add(p);
-        Mechanics.modLogger
-                .info("[BenchmarkSecurity] Registered security addon "
-                        + p.toString());
+        Mechanics.modLogger.info("[BenchmarkSecurity] Registered security addon " + p.toString());
     }
 
     @Override
-    public boolean onTextChanged(TileEntityBenchmark tile, String newtext,
-            EntityPlayerMP p) {
+    public boolean onTextChanged(TileEntityBenchmark tile, String newtext, EntityPlayerMP p) {
         if (processors != null)
             for (INetworkBenchmarkProcessor proc : processors)
                 if (!proc.onTextChanged(tile, newtext, p)) {
-                    Mechanics.modLogger
-                            .warn("[BenchmarkSecurity] Security addon %s canceled TextChanged event, tile=%s, player=%s, newtext=%s",
-                                    proc.toString(), p.toString(), newtext);
+                    Mechanics.modLogger.warn("[BenchmarkSecurity] Security addon %s canceled TextChanged event, tile=%s, player=%s, newtext=%s", proc.toString(), p.toString(), newtext);
                     return false;
                 }
         return true;
@@ -43,9 +38,7 @@ public class BenchmarkRegistry implements INetworkBenchmarkProcessor {
         if (processors != null)
             for (INetworkBenchmarkProcessor proc : processors)
                 if (!proc.onBenchmark(tile, echotext)) {
-                    Mechanics.modLogger
-                            .warn("[BenchmarkSecurity] Security addon %s canceled onBenchmark event, tile=%s, echotext=%s",
-                                    proc.toString(), echotext);
+                    Mechanics.modLogger.warn("[BenchmarkSecurity] Security addon %s canceled onBenchmark event, tile=%s, echotext=%s", proc.toString(), echotext);
                     return false;
                 }
         return true;
@@ -56,9 +49,7 @@ public class BenchmarkRegistry implements INetworkBenchmarkProcessor {
         if (processors != null)
             for (INetworkBenchmarkProcessor proc : processors)
                 if (!proc.requestEditor(tile, p)) {
-                    Mechanics.modLogger
-                            .warn("[BenchmarkSecurity] Security addon %s canceled RequestEditor event, tile=%s, player=%s",
-                                    proc.toString(), p.toString());
+                    Mechanics.modLogger.warn("[BenchmarkSecurity] Security addon %s canceled RequestEditor event, tile=%s, player=%s", proc.toString(), p.toString());
                     return false;
                 }
         return true;

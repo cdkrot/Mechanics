@@ -7,8 +7,7 @@ public class IInventoryWrapper implements IInventoryEX {
     private IInventory inv;
     private int inputBegin, inputEnd, outputBegin, outputEnd;
 
-    public IInventoryWrapper(IInventory base, int inputBegin, int inputEnd,
-            int outputBegin, int outputEnd) {
+    public IInventoryWrapper(IInventory base, int inputBegin, int inputEnd, int outputBegin, int outputEnd) {
         this.inv = base;
         this.inputBegin = inputBegin;
         this.inputEnd = inputEnd;

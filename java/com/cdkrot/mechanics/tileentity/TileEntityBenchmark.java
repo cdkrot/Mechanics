@@ -14,16 +14,14 @@ public class TileEntityBenchmark extends TileEntity {
      */
     public String s = "";
     public static final SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss");
-    public static final SimpleDateFormat date = new SimpleDateFormat(
-            "dd.MMMMM.yyyy");
+    public static final SimpleDateFormat date = new SimpleDateFormat("dd.MMMMM.yyyy");
     public static final SimpleDateFormat msec = new SimpleDateFormat("S");
 
     @Override
     public void validate() {
         super.validate();
         if (FMLCommonHandler.instance().getEffectiveSide().isServer())
-            s = s.replace("&&x", xCoord + "").replace("&&y", yCoord + "")
-                    .replace("&&z", zCoord + "");
+            s = s.replace("&&x", xCoord + "").replace("&&y", yCoord + "").replace("&&z", zCoord + "");
     }
 
     /**
@@ -48,15 +46,12 @@ public class TileEntityBenchmark extends TileEntity {
 
     public String getCurText() {
         Date d = Calendar.getInstance().getTime();
-        return s.replace("&time", time.format(d))
-                .replace("&date", date.format(d))
-                .replace("&msec", msec.format(d));
+        return s.replace("&time", time.format(d)).replace("&date", date.format(d)).replace("&msec", msec.format(d));
     }
 
     @Override
     public String toString() {
-        return "TEBenchmark{x=" + xCoord + ",y=" + yCoord + ",z=" + zCoord
-                + ",text=" + s + "}";
+        return "TEBenchmark{x=" + xCoord + ",y=" + yCoord + ",z=" + zCoord + ",text=" + s + "}";
     }
 
 }
