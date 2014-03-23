@@ -10,8 +10,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class TileEntityAllocator extends TileEntity implements IInventory,
-        IInventoryEX {
+public class TileEntityAllocator extends TileEntity implements IInventory, IInventoryEX {
     public ItemStack allocatorFilterItems[] = new ItemStack[16];
 
     @Override
@@ -33,9 +32,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory,
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-        return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this
-                && player.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D,
-                        zCoord + 0.5D) <= 64.0D; // EXperimental
+        return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && player.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64.0D; // EXperimental
     }
 
     @Override
@@ -44,8 +41,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory,
         super.readFromNBT(nbt);
         NBTTagList items = (NBTTagList) nbt.getTag("Items");
         for (int i = 0; (i < items.tagCount() && i < getSizeInventory()); i++) {
-            allocatorFilterItems[i] = ItemStack.loadItemStackFromNBT(items
-                    .getCompoundTagAt(i));// TODO: experimental
+            allocatorFilterItems[i] = ItemStack.loadItemStackFromNBT(items.getCompoundTagAt(i));// TODO: experimental
         }
     }
 
@@ -55,8 +51,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory,
         NBTTagList items = new NBTTagList();
         for (int i = 0; i < getSizeInventory(); i++) {
             if (allocatorFilterItems[i] != null)
-                items.appendTag(allocatorFilterItems[i]
-                        .writeToNBT(new NBTTagCompound()));
+                items.appendTag(allocatorFilterItems[i].writeToNBT(new NBTTagCompound()));
             nbttagcompound.setTag("Items", items);
         }
     }

@@ -10,19 +10,16 @@ import net.minecraft.item.ItemStack;
 
 public class ContainerAllocator extends Container {
 
-    public ContainerAllocator(IInventory invPlayer,
-            TileEntityAllocator tileentityallocator) {
+    public ContainerAllocator(IInventory invPlayer, TileEntityAllocator tileentityallocator) {
         allocator = tileentityallocator;
 
         for (int i = 0; i < 2; i++)
             for (int j = 0; j < 8; j++)
-                addSlotToContainer(new Slot(tileentityallocator, i * 8 + j,
-                        17 + j * 18, 28 + i * 18));
+                addSlotToContainer(new Slot(tileentityallocator, i * 8 + j, 17 + j * 18, 28 + i * 18));
 
         for (int i = 0; i < 3; i++)
             for (int k = 0; k < 9; k++)
-                addSlotToContainer(new Slot(invPlayer, k + i * 9 + 9,
-                        8 + k * 18, 84 + i * 18));
+                addSlotToContainer(new Slot(invPlayer, k + i * 9 + 9, 8 + k * 18, 84 + i * 18));
 
         for (int j = 0; j < 9; j++)
             addSlotToContainer(new Slot(invPlayer, j, 8 + j * 18, 142));
@@ -48,8 +45,7 @@ public class ContainerAllocator extends Container {
                 else {
                     Slot filterSlot = (Slot) inventorySlots.get(0);
                     ItemStack filter = filterSlot.getStack();
-                    if ((filter == null)
-                            || (filterSlot.getStack().stackSize == 0))
+                    if ((filter == null) || (filterSlot.getStack().stackSize == 0))
                         filterSlot.putStack(slot.decrStackSize(1));
                 }
 

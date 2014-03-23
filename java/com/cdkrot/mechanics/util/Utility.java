@@ -18,13 +18,11 @@ public class Utility {
 
     static {
         try {
-            EntityFallMethod = Entity.class.getDeclaredMethod("fall",
-                    float.class);
+            EntityFallMethod = Entity.class.getDeclaredMethod("fall", float.class);
             EntityFallMethod.setAccessible(true);
         } catch (Exception e) {
             try {
-                EntityFallMethod = Entity.class.getDeclaredMethod(
-                        "func_70069_a", float.class);
+                EntityFallMethod = Entity.class.getDeclaredMethod("func_70069_a", float.class);
                 EntityFallMethod.setAccessible(true);
             } catch (Exception ex) {
                 throw new RuntimeException("FATAL INIT EXCEPTION", ex);
@@ -58,8 +56,7 @@ public class Utility {
     public static int getMetadataForBlockSidePlaced(float rotationYaw) {
         // int l = MathHelper.floor_double((double)((rotationYaw * 4F) / 360F) +
         // 0.5D) & 3;
-        int l = MathHelper.floor_double((double) (rotationYaw / 90F) + 0.5D) & 3;// four
-                                                                                 // values
+        int l = MathHelper.floor_double((double) (rotationYaw / 90F) + 0.5D) & 3;// four values
 
         // if (l == 0)
         // return 2;
@@ -76,10 +73,8 @@ public class Utility {
      * This will return suggested metadata(Side) for block which placed on any
      * side Mostly copypaste of BlockPistonBase.determineOrientation
      */
-    public static int getMetadataForBlockAnyPlaced(int x, int y, int z,
-            EntityLivingBase entity) {
-        if (MathHelper.abs((float) entity.posX - (float) x) < 2.0F
-                && MathHelper.abs((float) entity.posZ - (float) z) < 2.0F) {
+    public static int getMetadataForBlockAnyPlaced(int x, int y, int z, EntityLivingBase entity) {
+        if (MathHelper.abs((float) entity.posX - (float) x) < 2.0F && MathHelper.abs((float) entity.posZ - (float) z) < 2.0F) {
             double d0 = entity.posY + 1.82D - (double) entity.yOffset;
 
             if (d0 - (double) y > 2.0D) {
@@ -91,8 +86,7 @@ public class Utility {
             }
         }
 
-        int l = MathHelper
-                .floor_double((double) (entity.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+        int l = MathHelper.floor_double((double) (entity.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
         return l == 0 ? 2 : (l == 1 ? 5 : (l == 2 ? 3 : (l == 3 ? 4 : 0)));
     }
 
@@ -125,14 +119,11 @@ public class Utility {
         }
     }
 
-    public static AxisAlignedBB SelectPoolBasingOnVectorAndInc(VecI3 base,
-            VecI3Base dirvec) {
+    public static AxisAlignedBB SelectPoolBasingOnVectorAndInc(VecI3 base, VecI3Base dirvec) {
         if (DirectionalVecs.isFacingNegative(dirvec))
-            return AxisAlignedBB.getBoundingBox(base.x + dirvec.x, base.y
-                    + dirvec.y, base.z + dirvec.z, base.x, base.y, base.z);
+            return AxisAlignedBB.getBoundingBox(base.x + dirvec.x, base.y + dirvec.y, base.z + dirvec.z, base.x, base.y, base.z);
         else
-            return AxisAlignedBB.getBoundingBox(base.x, base.y, base.z, base.x
-                    + dirvec.x, base.y + dirvec.y, base.z + dirvec.z);
+            return AxisAlignedBB.getBoundingBox(base.x, base.y, base.z, base.x + dirvec.x, base.y + dirvec.y, base.z + dirvec.z);
     }
 
     public static int getDefaultDirectionsMeta(World world, int x, int y, int z) {
@@ -184,18 +175,15 @@ public class Utility {
      * @return String array containing file's text or null if fails.
      */
     public static String[] loadFileAsStringArray(String file, String encoding) {
-        InputStream in = Mechanics.class.getClassLoader().getResourceAsStream(
-                file);
+        InputStream in = Mechanics.class.getClassLoader().getResourceAsStream(file);
         if (in == null) {
-            Mechanics.modLogger.warn("[FLoader] Failed loading file " + file
-                    + " with encoding " + encoding);
+            Mechanics.modLogger.warn("[FLoader] Failed loading file " + file + " with encoding " + encoding);
             return null;
         }
         List<String> list = new ArrayList<String>();
         Scanner s = new Scanner(in, encoding);
         if (s.hasNext())// at least 1 line
-            s.nextLine();// first line is skipped because of possible encoding
-                         // problem
+            s.nextLine();// first line is skipped because of possible encoding problem
         while (s.hasNextLine()) {
             String l = s.nextLine();
             if (l.startsWith("#") || l.equals(""))
@@ -213,22 +201,18 @@ public class Utility {
             return null;
         Scanner scanner = new Scanner(input, "UTF-16");
         if (scanner.hasNext())// at least 1 line
-            scanner.nextLine();// first line is skipped because of encoding
-                               // problem
+            scanner.nextLine();// first line is skipped because of encoding problem
         while (scanner.hasNextLine()) {
             String l = scanner.nextLine();
             if (l.startsWith("#") || l.equals(""))
                 continue;// ignored
             String parts[] = l.split("::", 2);
             if (parts.length < 2)
-                Mechanics.modLogger
-                        .warn("[Key-Value Loader] Bad line in kv file: " + l);
+                Mechanics.modLogger.warn("[Key-Value Loader] Bad line in kv file: " + l);
             else if (!map.containsKey(parts[0]))
                 map.put(parts[0], parts[1]);
             else
-                Mechanics.modLogger
-                        .warn("[Key-Value Loader] Key allready registered: "
-                                + parts[0] + ".");
+                Mechanics.modLogger.warn("[Key-Value Loader] Key allready registered: " + parts[0] + ".");
         }
         scanner.close();
         return map;
@@ -241,6 +225,5 @@ public class Utility {
         return list.size() == 0 ? null : list.get(r.nextInt(list.size()));
     }
 
-    // note that some of code is unused, it was used before, and (maybe) will be
-    // needed in the future.
+    // note that some of code is unused, it was used before, and (maybe) will be needed in the future.
 }

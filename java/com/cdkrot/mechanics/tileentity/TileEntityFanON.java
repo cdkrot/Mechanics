@@ -41,8 +41,7 @@ public class TileEntityFanON extends TileEntity {
     @Override
     public void updateEntity() {
         init();
-        if (!Mechanics.fan.updatePowered(worldObj, xCoord, yCoord, zCoord))// update
-                                                                           // meta
+        if (!Mechanics.fan.updatePowered(worldObj, xCoord, yCoord, zCoord))// update meta
             return;
 
         goOnAndTrace();
@@ -65,17 +64,13 @@ public class TileEntityFanON extends TileEntity {
         VecI3 cur = this.base.clone();
         int power = 12;
         while (power > 0) {
-            AxisAlignedBB selection = Utility.SelectPoolBasingOnVectorAndInc(
-                    base, dirvec);
+            AxisAlignedBB selection = Utility.SelectPoolBasingOnVectorAndInc(base, dirvec);
             Block b = worldObj.getBlock(cur.x, cur.y, cur.z);
             if (b != null)
                 return;
-            Entity e = Utility.randomFromList((List<Entity>) worldObj
-                    .getEntitiesWithinAABB(Entity.class, selection),
-                    worldObj.rand);
+            Entity e = Utility.randomFromList((List<Entity>) worldObj.getEntitiesWithinAABB(Entity.class, selection), worldObj.rand);
             if (e != null) {
-                e.addVelocity(dirvec.x * power, dirvec.y * power, dirvec.z
-                        * power);
+                e.addVelocity(dirvec.x * power, dirvec.y * power, dirvec.z * power);
                 return;
             }
             power -= ePs;
