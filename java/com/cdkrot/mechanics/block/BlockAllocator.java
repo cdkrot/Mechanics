@@ -84,9 +84,8 @@ public class BlockAllocator extends BlockContainer {
     public void onBlockAdded(World world, int x, int y, int z) {
         super.onBlockAdded(world, x, y, z);
         if (!world.isRemote) {
-            int meta = Utility.getDefaultDirectionsMeta(world, x, y, z); // moved
-                                                                         // to
-                                                                         // utility
+            // moved to utility
+            int meta = Utility.getDefaultDirectionsMeta(world, x, y, z);
             world.setBlockMetadataWithNotify(x, y, z, meta, 2);
         }
     }

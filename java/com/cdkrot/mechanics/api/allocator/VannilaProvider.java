@@ -31,9 +31,8 @@ public class VannilaProvider implements IInventoryProvider {
 
         Block cblock = w.getBlock(x, y, z);
 
-        if (w.getBlock(x + 1, y, z) == cblock)// using just links compare (like
-                                              // comparing blockids before)
-        {
+        if (w.getBlock(x + 1, y, z) == cblock) {
+            // using just links compare (like comparing blockids before)
             TileEntity chest2 = (w.getTileEntity(x + 1, y, z));
             if (chest2 instanceof IInventory)
                 return IInventoryWrapper.createDefault(new InventoryLargeChest("", (IInventory) tile, (IInventory) chest2));

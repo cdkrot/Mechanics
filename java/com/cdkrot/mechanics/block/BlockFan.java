@@ -50,9 +50,7 @@ public class BlockFan extends BlockContainer {
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack unused) {
         int suggested = Utility.getMetadataForBlockAnyPlaced(x, y, z, entity);
         boolean ispow = world.isBlockIndirectlyGettingPowered(x, y, z);
-        world.setBlockMetadataWithNotify(x, y, z, ispow ? suggested | 8 : suggested, 2);// side+8
-                                                                                        // :
-                                                                                        // side
+        world.setBlockMetadataWithNotify(x, y, z, ispow ? suggested | 8 : suggested, 2);// side+8 : side
     }
 
     @Override

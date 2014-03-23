@@ -56,8 +56,7 @@ public class Utility {
     public static int getMetadataForBlockSidePlaced(float rotationYaw) {
         // int l = MathHelper.floor_double((double)((rotationYaw * 4F) / 360F) +
         // 0.5D) & 3;
-        int l = MathHelper.floor_double((double) (rotationYaw / 90F) + 0.5D) & 3;// four
-                                                                                 // values
+        int l = MathHelper.floor_double((double) (rotationYaw / 90F) + 0.5D) & 3;// four values
 
         // if (l == 0)
         // return 2;
@@ -184,8 +183,7 @@ public class Utility {
         List<String> list = new ArrayList<String>();
         Scanner s = new Scanner(in, encoding);
         if (s.hasNext())// at least 1 line
-            s.nextLine();// first line is skipped because of possible encoding
-                         // problem
+            s.nextLine();// first line is skipped because of possible encoding problem
         while (s.hasNextLine()) {
             String l = s.nextLine();
             if (l.startsWith("#") || l.equals(""))
@@ -203,8 +201,7 @@ public class Utility {
             return null;
         Scanner scanner = new Scanner(input, "UTF-16");
         if (scanner.hasNext())// at least 1 line
-            scanner.nextLine();// first line is skipped because of encoding
-                               // problem
+            scanner.nextLine();// first line is skipped because of encoding problem
         while (scanner.hasNextLine()) {
             String l = scanner.nextLine();
             if (l.startsWith("#") || l.equals(""))
@@ -228,6 +225,5 @@ public class Utility {
         return list.size() == 0 ? null : list.get(r.nextInt(list.size()));
     }
 
-    // note that some of code is unused, it was used before, and (maybe) will be
-    // needed in the future.
+    // note that some of code is unused, it was used before, and (maybe) will be needed in the future.
 }

@@ -41,8 +41,7 @@ public class TileEntityFanON extends TileEntity {
     @Override
     public void updateEntity() {
         init();
-        if (!Mechanics.fan.updatePowered(worldObj, xCoord, yCoord, zCoord))// update
-                                                                           // meta
+        if (!Mechanics.fan.updatePowered(worldObj, xCoord, yCoord, zCoord))// update meta
             return;
 
         goOnAndTrace();

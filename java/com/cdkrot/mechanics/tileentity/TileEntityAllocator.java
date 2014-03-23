@@ -41,8 +41,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory, IInve
         super.readFromNBT(nbt);
         NBTTagList items = (NBTTagList) nbt.getTag("Items");
         for (int i = 0; (i < items.tagCount() && i < getSizeInventory()); i++) {
-            allocatorFilterItems[i] = ItemStack.loadItemStackFromNBT(items.getCompoundTagAt(i));// TODO:
-                                                                                                // experimental
+            allocatorFilterItems[i] = ItemStack.loadItemStackFromNBT(items.getCompoundTagAt(i));// TODO: experimental
         }
     }
 
