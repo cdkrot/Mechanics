@@ -258,22 +258,17 @@ public class BlockAllocator extends BlockContainer {
                             (double) (z - d.z), (double) (x - d.x + 1),
                             (double) (y - d.y + 1), (float) (z - d.z + 1)));
             List<IInventoryEX> invs = AllocatorRegistry.instance
-                    .getIInventoryAllInFor(entities, true);// TODO: entity
-                                                           // inventories should
-                                                           // be caught by other
-                                                           // way [REFACTORING].
+                    .getIInventoryAllInFor(entities, true);
+            // TODO: entity inventories should be caught by other way [REFACTORING].
 
             if (invs.size() > 0)
                 input = invs.get(random.nextInt(invs.size()));
             else
                 return;// no input.
         }
+        // TODO: should be inlined here.
 
-        int itemIndex = getRandomItemStackFromContainer(input, random, filter);// TODO:
-                                                                               // should
-                                                                               // be
-                                                                               // inlined
-                                                                               // here.
+        int itemIndex = getRandomItemStackFromContainer(input, random, filter);
 
         if (itemIndex >= 0)
             if (outputItem(world, x, y, z, d, input.asIInventory()

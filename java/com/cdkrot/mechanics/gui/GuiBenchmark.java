@@ -77,8 +77,9 @@ public class GuiBenchmark extends GuiScreen {
     }
 
     @Override
-    protected void keyTyped(char p1, int p2) {// TODO: figure out what is p1 and
-                                              // p2 here//source: commandblock.
+    protected void keyTyped(char p1, int p2) {
+        // TODO: figure out what is p1 and p2 here
+        //source: commandblock.
         this.text.textboxKeyTyped(p1, p2);
         this.done.enabled = this.text.getText().trim().length() != 0;
 
