@@ -29,16 +29,13 @@ public class PacketRequestBenchmarkText extends BasicPacket {
     @Override
     @SideOnly(Side.CLIENT)
     public void handleClientSide() {
-        throw new UnsupportedOperationException(
-                "This packet is unapplicable on client side");
+        throw new UnsupportedOperationException("This packet is unapplicable on client side");
     }
 
     @Override
     @SideOnly(Side.SERVER)
     public void handleServerSide(EntityPlayerMP player) {
-        TileEntityBenchmark tile = (TileEntityBenchmark) MinecraftServer
-                .getServer().worldServers[pos.worldid].getTileEntity(pos.x,
-                pos.y, pos.z);
+        TileEntityBenchmark tile = (TileEntityBenchmark) MinecraftServer.getServer().worldServers[pos.worldid].getTileEntity(pos.x, pos.y, pos.z);
         if (BenchmarkRegistry.instance.requestEditor(tile, player)) {
             PacketBenchmarkIO packet = new PacketBenchmarkIO();
             packet.pos = pos;

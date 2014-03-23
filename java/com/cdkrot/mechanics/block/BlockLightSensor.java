@@ -34,9 +34,7 @@ public class BlockLightSensor extends BlockContainer {
     @SideOnly(Side.CLIENT)
     @Override
     public void registerBlockIcons(IIconRegister register) {
-        this.iconArray = new IIcon[] {
-                register.registerIcon(Mechanics.modid + ":lightsensor_top"),
-                register.registerIcon("minecraft:daylight_detector_side") };
+        this.iconArray = new IIcon[] { register.registerIcon(Mechanics.modid + ":lightsensor_top"), register.registerIcon("minecraft:daylight_detector_side") };
     }
 
     public void updateSensorOutput(World world, int x, int y, int z) {
@@ -46,8 +44,7 @@ public class BlockLightSensor extends BlockContainer {
     }
 
     @Override
-    public int isProvidingWeakPower(IBlockAccess blockAccess, int x, int y,
-            int z, int s) {
+    public int isProvidingWeakPower(IBlockAccess blockAccess, int x, int y, int z, int s) {
         return blockAccess.getBlockMetadata(x, y, z);
     }
 
@@ -84,8 +81,7 @@ public class BlockLightSensor extends BlockContainer {
     }
 
     @Override
-    public int onBlockPlaced(World world, int x, int y, int z, int par5,
-            float par6, float par7, float par8, int par9) {
+    public int onBlockPlaced(World world, int x, int y, int z, int par5, float par6, float par7, float par8, int par9) {
         this.updateSensorOutput(world, x, y, z);
         return par9;
     }

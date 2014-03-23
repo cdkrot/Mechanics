@@ -11,7 +11,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ClientProxy extends CommonProxy {
     @Override
     public void doInit() {
-        RenderingRegistry.registerEntityRenderingHandler(
-                EntityFanParticle.class, new RendererFanParticle());
+        RenderingRegistry.registerEntityRenderingHandler(EntityFanParticle.class, new RendererFanParticle());
     }
 }

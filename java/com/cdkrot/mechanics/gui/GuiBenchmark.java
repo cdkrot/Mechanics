@@ -35,12 +35,9 @@ public class GuiBenchmark extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
         this.buttonList.clear();
-        this.buttonList.add(done = new GuiButton(0, this.width / 2 - 100,
-                this.height / 4 + 96 + 12, "Done"));
-        this.buttonList.add(new GuiButton(1, this.width / 2 - 100,
-                this.height / 4 + 120 + 12, "Cancel"));
-        this.text = new GuiTextField(this.fontRendererObj,
-                this.width / 2 - 150, 60, 300, 20);
+        this.buttonList.add(done = new GuiButton(0, this.width / 2 - 100, this.height / 4 + 96 + 12, "Done"));
+        this.buttonList.add(new GuiButton(1, this.width / 2 - 100, this.height / 4 + 120 + 12, "Cancel"));
+        this.text = new GuiTextField(this.fontRendererObj, this.width / 2 - 150, 60, 300, 20);
         this.text.setMaxStringLength(300);
         this.text.setFocused(true);
         this.text.setText(s);
@@ -77,8 +74,9 @@ public class GuiBenchmark extends GuiScreen {
     }
 
     @Override
-    protected void keyTyped(char p1, int p2) {// TODO: figure out what is p1 and
-                                              // p2 here//source: commandblock.
+    protected void keyTyped(char p1, int p2) {
+        // TODO: figure out what is p1 and p2 here
+        // source: commandblock.
         this.text.textboxKeyTyped(p1, p2);
         this.done.enabled = this.text.getText().trim().length() != 0;
 
@@ -100,10 +98,8 @@ public class GuiBenchmark extends GuiScreen {
     @Override
     public void drawScreen(int p1, int p2, float p3) {
         this.drawDefaultBackground();
-        this.drawCenteredString(this.fontRendererObj, "Benchmark",
-                this.width / 2, 20, 16777215);
-        this.drawString(this.fontRendererObj, "Set text:",
-                this.width / 2 - 150, 47, 10526880);
+        this.drawCenteredString(this.fontRendererObj, "Benchmark", this.width / 2, 20, 16777215);
+        this.drawString(this.fontRendererObj, "Set text:", this.width / 2 - 150, 47, 10526880);
         this.text.drawTextBox();
         super.drawScreen(p1, p2, p3);
     }

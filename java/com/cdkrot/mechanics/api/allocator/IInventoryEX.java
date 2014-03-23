@@ -31,7 +31,7 @@ public interface IInventoryEX {
 
     /**
      * Taken succesful some items. (update stack data yourself)
-     *
+     * 
      * @param slot
      *            slot id
      * @param left

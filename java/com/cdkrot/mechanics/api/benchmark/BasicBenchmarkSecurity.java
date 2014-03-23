@@ -10,8 +10,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 public class BasicBenchmarkSecurity implements INetworkBenchmarkProcessor {
 
     @Override
-    public boolean onTextChanged(TileEntityBenchmark tile, String newtext,
-            EntityPlayerMP p) {
+    public boolean onTextChanged(TileEntityBenchmark tile, String newtext, EntityPlayerMP p) {
         return requestEditor(tile, p); // same as in request editor;
     }
 

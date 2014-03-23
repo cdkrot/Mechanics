@@ -31,31 +31,26 @@ public class VannilaProvider implements IInventoryProvider {
 
         Block cblock = w.getBlock(x, y, z);
 
-        if (w.getBlock(x + 1, y, z) == cblock)// using just links compare (like
-                                              // comparing blockids before)
-        {
+        if (w.getBlock(x + 1, y, z) == cblock) {
+            // using just links compare (like comparing blockids before)
             TileEntity chest2 = (w.getTileEntity(x + 1, y, z));
             if (chest2 instanceof IInventory)
-                return IInventoryWrapper.createDefault(new InventoryLargeChest(
-                        "", (IInventory) tile, (IInventory) chest2));
+                return IInventoryWrapper.createDefault(new InventoryLargeChest("", (IInventory) tile, (IInventory) chest2));
         }
         if (w.getBlock(x - 1, y, z) == cblock) {
             TileEntity chest2 = (w.getTileEntity(x - 1, y, z));
             if (chest2 instanceof IInventory)
-                return IInventoryWrapper.createDefault(new InventoryLargeChest(
-                        "", (IInventory) chest2, (IInventory) tile));
+                return IInventoryWrapper.createDefault(new InventoryLargeChest("", (IInventory) chest2, (IInventory) tile));
         }
         if (w.getBlock(x, y, z + 1) == cblock) {
             TileEntity chest2 = (w.getTileEntity(x, y, z + 1));
             if (chest2 instanceof IInventory)
-                return IInventoryWrapper.createDefault(new InventoryLargeChest(
-                        "", (IInventory) tile, (IInventory) chest2));
+                return IInventoryWrapper.createDefault(new InventoryLargeChest("", (IInventory) tile, (IInventory) chest2));
         }
         if (w.getBlock(x, y, z - 1) == cblock) {
             TileEntity chest2 = (w.getTileEntity(x, y, z - 1));
             if (chest2 instanceof IInventory)
-                return IInventoryWrapper.createDefault(new InventoryLargeChest(
-                        "", (IInventory) chest2, (IInventory) tile));
+                return IInventoryWrapper.createDefault(new InventoryLargeChest("", (IInventory) chest2, (IInventory) tile));
         }
         return null;
     }
@@ -109,8 +104,7 @@ public class VannilaProvider implements IInventoryProvider {
 
         @Override
         public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-            return (i == 0) && (itemstack.getItem() instanceof ItemRecord)
-                    && (te.func_145856_a() == null);
+            return (i == 0) && (itemstack.getItem() instanceof ItemRecord) && (te.func_145856_a() == null);
         }
 
         @Override
@@ -140,24 +134,20 @@ public class VannilaProvider implements IInventoryProvider {
 
         @Override
         public void onTakenSuccessful(int slot, ItemStack left) {
-            te.getWorldObj().playAuxSFX(1005, te.xCoord, te.yCoord, te.zCoord,
-                    0);
+            te.getWorldObj().playAuxSFX(1005, te.xCoord, te.yCoord, te.zCoord, 0);
             te.getWorldObj().playRecord(null, te.xCoord, te.yCoord, te.zCoord);
             te.func_145828_a(null);
-            te.getWorldObj().setBlockMetadataWithNotify(te.xCoord, te.yCoord,
-                    te.zCoord, 0, 4);
+            te.getWorldObj().setBlockMetadataWithNotify(te.xCoord, te.yCoord, te.zCoord, 0, 4);
         }
 
         @Override
         public void onPutSuccessful(int slot, ItemStack stack) {
             // TODO: not sure what following code does, needs checking.
             ItemRecord record = (ItemRecord) stack.getItem();
-            record.onItemUse(stack, null, te.getWorldObj(), te.xCoord,
-                    te.yCoord, te.zCoord, 0, 0, 0, 0);
+            record.onItemUse(stack, null, te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord, 0, 0, 0, 0);
             // ((BlockJukebox) Blocks.jukebox).insertRecord(te.worldObj,
             // te.xCoord, te.yCoord, te.zCoord, stack);
-            ((BlockJukebox) Blocks.jukebox).func_149925_e(te.getWorldObj(),
-                    te.xCoord, te.yCoord, te.zCoord);
+            ((BlockJukebox) Blocks.jukebox).func_149925_e(te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord);
         }
 
         @Override
