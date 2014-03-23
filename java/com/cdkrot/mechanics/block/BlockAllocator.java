@@ -330,13 +330,8 @@ public class BlockAllocator extends BlockContainer {
             return icons[2];// in
         else if (side == 0 || side == 1)
             return this.blockIcon;// topbottom
-        else {
-            boolean t = (side == 2) || (side == 3);
-            if (((Math.abs(side - meta) == 2) && (t)) || ((Math.abs(side - Utility.getOppositeSide(meta)) == 2) && (!t))) {
-                return icons[0];// sidel
-            } else
-                return icons[1];// sider
-        }
+        else
+			return icons[1 - (meta %2)];
     }
 
     @Override
