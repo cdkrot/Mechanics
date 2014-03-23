@@ -110,7 +110,7 @@ public class Mechanics {
         GameRegistry.addRecipe(new ItemStack(benchmark), "WSW", "WDW", "RRR", 'W', new ItemStack(Blocks.wool, 1, 14), 'S', Items.sign, 'D', Blocks.dispenser, 'R', Items.redstone);
 
         AllocatorRegistry.instance.add(new VannilaProvider());
-        AllocatorRegistry.instance.add(new MechanicsModProvider());
+        //AllocatorRegistry.instance.add(new MechanicsModProvider());
         networkHandler.postInitialise();
     }
 }
