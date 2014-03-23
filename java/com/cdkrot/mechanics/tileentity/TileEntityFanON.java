@@ -14,7 +14,6 @@ import com.cdkrot.mechanics.util.Utility;
 import com.cdkrot.mechanics.util.VecI3;
 import com.cdkrot.mechanics.util.VecI3Base;
 
-//TODO: should work, however MUST be tested.
 public class TileEntityFanON extends TileEntity {
 
     private VecI3Base dirvec;
