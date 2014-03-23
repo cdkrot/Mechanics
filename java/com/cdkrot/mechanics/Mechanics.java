@@ -12,7 +12,6 @@ import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Logger;
 
 import com.cdkrot.mechanics.api.allocator.AllocatorRegistry;
-import com.cdkrot.mechanics.api.allocator.MechanicsModProvider;
 import com.cdkrot.mechanics.api.allocator.VannilaProvider;
 import com.cdkrot.mechanics.block.BlockAllocator;
 import com.cdkrot.mechanics.block.BlockBenchmark;
