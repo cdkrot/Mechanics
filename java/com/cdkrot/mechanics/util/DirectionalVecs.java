@@ -12,7 +12,8 @@ public class DirectionalVecs {
     private DirectionalVecs() {
     }
 
-    public static boolean isFacingNegative(VecI3Base base) {
+    public static boolean isFacingNegative(VecI3Base base) //only for dirvecs!
+	{
         return (base.x + base.y + base.z) < 0;
     }
 

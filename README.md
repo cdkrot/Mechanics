@@ -3,9 +3,9 @@ Mechanics Mod (Minecraft)
 * 1.7 update WIP
 
 ### Contibutors
-*cdkrot: main contibutor
+* cdkrot: main contibutor
 * T145: will not be committing to this repository as frequently, as he have primarily turned his attention to developing Magistics: http://www.minecraftforum.net/topic/2424249-/
-*: want to become a contibutor? Contact me(cdkrot)!
+* :want to become a contibutor? Contact me(cdkrot)!
 
 ## Latest News
 * 23 mar 14 fixed all texturing, includeing initialization (thanks kenzierocks!) Localization to do.

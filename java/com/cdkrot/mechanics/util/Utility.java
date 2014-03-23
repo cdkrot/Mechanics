@@ -120,10 +120,12 @@ public class Utility {
     }
 
     public static AxisAlignedBB SelectPoolBasingOnVectorAndInc(VecI3 base, VecI3Base dirvec) {
-        if (DirectionalVecs.isFacingNegative(dirvec))
+		return AxisAlignedBB.getBoundingBox(base.x+dirvec.x, base.y+dirvec.y, base.z+dirvec.z,
+				base.x+dirvec.x+1, base.y+dirvec.y+1, base.z+dirvec.z+1);
+       /*if (DirectionalVecs.isFacingNegative(dirvec))
             return AxisAlignedBB.getBoundingBox(base.x + dirvec.x, base.y + dirvec.y, base.z + dirvec.z, base.x, base.y, base.z);
         else
-            return AxisAlignedBB.getBoundingBox(base.x, base.y, base.z, base.x + dirvec.x, base.y + dirvec.y, base.z + dirvec.z);
+            return AxisAlignedBB.getBoundingBox(base.x, base.y, base.z, base.x + dirvec.x, base.y + dirvec.y, base.z + dirvec.z);*/
     }
 
     public static int getDefaultDirectionsMeta(World world, int x, int y, int z) {
