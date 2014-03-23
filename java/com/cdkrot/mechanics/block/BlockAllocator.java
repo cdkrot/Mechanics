@@ -46,7 +46,6 @@ public class BlockAllocator extends BlockContainer {
      */
     public BlockAllocator() {
         super(Material.rock);
-        this.setBlockTextureName(Mechanics.modid + ":allocator_in.png");
     }
 
     @Override
