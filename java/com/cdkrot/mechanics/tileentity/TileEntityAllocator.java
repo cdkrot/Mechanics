@@ -25,7 +25,6 @@ import com.cdkrot.mechanics.util.VecI3Base;
 
 public class TileEntityAllocator extends TileEntity implements IInventory {
     public ItemStack allocatorFilterItems[] = new ItemStack[16];
-    public FakeIInventory transfer = new FakeIInventory(1);
 
     @Override
     public ItemStack decrStackSize(int slot, int amount) {
@@ -129,7 +128,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
     /**
      * Returns true, if the item is allowed to pass.
      */
-    public boolean passesFilter(ItemStack item) {
+    private boolean passesFilter(ItemStack item) {
         if (allocatorFilterItems == null)
             return true;
         boolean t = true;
@@ -147,7 +146,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
     /**
      * Returns the container (IIventory) at position (x,y,z) if it exists.
      */
-    protected IInventory containerAtPos(World world, int x, int y, int z) {
+    private IInventory containerAtPos(World world, int x, int y, int z) {
         IInventory inv = AllocatorRegistry.instance.getIInventoryFor(world, x, y, z);
 
         if (inv != null)
@@ -164,7 +163,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
      * INPUT! Returns a random item (index) from the container, using the same
      * rule as the dispenser
      */
-    public int getRandomItemIndexFromContainer(IInventory inventory, Random rand, int side) {
+    private int getRandomItemIndexFromContainer(IInventory inventory, Random rand, int side) {
         if (inventory == null)
             return -1;
 
@@ -196,7 +195,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
     /**
      * Spits out an item (like the dropper, but the whole stack)
      */
-    protected void dispense(World world, int i, int j, int k, ItemStack item) {
+    private void dispense(World world, int i, int j, int k, ItemStack item) {
         BlockSourceImpl blockImpl = new BlockSourceImpl(world, i, j, k);
         // Inventory fetcher for hopper, probably not needed
         //
@@ -215,77 +214,6 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
     }
 
     /**
-     * Inserts itemstack to given place, partialy or fully
-     * 
-     * @return stack's reference or null if item was fully put out.
-     */
-    @SuppressWarnings({ "unchecked" })
-    private ItemStack outputItem(World world, int x, int y, int z, VecI3Base dir, ItemStack stack, Random random, int side) {
-        int xoff = x + dir.x, yoff = y + dir.y, zoff = z + dir.z;
-        IInventory output = containerAtPos(world, xoff, yoff, zoff);
-
-        if (output == null) {
-            List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox(xoff, yoff, zoff, xoff + 1, yoff + 1, zoff));
-            List<IInventory> invs = AllocatorRegistry.instance.getIInventoryAllInFor(entities, false);
-            if (invs.size() > 0)
-                output = invs.get(random.nextInt(invs.size()));
-            else if (!(world.getBlock(xoff, yoff, zoff).isOpaqueCube())) {
-                dispense(world, x, y, z, stack);
-                return null;
-            } else
-                return stack;
-        }
-        if (output instanceof ISidedInventory) {
-            int list[] = ((ISidedInventory) output).getAccessibleSlotsFromSide(side);
-            for (int i = 0; (i < list.length) && stack != null; i++)
-                stack = outputItem_do(output, list[i], stack);
-        } else
-            for (int l = 0; (l < output.getSizeInventory() && stack != null); l++)
-                stack = outputItem_do(output, l, stack);
-
-        return stack;
-    }
-
-    /**
-     * Inserts itemstack to given slot, partialy or fully.
-     * 
-     * @param inv
-     *            inventory to output.
-     * @param id
-     *            slot id
-     * @param stack
-     *            modifyable stack(quantity)
-     * @return stack's referense, or null if fully taken.
-     */
-    protected ItemStack outputItem_do(IInventory inv, int id, ItemStack stack) {
-        ItemStack baseStack = inv.getStackInSlot(id);
-        if (baseStack == null)
-            if (stack.stackSize <= inv.getInventoryStackLimit() && inv.isItemValidForSlot(id, stack)) {
-                inv.setInventorySlotContents(id, stack);
-                return null;
-            } else {
-                ItemStack stack2 = stack.copy();
-                stack2.stackSize = inv.getInventoryStackLimit();
-                stack.stackSize -= inv.getInventoryStackLimit();
-                inv.setInventorySlotContents(id, stack2);
-                return stack;
-            }
-        else if (((baseStack.isStackable()) && (stack.isStackable())) && (baseStack.getItem() == stack.getItem()) && (baseStack.getItemDamage() == stack.getItemDamage())) {
-            // item is valid for stack
-            int stack_limit = Math.min(inv.getInventoryStackLimit(), stack.getMaxStackSize());
-            if (baseStack.stackSize + stack.stackSize <= stack_limit) {
-                baseStack.stackSize += stack.stackSize;
-                return null;
-            } else {
-                stack.stackSize -= (stack_limit - baseStack.stackSize);
-                baseStack.stackSize = stack_limit;
-                return stack;
-            }
-        } else
-            return stack;
-    }
-
-    /**
      * Handles all the item input/output
      */
     @SuppressWarnings("unchecked")
@@ -293,77 +221,51 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
     public void allocateItems(World world, int x, int y, int z, Random random) {
         int front = getBlockMetadata(), back = Facing.oppositeSide[front];
         VecI3Base d = DirectionalVecs.list[front];
-        IInventory input = containerAtPos(world, x - d.x, y - d.y, z - d.z);
+        int xoff = x - d.x, yoff = y - d.y, zoff = z - d.z;
+        int invxoff = x + d.x, invyoff = y + d.y, invzoff = z + d.z;
+        IInventory input = containerAtPos(world, xoff, yoff, zoff);
+        IInventory output = containerAtPos(world, invxoff, invyoff, invzoff);
 
         if (input == null) {
-            List<Entity> entities = (List<Entity>) world.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox((double) (x - d.x), (double) y - d.y, (double) (z - d.z), (double) (x - d.x + 1), (double) (y - d.y + 1), (float) (z - d.z + 1)));
+            List<Entity> entities = (List<Entity>) world.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox(xoff, yoff, zoff, xoff + 1, yoff + 1, zoff + 1));
             List<IInventory> invs = AllocatorRegistry.instance.getIInventoryAllInFor(entities, true);
             // TODO: entity inventories should be caught by other way
             // [REFACTORING].
 
-            if (invs.size() > 0)
+            if (invs.size() > 0) {
                 input = invs.get(random.nextInt(invs.size()));
-            else
+            } else {
+                Mechanics.modLogger.info("no input @ " + xoff + " " + yoff + " " + zoff);
                 return;// no input.
+            }
+        }
+
+        if (output == null) {
+            List<Entity> entities = (List<Entity>) world.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox(invxoff, invyoff, invzoff, invxoff + 1, invyoff + 1, invzoff + 1));
+            List<IInventory> invs = AllocatorRegistry.instance.getIInventoryAllInFor(entities, false);
+            if (invs.size() > 0) {
+                output = invs.get(random.nextInt(invs.size()));
+            } else if (!(world.getBlock(invxoff, invyoff, invzoff).isOpaqueCube())) {
+                // will dispense later
+                output = null;
+            }
         }
         // TODO: inline
         int itemIndex = getRandomItemIndexFromContainer(input, random, back);
 
         if (itemIndex < 0)
             return; // no item
-
-        IInventory iinventory = input;
-        ItemStack stack = iinventory.getStackInSlot(itemIndex).copy();
-
-        if (stack == null)
-            return;
-        if (couldMoveStack(this, stack, front))
-            iinventory.setInventorySlotContents(itemIndex, outputItem(world, x, y, z, d, stack, random, front));
-        // TODO: the onest place transfer used, is it needed?
-        transfer.setInventorySlotContents(0, null);
-    }
-
-    private static boolean couldMoveStack(IInventory inv, ItemStack stack, int side) {
-        boolean yes = false;
-        if (inv instanceof ISidedInventory && side > -1) {
-            ISidedInventory isidedinventory = (ISidedInventory) inv;
-            int[] slots = isidedinventory.getAccessibleSlotsFromSide(side);
-
-            for (int l = 0; l < slots.length && stack != null && stack.stackSize > 0; ++l) {
-                yes = canTryStackMove(inv, stack, slots[l], side);
-            }
+        ItemStack stack = input.getStackInSlot(itemIndex).copy();
+        if (output == null) {
+            // dispense
+            dispense(world, invxoff, invyoff, invzoff, stack);
+            stack = null;
         } else {
-            int size = inv.getSizeInventory();
-
-            for (int k = 0; k < size && stack != null && stack.stackSize > 0; ++k) {
-                yes = canTryStackMove(inv, stack, k, side);
-            }
+            stack = moveStackToInv(output, stack, front);
         }
-
-        return yes;
+        input.setInventorySlotContents(itemIndex, stack);
     }
 
-    private static boolean canTryStackMove(IInventory inv, ItemStack stack, int slot, int side) {
-        ItemStack stackInSlot = inv.getStackInSlot(slot);
-        boolean yes = false;
-
-        if (canInsertIntoInventoryAtSlot(inv, stack, slot, side)) {
-            if (stackInSlot == null) {
-                yes = true;
-            } else if (canStackItems(stackInSlot, stack)) {
-                int max = Math.min(stack.getMaxStackSize(), inv.getInventoryStackLimit());
-                if (max > stackInSlot.stackSize) {
-                    yes = true;
-                }
-            }
-        }
-        return yes;
-    }
-
-    /**
-     * Unused until we stop with IInventory, if ever.
-     */
-    @SuppressWarnings("unused")
     private static ItemStack moveStackToInv(IInventory inv, ItemStack stack, int side) {
         if (inv instanceof ISidedInventory && side > -1) {
             ISidedInventory isidedinventory = (ISidedInventory) inv;
