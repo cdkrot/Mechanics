@@ -14,9 +14,11 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -102,7 +104,7 @@ public class BlockAllocator extends BlockContainer {
                 continue;
             t = false;
             if ((item.getItem() == filter_.getItem()) && (item.getItemDamage() == filter_.getItemDamage()))
-                if (Objects.equals(item.getTagCompound(), filter_.getTagCompound()))
+                if (ItemStack.areItemStackTagsEqual(item, filter_))
                     return true;
         }
         return t;
@@ -112,12 +114,13 @@ public class BlockAllocator extends BlockContainer {
      * Returns the container (IIventory) at position (x,y,z) if it exists.
      */
     protected IInventoryEX containerAtPos(World world, int x, int y, int z) {
-        TileEntity tile = world.getTileEntity(x, y, z);
         IInventoryEX inv = AllocatorRegistry.instance.getIInventoryFor(world, x, y, z);
 
         if (inv != null)
             return inv;
-        else if (tile instanceof IInventoryEX)
+
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile instanceof IInventoryEX)
             return (IInventoryEX) tile;
         else if (tile instanceof IInventory)
             return IInventoryWrapper.createDefault((IInventory) tile);
@@ -155,13 +158,12 @@ public class BlockAllocator extends BlockContainer {
         TileEntityAllocator allocator = (TileEntityAllocator) blockImpl.getBlockTileEntity();
 
         if (allocator != null) {
+            // Inventory fetcher for hopper, probably not needed
+            //
             // int meta = world.getBlockMetadata(i, j, k) & 7;
-            // IInventory hopper = TileEntityHopper.func_96117_b(world,
-            // //WARNING: Hopper doesn't have following (or equiv. with other
-            // name) method!!!
-            // (double) (i + Facing.offsetsXForSide[meta]), //WARNING what
-            // "hopper" variable does?
-            // (double) (j + Facing.offsetsYForSide[meta]), //unfinished?
+            // IInventory hopper = TileEntityHopper.func_145893_b(world,
+            // (double) (i + Facing.offsetsXForSide[meta]), 
+            // (double) (j + Facing.offsetsYForSide[meta]), 
             // (double) (k + Facing.offsetsZForSide[meta]));
 
             // TODO: use stack
@@ -243,6 +245,86 @@ public class BlockAllocator extends BlockContainer {
         if (itemIndex >= 0)
             if (outputItem(world, x, y, z, d, input.asIInventory().getStackInSlot(itemIndex), random))
                 input.onTakenSuccessful(itemIndex, null);
+    }
+
+    public static ItemStack moveStackToInv(IInventory inv, ItemStack stack, int side) {
+        if (inv instanceof ISidedInventory && side > -1) {
+            ISidedInventory isidedinventory = (ISidedInventory) inv;
+            int[] slots = isidedinventory.getAccessibleSlotsFromSide(side);
+
+            for (int l = 0; l < slots.length && stack != null && stack.stackSize > 0; ++l) {
+                stack = tryStackMove(inv, stack, slots[l], side);
+            }
+        } else {
+            int size = inv.getSizeInventory();
+
+            for (int k = 0; k < size && stack != null && stack.stackSize > 0; ++k) {
+                stack = tryStackMove(inv, stack, k, side);
+            }
+        }
+
+        if (stack != null && stack.stackSize == 0) {
+            stack = null;
+        }
+
+        return stack;
+    }
+
+    /**
+     * Attempts to move the given stack into the given inventory at the given
+     * slot and side.
+     */
+    private static ItemStack tryStackMove(IInventory inv, ItemStack stack, int slot, int side) {
+        ItemStack stackInSlot = inv.getStackInSlot(slot);
+
+        if (canInsertIntoInventoryAtSlot(inv, stack, slot, side)) {
+            boolean save = false;
+
+            if (stackInSlot == null) {
+                int max = Math.min(stack.getMaxStackSize(), inv.getInventoryStackLimit());
+                if (max >= stack.stackSize) {
+                    inv.setInventorySlotContents(slot, stack);
+                    stack = null;
+                } else {
+                    inv.setInventorySlotContents(slot, stack.splitStack(max));
+                }
+                save = true;
+            } else if (canStackItems(stackInSlot, stack)) {
+                int max = Math.min(stack.getMaxStackSize(), inv.getInventoryStackLimit());
+                if (max > stackInSlot.stackSize) {
+                    int l = Math.min(stack.stackSize, max - stackInSlot.stackSize);
+                    stack.stackSize -= l;
+                    stackInSlot.stackSize += l;
+                    save = l > 0;
+                }
+            }
+
+            if (save) {
+                inv.markDirty();
+            }
+        }
+
+        return stack;
+    }
+
+    /**
+     * Checks for insertion into the given inventory at the slot specified, and,
+     * if inv implements ISidedInventory, the given side.
+     */
+    private static boolean canInsertIntoInventoryAtSlot(IInventory inv, ItemStack stack, int slot, int side) {
+        return !inv.isItemValidForSlot(slot, stack) ? false : !(inv instanceof ISidedInventory) || ((ISidedInventory) inv).canInsertItem(slot, stack, side);
+    }
+
+    /**
+     * This compares two item stacks, and ensures that a's size is under it's
+     * max and that it's item data (id, meta, tags) matches b's.
+     */
+    private static boolean canStackItems(ItemStack a, ItemStack b) {
+        // old code, I optimized it so it isn't so obfuscated
+        // a.getItem() != b.getItem() ? false : (a.getItemDamage() !=
+        // b.getItemDamage() ? false : (a.stackSize > a.getMaxStackSize() ?
+        // false : ItemStack.areItemStackTagsEqual(a, b)))
+        return a.getItem() == b.getItem() && a.getItemDamage() == b.getItemDamage() && a.stackSize <= a.getMaxStackSize() && ItemStack.areItemStackTagsEqual(a, b);
     }
 
     @Override
@@ -330,7 +412,7 @@ public class BlockAllocator extends BlockContainer {
         else if (side == 0 || side == 1)
             return this.blockIcon;// topbottom
         else
-			return icons[1 - (meta %2)];
+            return icons[1 - (meta % 2)];
     }
 
     @Override
