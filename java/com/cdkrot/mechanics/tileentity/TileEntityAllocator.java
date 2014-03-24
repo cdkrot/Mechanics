@@ -3,7 +3,6 @@ package com.cdkrot.mechanics.tileentity;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.BlockHopper;
 import net.minecraft.block.BlockSourceImpl;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -120,22 +119,21 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
         return getStackInSlot(s);
     }
 
-    // Imported from BlockAllocator, it is much easier to deal with it in an
-    // instance of the TileENtity, we don't have to reget an instance.
-
+	//==========================================================//
+	//          Start of item io algorithms.                    //
+	//==========================================================//
     // TODO rewrite
 
     private final BehaviourDispenseItemStack dispenser = new BehaviourDispenseItemStack();
 
     /**
-     * Returns true, if the item is allowed to pass (Filter is array filled with
-     * filter items. Lists filled with null will not pass correctly.
+     * Returns true, if the item is allowed to pass.
      */
-    private boolean passesFilter(ItemStack item, ItemStack[] filter) {
-        if (filter == null)
+    public boolean passesFilter(ItemStack item) {
+        if (allocatorFilterItems == null)
             return true;
         boolean t = true;
-        for (ItemStack filter_ : filter) {
+        for (ItemStack filter_ : allocatorFilterItems) {
             if (filter_ == null)
                 continue;
             t = false;
@@ -166,19 +164,30 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
      * INPUT! Returns a random item (index) from the container, using the same
      * rule as the dispenser
      */
-    public int getRandomItemIndexFromContainer(IInventory inventory, Random rand, ItemStack[] filter) {
+    public int getRandomItemIndexFromContainer(IInventory inventory, Random rand) {
         if (inventory == null)
             return -1;
-        IInventory base = inventory;
-        int ret = -1, j = 1;
 
-        for (int k = 0; k < inventory.getSizeInventory(); k++) {
-            ItemStack s = base.getStackInSlot(k);
-            if ((s != null) && passesFilter(s, filter) && (rand.nextInt(j) == 0)) {
-                ret = k;
-                j++;
-            }
-        }
+		int ret = -1, j = 1;
+
+		if (inventory instanceof ISidedInventory) {
+			int list[] = ((ISidedInventory)inventory).getAccessibleSlotsFromSide(0);//FIXME:  id of INPUT
+
+			for (int k=0; k<list.length; k++) {
+				ItemStack s = inventory.getStackInSlot(list[k]);
+				if ((s!=null) && passesFilter(s) && rand.nextInt(j)==0){
+					ret=list[k]; j++;
+				}
+			}
+		}
+		else {
+        	for (int k = 0; k < inventory.getSizeInventory(); k++) {
+            	ItemStack s = inventory.getStackInSlot(k);
+            	if ((s != null) && passesFilter(s) && (rand.nextInt(j) == 0)) {
+            	    ret=k; j++;
+            	}
+       		}
+		}
         return ret;
     }
 
@@ -204,10 +213,11 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
     }
 
     /**
-     * Handles the item output. Returns true, if item was successfully put out.
+     * Inserts itemstack to given place, partialy or fully
+	 * @return stack's reference or null if item was fully put out.
      */
     @SuppressWarnings({ "unchecked" })
-    private boolean outputItem(World world, int x, int y, int z, VecI3Base dir, ItemStack item, Random random) {
+    private ItemStack outputItem(World world, int x, int y, int z, VecI3Base dir, ItemStack stack, Random random) {
         int xoff = x + dir.x, yoff = y + dir.y, zoff = z + dir.z;
         IInventory output = containerAtPos(world, xoff, yoff, zoff);
 
@@ -217,30 +227,62 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
             if (invs.size() > 0)
                 output = invs.get(random.nextInt(invs.size()));
             else if (!(world.getBlock(xoff, yoff, zoff).isOpaqueCube())) {
-                dispense(world, x, y, z, item);
-                return true;
+                dispense(world, x, y, z, stack);
+                return null;
             } else
-                return false;
+                return stack;
         }
-        IInventory base = output;
+        if (output instanceof ISidedInventory) {
+			int list[]=((ISidedInventory) output).getAccessibleSlotsFromSide(1);//FIXME: ID OF OUTPUT SIDE
+			for (int i=0; (i<list.length) && stack!=null; i++)
+				stack = outputItem_do(output, list[i], stack);
+		}
+		else for (int l = 0; (l < output.getSizeInventory() && stack!=null); l++)
+			stack = outputItem_do(output, l, stack);
 
-        for (int l = 0; l < output.getSizeInventory(); l++) {
-            ItemStack baseStack = base.getStackInSlot(l);
-            if (baseStack == null)
-                if (item.stackSize <= base.getInventoryStackLimit() && base.isItemValidForSlot(l, item)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            else if (((baseStack.isStackable()) && (item.isStackable())) && (baseStack.getItem() == item.getItem()) && (baseStack.getItemDamage() == item.getItemDamage()) && (baseStack.stackSize + item.stackSize <= Math.min(base.getInventoryStackLimit(), item.getMaxStackSize()))) {
-                // item is valid for stack
-                baseStack = baseStack.copy();// should copy a stack
-                baseStack.stackSize += item.stackSize;
-                return true;
-            }
-        }
-        return false;
+        return stack;
     }
+
+	/**
+	 * Inserts itemstack to given slot, partialy or fully.
+	 * @param inv inventory to output.
+	 * @param id slot id
+	 * @param stack modifyable stack(quantity)
+	 * @return stack's referense, or null if fully taken.
+	 */
+	protected ItemStack outputItem_do(IInventory inv, int id, ItemStack stack)
+	{
+		ItemStack baseStack = inv.getStackInSlot(id);
+		if (baseStack == null)
+			if (stack.stackSize <= inv.getInventoryStackLimit() && inv.isItemValidForSlot(id, stack))
+			{
+				inv.setInventorySlotContents(id, stack);
+				return null;
+			}
+			else
+			{
+				ItemStack stack2 = stack.copy();
+				stack2.stackSize=inv.getInventoryStackLimit();
+				stack.stackSize-=inv.getInventoryStackLimit();
+				inv.setInventorySlotContents(id, stack2);
+				return stack;
+			}
+		else if (((baseStack.isStackable()) && (stack.isStackable())) && (baseStack.getItem() == stack.getItem()) && (baseStack.getItemDamage() == stack.getItemDamage())){
+			// item is valid for stack
+			int stack_limit = Math.min(inv.getInventoryStackLimit(), stack.getMaxStackSize());
+			if (baseStack.stackSize + stack.stackSize <= stack_limit) {
+				baseStack.stackSize += stack.stackSize;
+				return null;
+			}
+			else {
+				stack.stackSize-=(stack_limit-baseStack.stackSize);
+				baseStack.stackSize = stack_limit;
+				return stack;
+			}
+		}
+		else
+			return stack;
+	}
 
     /**
      * Handles all the item input/output
@@ -249,7 +291,6 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
     // TODO: remove the need for suppression
     public void allocateItems(World world, int x, int y, int z, Random random) {
         VecI3Base d = DirectionalVecs.list[world.getBlockMetadata(x, y, z)];
-        ItemStack[] filter = allocatorFilterItems;
         IInventory input = containerAtPos(world, x - d.x, y - d.y, z - d.z);
 
         if (input == null) {
@@ -263,32 +304,20 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
             else
                 return;// no input.
         }
-        // TODO: should be inlined here.
+        int itemIndex = getRandomItemIndexFromContainer(input, random);//TODO: inline
 
-        int itemIndex = getRandomItemIndexFromContainer(input, random, filter);
+        if (itemIndex < 0)
+            return; // no item
 
-        if (itemIndex < 0) {
-            // no item
-            return;
-        }
-
-        IInventory iinventory = input;
+		IInventory iinventory = input;
         ItemStack stack = iinventory.getStackInSlot(itemIndex).copy();
 
-        if (stack == null) {
-            // no stack in slot
+        if (stack == null)
             return;
-        }
 
-        // correct this if you need to: I assumed that our direction meta is
-        // exactly like hoppers
-		//TODO: check this code. Our direction meta is: meta equals to side of allocator's input.
-        if (couldMoveStack(this, stack, Facing.oppositeSide[BlockHopper.getDirectionFromMetadata(getBlockMetadata())]) && outputItem(world, x, y, z, d, stack, random)) {
-            iinventory.setInventorySlotContents(itemIndex, stack);
-        } else {
-
-        }
-        transfer.setInventorySlotContents(0, null);
+        if (couldMoveStack(this, stack, Facing.oppositeSide[getBlockMetadata()]))
+            iinventory.setInventorySlotContents(itemIndex, outputItem(world, x, y, z, d, stack, random));
+        transfer.setInventorySlotContents(0, null);//TODO: the onest place transfer used, is it needed?
     }
 
     private static boolean couldMoveStack(IInventory inv, ItemStack stack, int side) {
@@ -397,7 +426,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
      * if inv implements ISidedInventory, the given side.
      */
     private static boolean canInsertIntoInventoryAtSlot(IInventory inv, ItemStack stack, int slot, int side) {
-        return (inv.isItemValidForSlot(slot, stack) && ( !(inv instanceof ISidedInventory) || ((ISidedInventory)inv).canInsertItem(slot, stack, side)));
+		return (inv.isItemValidForSlot(slot, stack) && (!(inv instanceof ISidedInventory) || ((ISidedInventory) inv).canInsertItem(slot, stack, side)));
     }
 
     /**
