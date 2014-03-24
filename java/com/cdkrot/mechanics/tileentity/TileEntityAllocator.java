@@ -252,7 +252,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
 				return;//face blocked with something.
         }
         // TODO: inline
-        int itemIndex = getRandomItemIndexFromContainer(input, random, back);
+        int itemIndex = getRandomItemIndexFromContainer(input, random, front);
 
         if (itemIndex < 0)
             return; // no item
@@ -261,7 +261,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
             dispense(world, invxoff, invyoff, invzoff, stack);
             stack = null;
         } else {
-            stack = moveStackToInv(output, stack, front);
+            stack = moveStackToInv(output, stack, back);
         }
         input.setInventorySlotContents(itemIndex, stack);
     }
