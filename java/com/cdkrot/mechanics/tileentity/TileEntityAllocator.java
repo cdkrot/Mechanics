@@ -254,6 +254,10 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
         if (itemIndex < 0)
             return; // no item
         ItemStack stack = input.getStackInSlot(itemIndex).copy();
+        if (!canExtractFromInventoryAtSlot(input, stack, itemIndex, back)) {
+            // illegal
+            return;
+        }
         if (output == null) {
             dispense(world, invxoff, invyoff, invzoff, stack);
             stack = null;
@@ -329,6 +333,14 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
      */
     private static boolean canInsertIntoInventoryAtSlot(IInventory inv, ItemStack stack, int slot, int side) {
         return (inv.isItemValidForSlot(slot, stack) && (!(inv instanceof ISidedInventory) || ((ISidedInventory) inv).canInsertItem(slot, stack, side)));
+    }
+
+    /**
+     * Checks for extraction into the given inventory at the slot specified,
+     * and, if inv implements ISidedInventory, the given side.
+     */
+    private static boolean canExtractFromInventoryAtSlot(IInventory inv, ItemStack stack, int slot, int side) {
+        return (!(inv instanceof ISidedInventory) || ((ISidedInventory) inv).canExtractItem(slot, stack, side));
     }
 
     /**
