@@ -248,7 +248,8 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
             } else if (!(world.getBlock(invxoff, invyoff, invzoff).isOpaqueCube())) {
                 // will dispense later
                 output = null;
-            }
+            } else
+				return;//face blocked with something.
         }
         // TODO: inline
         int itemIndex = getRandomItemIndexFromContainer(input, random, back);
@@ -257,7 +258,6 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
             return; // no item
         ItemStack stack = input.getStackInSlot(itemIndex).copy();
         if (output == null) {
-            // dispense
             dispense(world, invxoff, invyoff, invzoff, stack);
             stack = null;
         } else {
