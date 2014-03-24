@@ -164,15 +164,15 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
      * INPUT! Returns a random item (index) from the container, using the same
      * rule as the dispenser
      */
-    public int getRandomItemIndexFromContainer(IInventory inventory, Random rand) {
+    public int getRandomItemIndexFromContainer(IInventory inventory, Random rand, int side) {
         if (inventory == null)
             return -1;
 
         int ret = -1, j = 1;
 
         if (inventory instanceof ISidedInventory) {
-			//TODO: check.
-            int list[] = ((ISidedInventory) inventory).getAccessibleSlotsFromSide(Facing.oppositeSide[getBlockMetadata()]);//taking from input face
+            // TODO: check.
+            int list[] = ((ISidedInventory) inventory).getAccessibleSlotsFromSide(side);
 
             for (int k = 0; k < list.length; k++) {
                 ItemStack s = inventory.getStackInSlot(list[k]);
@@ -220,7 +220,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
      * @return stack's reference or null if item was fully put out.
      */
     @SuppressWarnings({ "unchecked" })
-    private ItemStack outputItem(World world, int x, int y, int z, VecI3Base dir, ItemStack stack, Random random) {
+    private ItemStack outputItem(World world, int x, int y, int z, VecI3Base dir, ItemStack stack, Random random, int side) {
         int xoff = x + dir.x, yoff = y + dir.y, zoff = z + dir.z;
         IInventory output = containerAtPos(world, xoff, yoff, zoff);
 
@@ -236,7 +236,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
                 return stack;
         }
         if (output instanceof ISidedInventory) {
-            int list[] = ((ISidedInventory) output).getAccessibleSlotsFromSide(getBlockMetadata());
+            int list[] = ((ISidedInventory) output).getAccessibleSlotsFromSide(side);
             for (int i = 0; (i < list.length) && stack != null; i++)
                 stack = outputItem_do(output, list[i], stack);
         } else
@@ -291,7 +291,8 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
     @SuppressWarnings("unchecked")
     // TODO: remove the need for suppression
     public void allocateItems(World world, int x, int y, int z, Random random) {
-        VecI3Base d = DirectionalVecs.list[world.getBlockMetadata(x, y, z)];
+        int front = getBlockMetadata(), back = Facing.oppositeSide[front];
+        VecI3Base d = DirectionalVecs.list[front];
         IInventory input = containerAtPos(world, x - d.x, y - d.y, z - d.z);
 
         if (input == null) {
@@ -306,7 +307,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
                 return;// no input.
         }
         // TODO: inline
-        int itemIndex = getRandomItemIndexFromContainer(input, random);
+        int itemIndex = getRandomItemIndexFromContainer(input, random, back);
 
         if (itemIndex < 0)
             return; // no item
@@ -316,8 +317,8 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
 
         if (stack == null)
             return;
-        if (couldMoveStack(this, stack, Facing.oppositeSide[getBlockMetadata()]))
-            iinventory.setInventorySlotContents(itemIndex, outputItem(world, x, y, z, d, stack, random));
+        if (couldMoveStack(this, stack, front))
+            iinventory.setInventorySlotContents(itemIndex, outputItem(world, x, y, z, d, stack, random, front));
         // TODO: the onest place transfer used, is it needed?
         transfer.setInventorySlotContents(0, null);
     }
