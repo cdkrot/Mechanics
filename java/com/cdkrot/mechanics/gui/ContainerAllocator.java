@@ -31,6 +31,7 @@ public class ContainerAllocator extends Container {
         return allocator.isUseableByPlayer(entityplayer);
     }
 
+	@Override
 	public net.minecraft.item.ItemStack slotClick(int id, int x, int y, net.minecraft.entity.player.EntityPlayer entityPlayer) {
 		Mechanics.modLogger.info(" "+id+" "+x+" "+y);
 		if (id<16 && id>=0) { //looks like there are reserved codes below 0.
