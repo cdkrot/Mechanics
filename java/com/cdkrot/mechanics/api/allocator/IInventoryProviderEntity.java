@@ -1,13 +1,11 @@
 package com.cdkrot.mechanics.api.allocator;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.inventory.IInventory;
 
 public interface IInventoryProviderEntity {
-    /**
-     * If Entity recognized return it as IInventory array
-     * 
-     * @param entity
-     * @return IInventory[]
-     */
-    IInventoryEX createIInventory(Entity entity);
+	/**
+	 * Return inventory as IInventory or as ISidedInventory
+	 */
+    IInventory createIInventory(Entity entity);
 }
