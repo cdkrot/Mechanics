@@ -3,6 +3,7 @@ package com.cdkrot.mechanics.api.allocator;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
+@Deprecated
 public interface IInventoryEX {
     /**
      * See BlockAllocator.getRandomItemStackFromContainer
