@@ -24,10 +24,18 @@ public class AllocatorRegistry {
         list2.add(p);
     }
 
-    public IInventoryEX getIInventoryFor(World w, int x, int y, int z) {
+	/**
+	 * Returns Block as IInventory or ISidedInventory
+	 * @param w
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
+    public IInventory getIInventoryFor(World w, int x, int y, int z) {
         Block b = w.getBlock(x, y, z);
         for (IInventoryProvider provider : list) {
-            IInventoryEX inv = provider.createIInventory(w, x, y, z, b);
+            IInventory inv = provider.createIInventory(w, x, y, z, b);
             if (inv != null)
                 return inv;
         }
@@ -52,12 +60,12 @@ public class AllocatorRegistry {
      *            Varifies if there is an input
      * @return list of IInventories in IInventoryEX format
      */
-    public List<IInventoryEX> getIInventoryAllInFor(List<Entity> entities, boolean isInput) {
-        List<IInventoryEX> res = new ArrayList<IInventoryEX>();
+    public List<IInventory> getIInventoryAllInFor(List<Entity> entities, boolean isInput) {
+        List<IInventory> res = new ArrayList<IInventory>();
         for (IInventoryProviderEntity provider : list2) {
             for (int i = entities.size() - 1; i >= 0; i--) {
                 Entity e = entities.get(i);
-                IInventoryEX inv = provider.createIInventory(e);
+                IInventory inv = provider.createIInventory(e);
                 if (inv != null) {
                     res.add(inv);
                     entities.remove(i);
@@ -68,10 +76,8 @@ public class AllocatorRegistry {
         for (Entity e : entities) {
             if (e instanceof EntityItem)
                 items.add((EntityItem) e);
-            else if (e instanceof IInventoryEX)
-                res.add((IInventoryEX) e);
             else if (e instanceof IInventory)
-                res.add(IInventoryWrapper.createDefault((IInventory) e));
+                res.add((IInventory) e);
         }
         if (items.size() > 0 && isInput)
             res.add(new VannilaProvider.ItemStacksInventory(items.toArray(new EntityItem[items.size()])));
