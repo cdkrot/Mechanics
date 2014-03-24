@@ -1,14 +1,15 @@
 package com.cdkrot.mechanics.gui;
 
+import com.cdkrot.mechanics.Mechanics;
 import com.cdkrot.mechanics.tileentity.TileEntityAllocator;
 
 import net.minecraft.inventory.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-//package moved; imports added;
-
 public class ContainerAllocator extends Container {
+
+	private TileEntityAllocator allocator;
 
     public ContainerAllocator(IInventory invPlayer, TileEntityAllocator tileentityallocator) {
         allocator = tileentityallocator;
@@ -30,8 +31,25 @@ public class ContainerAllocator extends Container {
         return allocator.isUseableByPlayer(entityplayer);
     }
 
-    @Override
+	public net.minecraft.item.ItemStack slotClick(int id, int x, int y, net.minecraft.entity.player.EntityPlayer entityPlayer) {
+		Mechanics.modLogger.info(" "+id+" "+x+" "+y);
+		if (id<16 && id>=0) { //looks like there are reserved codes below 0.
+			ItemStack temp = entityPlayer.inventory.getItemStack();
+			if (temp!=null)
+				temp=temp.copy();
+			((Slot)(inventorySlots.get(id))).putStack(temp);
+			return null;
+		}
+		else
+			return super.slotClick(id, x, y, entityPlayer);
+	}
+
+	@Override
     public ItemStack transferStackInSlot(EntityPlayer player, int sl) {
+        if (sl<16)
+			((Slot)inventorySlots.get(sl)).putStack(null);
+		return null;
+        /*
         ItemStack itemstack = null;
         Slot slot = (Slot) inventorySlots.get(sl);
 
@@ -61,7 +79,6 @@ public class ContainerAllocator extends Container {
         }
 
         return itemstack;
+    	*/
     }
-
-    private TileEntityAllocator allocator;
 }
