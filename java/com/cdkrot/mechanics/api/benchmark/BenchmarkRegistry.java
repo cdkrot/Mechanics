@@ -1,12 +1,12 @@
 package com.cdkrot.mechanics.api.benchmark;
 
-import com.cdkrot.mechanics.Mechanics;
-import net.minecraft.entity.player.EntityPlayerMP;
-
-import com.cdkrot.mechanics.tileentity.TileEntityBenchmark;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.entity.player.EntityPlayerMP;
+
+import com.cdkrot.mechanics.Mechanics;
+import com.cdkrot.mechanics.tileentity.TileEntityBenchmark;
 
 public class BenchmarkRegistry implements INetworkBenchmarkProcessor {
     public static final int API_VERSION = 3;

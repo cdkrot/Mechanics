@@ -1,29 +1,23 @@
 package com.cdkrot.mechanics.api.allocator;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockJukebox;
 import net.minecraft.block.BlockJukebox.TileEntityJukebox;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemRecord;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
 
 //TODO: needs checking!
 public class VannilaProvider implements IInventoryProvider {
     @Override
-    public IInventoryEX createIInventory(World w, int x, int y, int z, Block b) {
+    public IInventory createIInventory(World w, int x, int y, int z, Block b) {
         TileEntity tile = w.getTileEntity(x, y, z);
         if (tile instanceof TileEntityJukebox)
             return new JukeBoxInventory((TileEntityJukebox) tile);
-
-        if (tile instanceof TileEntityFurnace)
-            return new IInventoryWrapper((TileEntityFurnace) tile, 2, 2, 0, 1);
 
         // I hate those morally depraved persons in "Oracle" or "Sun" who
         // decided that nobody should use goto's if i will find you, i will
@@ -35,27 +29,27 @@ public class VannilaProvider implements IInventoryProvider {
             // using just links compare (like comparing blockids before)
             TileEntity chest2 = (w.getTileEntity(x + 1, y, z));
             if (chest2 instanceof IInventory)
-                return IInventoryWrapper.createDefault(new InventoryLargeChest("", (IInventory) tile, (IInventory) chest2));
+                return new InventoryLargeChest("", (IInventory) tile, (IInventory) chest2);
         }
         if (w.getBlock(x - 1, y, z) == cblock) {
             TileEntity chest2 = (w.getTileEntity(x - 1, y, z));
             if (chest2 instanceof IInventory)
-                return IInventoryWrapper.createDefault(new InventoryLargeChest("", (IInventory) chest2, (IInventory) tile));
+                return new InventoryLargeChest("", (IInventory) chest2, (IInventory) tile);
         }
         if (w.getBlock(x, y, z + 1) == cblock) {
             TileEntity chest2 = (w.getTileEntity(x, y, z + 1));
             if (chest2 instanceof IInventory)
-                return IInventoryWrapper.createDefault(new InventoryLargeChest("", (IInventory) tile, (IInventory) chest2));
+                return new InventoryLargeChest("", (IInventory) tile, (IInventory) chest2);
         }
         if (w.getBlock(x, y, z - 1) == cblock) {
             TileEntity chest2 = (w.getTileEntity(x, y, z - 1));
             if (chest2 instanceof IInventory)
-                return IInventoryWrapper.createDefault(new InventoryLargeChest("", (IInventory) chest2, (IInventory) tile));
+                return new InventoryLargeChest("", (IInventory) chest2, (IInventory) tile);
         }
         return null;
     }
 
-    public static class JukeBoxInventory implements IInventoryEX, IInventory {
+    public static class JukeBoxInventory implements IInventory {
         private TileEntityJukebox te;
 
         public JukeBoxInventory(TileEntityJukebox tile) {
@@ -108,49 +102,6 @@ public class VannilaProvider implements IInventoryProvider {
         }
 
         @Override
-        public int getInventoryInputBegin() {
-            return 0;
-        }
-
-        @Override
-        public int getInventoryInputEnd() {
-            return 0;
-        }
-
-        @Override
-        public int getInventoryOutputBegin() {
-            return 0;
-        }
-
-        @Override
-        public int getInventoryOutputEnd() {
-            return 0;
-        }
-
-        @Override
-        public IInventory asIInventory() {
-            return this;
-        }
-
-        @Override
-        public void onTakenSuccessful(int slot, ItemStack left) {
-            te.getWorldObj().playAuxSFX(1005, te.xCoord, te.yCoord, te.zCoord, 0);
-            te.getWorldObj().playRecord(null, te.xCoord, te.yCoord, te.zCoord);
-            te.func_145828_a(null);
-            te.getWorldObj().setBlockMetadataWithNotify(te.xCoord, te.yCoord, te.zCoord, 0, 4);
-        }
-
-        @Override
-        public void onPutSuccessful(int slot, ItemStack stack) {
-            // TODO: not sure what following code does, needs checking.
-            ItemRecord record = (ItemRecord) stack.getItem();
-            record.onItemUse(stack, null, te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord, 0, 0, 0, 0);
-            // ((BlockJukebox) Blocks.jukebox).insertRecord(te.worldObj,
-            // te.xCoord, te.yCoord, te.zCoord, stack);
-            ((BlockJukebox) Blocks.jukebox).func_149925_e(te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord);
-        }
-
-        @Override
         public String getInventoryName() {
             return "";
         }
@@ -173,44 +124,11 @@ public class VannilaProvider implements IInventoryProvider {
         }
     }
 
-    public static class ItemStacksInventory implements IInventory, IInventoryEX {
+    public static class ItemStacksInventory implements IInventory {
         private EntityItem stacks[];
 
         public ItemStacksInventory(EntityItem arr[]) {
             stacks = arr;
-        }
-
-        @Override
-        public int getInventoryOutputBegin() {
-            return 0;
-        }
-
-        @Override
-        public int getInventoryOutputEnd() {
-            return stacks.length - 1;
-        }
-
-        @Override
-        public int getInventoryInputBegin() {
-            return 0;
-        }
-
-        @Override
-        public int getInventoryInputEnd() {
-            return stacks.length - 1;
-        }
-
-        @Override
-        public IInventory asIInventory() {
-            return this;
-        }
-
-        @Override
-        public void onTakenSuccessful(int slot, ItemStack left) {
-            if (left == null)
-                stacks[slot].setDead();
-            else
-                stacks[slot].setEntityItemStack(left);
         }
 
         @Override
@@ -263,11 +181,6 @@ public class VannilaProvider implements IInventoryProvider {
         @Override
         public boolean isItemValidForSlot(int i, ItemStack itemstack) {
             return true;/* any itemstack is valid */
-        }
-
-        @Override
-        public void onPutSuccessful(int slot, ItemStack stack) {
-            throw new UnsupportedOperationException("NO INPUT HERE!");
         }
 
         @Override

@@ -1,8 +1,8 @@
 package com.cdkrot.mechanics.tileentity;
 
-import com.cdkrot.mechanics.block.BlockLightSensor;
-
 import net.minecraft.tileentity.TileEntity;
+
+import com.cdkrot.mechanics.block.BlockLightSensor;
 
 public class TileEntityLightSensor extends TileEntity {
     @Override

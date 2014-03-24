@@ -1,5 +1,11 @@
 package com.cdkrot.mechanics.net;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
+
 import com.cdkrot.mechanics.api.benchmark.BenchmarkRegistry;
 import com.cdkrot.mechanics.gui.GuiBenchmark;
 import com.cdkrot.mechanics.tileentity.TileEntityBenchmark;
@@ -7,11 +13,6 @@ import com.cdkrot.mechanics.tileentity.TileEntityBenchmark;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
 
 public class PacketBenchmarkIO extends BasicPacket {
     public String text;

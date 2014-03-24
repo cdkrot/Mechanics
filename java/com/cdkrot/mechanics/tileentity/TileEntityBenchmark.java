@@ -4,9 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import cpw.mods.fml.common.FMLCommonHandler;
 
 public class TileEntityBenchmark extends TileEntity {
     /**

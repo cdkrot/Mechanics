@@ -3,15 +3,10 @@ package com.cdkrot.mechanics.tileentity;
 import java.util.List;
 import java.util.Random;
 
-import com.cdkrot.mechanics.BehaviourDispenseItemStack;
-import com.cdkrot.mechanics.Mechanics;
-import com.cdkrot.mechanics.api.allocator.AllocatorRegistry;
-import com.cdkrot.mechanics.api.allocator.IInventoryEX;
-import com.cdkrot.mechanics.api.allocator.IInventoryWrapper;
-import com.cdkrot.mechanics.util.DirectionalVecs;
-import com.cdkrot.mechanics.util.FakeIInventory;
-import com.cdkrot.mechanics.util.VecI3Base;
-
+import net.minecraft.block.BlockHopper;
+import net.minecraft.block.BlockSourceImpl;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -21,12 +16,15 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Facing;
 import net.minecraft.world.World;
-import net.minecraft.block.BlockHopper;
-import net.minecraft.block.BlockSourceImpl;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 
-public class TileEntityAllocator extends TileEntity implements IInventory, IInventoryEX {
+import com.cdkrot.mechanics.BehaviourDispenseItemStack;
+import com.cdkrot.mechanics.Mechanics;
+import com.cdkrot.mechanics.api.allocator.AllocatorRegistry;
+import com.cdkrot.mechanics.util.DirectionalVecs;
+import com.cdkrot.mechanics.util.FakeIInventory;
+import com.cdkrot.mechanics.util.VecI3Base;
+
+public class TileEntityAllocator extends TileEntity implements IInventory {
     public ItemStack allocatorFilterItems[] = new ItemStack[16];
     public FakeIInventory transfer = new FakeIInventory(1);
 
@@ -122,43 +120,10 @@ public class TileEntityAllocator extends TileEntity implements IInventory, IInve
         return getStackInSlot(s);
     }
 
-    @Override
-    public int getInventoryOutputBegin() {
-        return 0;
-    }
-
-    @Override
-    public int getInventoryOutputEnd() {
-        return 15;
-    }
-
-    @Override
-    public int getInventoryInputBegin() {
-        return 0;
-    }
-
-    @Override
-    public int getInventoryInputEnd() {
-        return 0;
-    }
-
-    @Override
-    public IInventory asIInventory() {
-        return this;
-    }
-
-    @Override
-    public void onTakenSuccessful(int slot, ItemStack left) {
-        setInventorySlotContents(slot, left);
-    }
-
-    @Override
-    public void onPutSuccessful(int slot, ItemStack stack) {
-        setInventorySlotContents(slot, stack);
-    }
-
     // Imported from BlockAllocator, it is much easier to deal with it in an
     // instance of the TileENtity, we don't have to reget an instance.
+
+    // TODO rewrite
 
     private final BehaviourDispenseItemStack dispenser = new BehaviourDispenseItemStack();
 
@@ -184,17 +149,15 @@ public class TileEntityAllocator extends TileEntity implements IInventory, IInve
     /**
      * Returns the container (IIventory) at position (x,y,z) if it exists.
      */
-    protected IInventoryEX containerAtPos(World world, int x, int y, int z) {
-        IInventoryEX inv = AllocatorRegistry.instance.getIInventoryFor(world, x, y, z);
+    protected IInventory containerAtPos(World world, int x, int y, int z) {
+        IInventory inv = AllocatorRegistry.instance.getIInventoryFor(world, x, y, z);
 
         if (inv != null)
             return inv;
 
         TileEntity tile = world.getTileEntity(x, y, z);
-        if (tile instanceof IInventoryEX)
-            return (IInventoryEX) tile;
-        else if (tile instanceof IInventory)
-            return IInventoryWrapper.createDefault((IInventory) tile);
+        if (tile instanceof IInventory)
+            return (IInventory) tile;
         else
             return null;
     }
@@ -203,15 +166,13 @@ public class TileEntityAllocator extends TileEntity implements IInventory, IInve
      * INPUT! Returns a random item (index) from the container, using the same
      * rule as the dispenser
      */
-    public int getRandomItemIndexFromContainer(IInventoryEX inventory, Random rand, ItemStack[] filter) {
+    public int getRandomItemIndexFromContainer(IInventory inventory, Random rand, ItemStack[] filter) {
         if (inventory == null)
             return -1;
-        IInventory base = inventory.asIInventory();
-        if (base == null)
-            return -1;
+        IInventory base = inventory;
         int ret = -1, j = 1;
 
-        for (int k = inventory.getInventoryInputBegin(); k <= inventory.getInventoryInputEnd(); k++) {
+        for (int k = 0; k < inventory.getSizeInventory(); k++) {
             ItemStack s = base.getStackInSlot(k);
             if ((s != null) && passesFilter(s, filter) && (rand.nextInt(j) == 0)) {
                 ret = k;
@@ -248,11 +209,11 @@ public class TileEntityAllocator extends TileEntity implements IInventory, IInve
     @SuppressWarnings({ "unchecked" })
     private boolean outputItem(World world, int x, int y, int z, VecI3Base dir, ItemStack item, Random random) {
         int xoff = x + dir.x, yoff = y + dir.y, zoff = z + dir.z;
-        IInventoryEX output = containerAtPos(world, xoff, yoff, zoff);
+        IInventory output = containerAtPos(world, xoff, yoff, zoff);
 
         if (output == null) {
             List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox(xoff, yoff, zoff, xoff + 1, yoff + 1, zoff));
-            List<IInventoryEX> invs = AllocatorRegistry.instance.getIInventoryAllInFor(entities, false);
+            List<IInventory> invs = AllocatorRegistry.instance.getIInventoryAllInFor(entities, false);
             if (invs.size() > 0)
                 output = invs.get(random.nextInt(invs.size()));
             else if (!(world.getBlock(xoff, yoff, zoff).isOpaqueCube())) {
@@ -261,13 +222,12 @@ public class TileEntityAllocator extends TileEntity implements IInventory, IInve
             } else
                 return false;
         }
-        IInventory base = output.asIInventory();
+        IInventory base = output;
 
-        for (int l = output.getInventoryOutputBegin(); l < output.getInventoryOutputEnd(); l++) {
+        for (int l = 0; l < output.getSizeInventory(); l++) {
             ItemStack baseStack = base.getStackInSlot(l);
             if (baseStack == null)
                 if (item.stackSize <= base.getInventoryStackLimit() && base.isItemValidForSlot(l, item)) {
-                    output.onPutSuccessful(l, item);
                     return true;
                 } else {
                     return false;
@@ -276,7 +236,6 @@ public class TileEntityAllocator extends TileEntity implements IInventory, IInve
                 // item is valid for stack
                 baseStack = baseStack.copy();// should copy a stack
                 baseStack.stackSize += item.stackSize;
-                output.onPutSuccessful(l, baseStack);
                 return true;
             }
         }
@@ -291,11 +250,11 @@ public class TileEntityAllocator extends TileEntity implements IInventory, IInve
     public void allocateItems(World world, int x, int y, int z, Random random) {
         VecI3Base d = DirectionalVecs.list[world.getBlockMetadata(x, y, z)];
         ItemStack[] filter = allocatorFilterItems;
-        IInventoryEX input = containerAtPos(world, x - d.x, y - d.y, z - d.z);
+        IInventory input = containerAtPos(world, x - d.x, y - d.y, z - d.z);
 
         if (input == null) {
             List<Entity> entities = (List<Entity>) world.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox((double) (x - d.x), (double) y - d.y, (double) (z - d.z), (double) (x - d.x + 1), (double) (y - d.y + 1), (float) (z - d.z + 1)));
-            List<IInventoryEX> invs = AllocatorRegistry.instance.getIInventoryAllInFor(entities, true);
+            List<IInventory> invs = AllocatorRegistry.instance.getIInventoryAllInFor(entities, true);
             // TODO: entity inventories should be caught by other way
             // [REFACTORING].
 
@@ -313,7 +272,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory, IInve
             return;
         }
 
-        IInventory iinventory = input.asIInventory();
+        IInventory iinventory = input;
         ItemStack stack = iinventory.getStackInSlot(itemIndex).copy();
 
         if (stack == null) {
@@ -324,7 +283,6 @@ public class TileEntityAllocator extends TileEntity implements IInventory, IInve
         // correct this if you need to: I assumed that our direction meta is
         // exactly like hoppers
         if (couldMoveStack(this, stack, Facing.oppositeSide[BlockHopper.getDirectionFromMetadata(getBlockMetadata())]) && outputItem(world, x, y, z, d, stack, random)) {
-            input.onTakenSuccessful(itemIndex, null);
             iinventory.setInventorySlotContents(itemIndex, stack);
         } else {
 
@@ -370,7 +328,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory, IInve
     }
 
     /**
-     * Unused until we stop with IInventoryEx, if ever.
+     * Unused until we stop with IInventory, if ever.
      */
     @SuppressWarnings("unused")
     private static ItemStack moveStackToInv(IInventory inv, ItemStack stack, int side) {

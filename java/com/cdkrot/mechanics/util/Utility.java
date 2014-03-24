@@ -1,9 +1,12 @@
 package com.cdkrot.mechanics.util;
 
-import java.util.*;
 import java.io.InputStream;
-
-import com.cdkrot.mechanics.Mechanics;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Scanner;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -11,6 +14,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+
+import com.cdkrot.mechanics.Mechanics;
 
 public class Utility {
     // a BIG utility class

@@ -1,10 +1,11 @@
 package com.cdkrot.mechanics.net;
 
+import net.minecraft.world.World;
+
 import com.cdkrot.mechanics.Mechanics;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.world.World;
 
 //Sided network code
 public class SidedNetworkStuff {

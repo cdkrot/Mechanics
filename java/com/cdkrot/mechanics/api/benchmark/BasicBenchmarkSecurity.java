@@ -1,7 +1,8 @@
 package com.cdkrot.mechanics.api.benchmark;
 
-import com.cdkrot.mechanics.tileentity.TileEntityBenchmark;
 import net.minecraft.entity.player.EntityPlayerMP;
+
+import com.cdkrot.mechanics.tileentity.TileEntityBenchmark;
 
 /**
  * Checks distance (players can't interact with Benchmarks, which are far from
