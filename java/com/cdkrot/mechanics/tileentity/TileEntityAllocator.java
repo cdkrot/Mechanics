@@ -171,8 +171,8 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
         int ret = -1, j = 1;
 
         if (inventory instanceof ISidedInventory) {
-            // FIXME: id of INPUT
-            int list[] = ((ISidedInventory) inventory).getAccessibleSlotsFromSide(0);
+			//TODO: check.
+            int list[] = ((ISidedInventory) inventory).getAccessibleSlotsFromSide(Facing.oppositeSide[getBlockMetadata()]);//taking from input face
 
             for (int k = 0; k < list.length; k++) {
                 ItemStack s = inventory.getStackInSlot(list[k]);
@@ -236,8 +236,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
                 return stack;
         }
         if (output instanceof ISidedInventory) {
-            // FIXME: ID OF OUTPUT SIDE
-            int list[] = ((ISidedInventory) output).getAccessibleSlotsFromSide(1);
+            int list[] = ((ISidedInventory) output).getAccessibleSlotsFromSide(getBlockMetadata());
             for (int i = 0; (i < list.length) && stack != null; i++)
                 stack = outputItem_do(output, list[i], stack);
         } else
