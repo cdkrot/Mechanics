@@ -20,7 +20,6 @@ import com.cdkrot.mechanics.BehaviourDispenseItemStack;
 import com.cdkrot.mechanics.Mechanics;
 import com.cdkrot.mechanics.api.allocator.AllocatorRegistry;
 import com.cdkrot.mechanics.util.DirectionalVecs;
-import com.cdkrot.mechanics.util.FakeIInventory;
 import com.cdkrot.mechanics.util.VecI3Base;
 
 public class TileEntityAllocator extends TileEntity implements IInventory {
@@ -245,11 +244,9 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
             List<IInventory> invs = AllocatorRegistry.instance.getIInventoryAllInFor(entities, false);
             if (invs.size() > 0) {
                 output = invs.get(random.nextInt(invs.size()));
-            } else if (!(world.getBlock(invxoff, invyoff, invzoff).isOpaqueCube())) {
-                // will dispense later
-                output = null;
-            } else
-				return;//face blocked with something.
+            } else if (world.getBlock(invxoff, invyoff, invzoff).isOpaqueCube()) {
+				return;
+            }
         }
         // TODO: inline
         int itemIndex = getRandomItemIndexFromContainer(input, random, front);
