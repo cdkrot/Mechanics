@@ -279,11 +279,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
             // no stack in slot
             return;
         }
-
-        // correct this if you need to: I assumed that our direction meta is
-        // exactly like hoppers
-		//TODO: check this code. Our direction meta is: meta equals to side of allocator's input.
-        if (couldMoveStack(this, stack, Facing.oppositeSide[BlockHopper.getDirectionFromMetadata(getBlockMetadata())]) && outputItem(world, x, y, z, d, stack, random)) {
+        if (couldMoveStack(this, stack, Facing.oppositeSide[getBlockMetadata()]) && outputItem(world, x, y, z, d, stack, random)) {
             iinventory.setInventorySlotContents(itemIndex, stack);
         } else {
 
@@ -397,7 +393,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
      * if inv implements ISidedInventory, the given side.
      */
     private static boolean canInsertIntoInventoryAtSlot(IInventory inv, ItemStack stack, int slot, int side) {
-        return (inv.isItemValidForSlot(slot, stack) && ( !(inv instanceof ISidedInventory) || ((ISidedInventory)inv).canInsertItem(slot, stack, side)));
+        return (inv.isItemValidForSlot(slot, stack) && (!(inv instanceof ISidedInventory) || ((ISidedInventory) inv).canInsertItem(slot, stack, side)));
     }
 
     /**
