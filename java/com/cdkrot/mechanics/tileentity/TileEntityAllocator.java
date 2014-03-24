@@ -317,7 +317,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
 
         if (stack == null)
             return;
-        if (couldMoveStack(this, stack, Facing.oppositeSide[blockMetadata]))
+        if (couldMoveStack(this, stack, Facing.oppositeSide[getBlockMetadata()]))
             iinventory.setInventorySlotContents(itemIndex, outputItem(world, x, y, z, d, stack, random));
         // TODO: the onest place transfer used, is it needed?
         transfer.setInventorySlotContents(0, null);
