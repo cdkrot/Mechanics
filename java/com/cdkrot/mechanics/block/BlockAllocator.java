@@ -114,12 +114,13 @@ public class BlockAllocator extends BlockContainer {
      * Returns the container (IIventory) at position (x,y,z) if it exists.
      */
     protected IInventoryEX containerAtPos(World world, int x, int y, int z) {
-        TileEntity tile = world.getTileEntity(x, y, z);
         IInventoryEX inv = AllocatorRegistry.instance.getIInventoryFor(world, x, y, z);
 
         if (inv != null)
             return inv;
-        else if (tile instanceof IInventoryEX)
+
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile instanceof IInventoryEX)
             return (IInventoryEX) tile;
         else if (tile instanceof IInventory)
             return IInventoryWrapper.createDefault((IInventory) tile);
