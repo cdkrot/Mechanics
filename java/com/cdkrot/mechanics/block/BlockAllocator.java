@@ -104,7 +104,7 @@ public class BlockAllocator extends BlockContainer {
                 continue;
             t = false;
             if ((item.getItem() == filter_.getItem()) && (item.getItemDamage() == filter_.getItemDamage()))
-                if (Objects.equals(item.getTagCompound(), filter_.getTagCompound()))
+                if (ItemStack.areItemStackTagsEqual(item, filter_))
                     return true;
         }
         return t;
