@@ -64,9 +64,7 @@ public class BlockFan extends BlockContainer {
 
     @Override
     public TileEntity createTileEntity(World world, int metadata) {
-        if ((metadata & 8) != 0)
             return createNewTileEntity();
-        return null;
     }
 
     @Override
@@ -80,13 +78,13 @@ public class BlockFan extends BlockContainer {
         if (world.isBlockIndirectlyGettingPowered(x, y, z)) {
             if ((meta & 8) == 0) {
                 world.setBlockMetadataWithNotify(x, y, z, meta | 8, 2);// unpow->pow
-                world.setTileEntity(x, y, z, this.createNewTileEntity());
+				((TileEntityFanON)world.getTileEntity(x,y,z)).disabled=false;
             }
             return true;
         } else {
             if ((meta & 8) != 0) {
                 world.setBlockMetadataWithNotify(x, y, z, meta & 7, 2);
-                world.removeTileEntity(x, y, z);// pow->unpow
+				((TileEntityFanON)world.getTileEntity(x,y,z)).disabled=true;// pow->unpow
             }
             return false;
         }
