@@ -38,10 +38,7 @@ public class Utility {
 
     // Get side opposite to i
     public static int getOppositeSide(int i) {
-        if(0 <= i && i <= 5) {
-            return Facing.oppositeSide[i];
-        }
-        return 0;// illegal argument
+        return Facing.oppositeSide[i];
     }
 
     /**
