@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Facing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -37,19 +38,8 @@ public class Utility {
 
     // Get side opposite to i
     public static int getOppositeSide(int i) {
-        switch (i) {
-        case 0:
-            return 1; // UP: DOWN
-        case 1:
-            return 0; // DOWN: UP
-        case 2:
-            return 3; // NORTH (Z_NEG): SOUTH (Z_POS)
-        case 3:
-            return 2; // SOUTH (Z_POS): NORTH (Z_NEG)
-        case 4:
-            return 5; // EAST (X_NEG): WEST (X_POS)
-        case 5:
-            return 4; // WEST (X_POS): EAST (X_NEG)
+        if(0 <= i && i <= 5) {
+            return Facing.oppositeSide[i];
         }
         return 0;// illegal argument
     }
