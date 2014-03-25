@@ -22,7 +22,7 @@ import com.cdkrot.mechanics.api.allocator.AllocatorRegistry;
 import com.cdkrot.mechanics.util.DirectionalVecs;
 import com.cdkrot.mechanics.util.VecI3Base;
 
-public class TileEntityAllocator extends TileEntity implements IInventory {
+public class TileEntityAllocator extends TileEntity implements IInventory, ISidedInventory {
     public ItemStack allocatorFilterItems[] = new ItemStack[16];
 
     @Override
@@ -355,4 +355,20 @@ public class TileEntityAllocator extends TileEntity implements IInventory {
         return a.getItem() == b.getItem() && a.getItemDamage() == b.getItemDamage() && a.stackSize <= a.getMaxStackSize() && ItemStack.areItemStackTagsEqual(a, b);
     }
 
+	//==== ISidedInventory
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(int i) {
+		return new int[0];
+	}
+
+	@Override
+	public boolean canInsertItem(int i, ItemStack itemStack, int i2) {
+		return false;
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemStack, int i2) {
+		return false;
+	}
 }
