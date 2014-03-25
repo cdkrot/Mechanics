@@ -103,7 +103,7 @@ public class BlockAllocator extends BlockContainer {
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase e, ItemStack stack) {
         int side = Utility.getMetadataForBlockAnyPlaced(x, y, z, e);
-        world.setBlockMetadataWithNotify(x, y, z, side, 4);
+        world.setBlockMetadataWithNotify(x, y, z, side, 2);
     }
 
     @Override
