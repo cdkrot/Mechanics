@@ -36,11 +36,6 @@ public class Utility {
         }
     }
 
-    // Get side opposite to i
-    public static int getOppositeSide(int i) {
-        return Facing.oppositeSide[i];
-    }
-
     /**
      * This will return suggested metadata(Side) for block which placed on side
      */

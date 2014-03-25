@@ -13,6 +13,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Facing;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -150,21 +151,21 @@ public class BlockAllocator extends BlockContainer {
         if (meta == 0)// facing down
                 if (side == meta)
                     return icons[5];// out
-                else if (side == Utility.getOppositeSide(meta))
+                else if (side == Facing.oppositeSide[meta])
                     return icons[4];// in
                 else
                     return icons[7];// facedown
         if (meta == 1)
             if (side == meta)
                 return icons[4];// in
-            else if (side == Utility.getOppositeSide(meta))
+            else if (side == Facing.oppositeSide[meta])
                 return icons[5];// out
             else
                 return icons[6];// faceup
         // ===meta!=0; meta!=1===//
         if (side == meta)
             return icons[3];// out
-        else if (side == Utility.getOppositeSide(meta))
+        else if (side == Facing.oppositeSide[meta])
             return icons[2];// in
         else if (side == 0 || side == 1)
             return this.blockIcon;// topbottom
