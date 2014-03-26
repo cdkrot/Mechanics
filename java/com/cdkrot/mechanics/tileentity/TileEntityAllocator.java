@@ -245,7 +245,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory, ISide
             if (invs.size() > 0) {
                 output = invs.get(random.nextInt(invs.size()));
             } else if (world.getBlock(invxoff, invyoff, invzoff).isOpaqueCube()) {
-				return;
+                return;
             }
         }
         // TODO: inline
@@ -355,20 +355,20 @@ public class TileEntityAllocator extends TileEntity implements IInventory, ISide
         return a.getItem() == b.getItem() && a.getItemDamage() == b.getItemDamage() && a.stackSize <= a.getMaxStackSize() && ItemStack.areItemStackTagsEqual(a, b);
     }
 
-	//==== ISidedInventory
+    // ==== ISidedInventory
 
-	@Override
-	public int[] getAccessibleSlotsFromSide(int i) {
-		return new int[0];
-	}
+    @Override
+    public int[] getAccessibleSlotsFromSide(int i) {
+        return new int[0];
+    }
 
-	@Override
-	public boolean canInsertItem(int i, ItemStack itemStack, int i2) {
-		return false;
-	}
+    @Override
+    public boolean canInsertItem(int i, ItemStack itemStack, int i2) {
+        return false;
+    }
 
-	@Override
-	public boolean canExtractItem(int i, ItemStack itemStack, int i2) {
-		return false;
-	}
+    @Override
+    public boolean canExtractItem(int i, ItemStack itemStack, int i2) {
+        return false;
+    }
 }
