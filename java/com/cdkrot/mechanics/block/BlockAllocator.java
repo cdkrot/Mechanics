@@ -2,28 +2,22 @@ package com.cdkrot.mechanics.block;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Facing;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
+import net.minecraft.util.*;
+import net.minecraft.world.*;
 
 import com.cdkrot.mechanics.Mechanics;
 import com.cdkrot.mechanics.tileentity.TileEntityAllocator;
 import com.cdkrot.mechanics.util.Utility;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.*;
 
 public class BlockAllocator extends BlockContainer {
 
@@ -44,22 +38,7 @@ public class BlockAllocator extends BlockContainer {
 
     @Override
     public void breakBlock(World world, int i, int j, int k, Block par5, int par6) {
-        TileEntityAllocator allocator = (TileEntityAllocator) world.getTileEntity(i, j, k);
-        if (allocator != null) {
-            ItemStack itemStack = allocator.getStackInSlot(0);
-            if (itemStack != null) {
-                EntityItem entityItem = new EntityItem(world, i, j, k, new ItemStack(itemStack.getItem(), 1, itemStack.getItemDamage()));
-
-                if (itemStack.hasTagCompound())
-                    entityItem.getEntityItem().setTagCompound((NBTTagCompound) itemStack.getTagCompound().copy());
-
-                final double var15 = 0.05;
-                entityItem.motionX = world.rand.nextGaussian() * var15;
-                entityItem.motionY = world.rand.nextGaussian() * var15 + 0.2F;
-                entityItem.motionZ = world.rand.nextGaussian() * var15;
-                world.spawnEntityInWorld(entityItem);
-            }
-        }
+        // drop nothing
         super.breakBlock(world, i, j, k, par5, par6);
     }
 
@@ -149,12 +128,12 @@ public class BlockAllocator extends BlockContainer {
     @SideOnly(Side.CLIENT)
     public IIcon getIconForTerrain(int side, int meta) {
         if (meta == 0)// facing down
-                if (side == meta)
-                    return icons[5];// out
-                else if (side == Facing.oppositeSide[meta])
-                    return icons[4];// in
-                else
-                    return icons[7];// facedown
+            if (side == meta)
+                return icons[5];// out
+            else if (side == Facing.oppositeSide[meta])
+                return icons[4];// in
+            else
+                return icons[7];// facedown
         if (meta == 1)
             if (side == meta)
                 return icons[4];// in
