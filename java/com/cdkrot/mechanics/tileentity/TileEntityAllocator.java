@@ -218,6 +218,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory, ISide
     @SuppressWarnings("unchecked")
     // TODO: remove the need for suppression
     public void allocateItems(World world, int x, int y, int z, Random random) {
+        // NB: front is the out, back is the in
         int front = getBlockMetadata(), back = Facing.oppositeSide[front];
         VecI3Base d = DirectionalVecs.list[front];
         int xoff = x - d.x, yoff = y - d.y, zoff = z - d.z;
@@ -234,7 +235,6 @@ public class TileEntityAllocator extends TileEntity implements IInventory, ISide
             if (invs.size() > 0) {
                 input = invs.get(random.nextInt(invs.size()));
             } else {
-                Mechanics.modLogger.info("no input @ " + xoff + " " + yoff + " " + zoff);
                 return;// no input.
             }
         }
@@ -254,7 +254,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory, ISide
         if (itemIndex < 0)
             return; // no item
         ItemStack stack = input.getStackInSlot(itemIndex).copy();
-        if (!canExtractFromInventoryAtSlot(input, stack, itemIndex, back)) {
+        if (!canExtractFromInventoryAtSlot(input, stack, itemIndex, front)) {
             // illegal
             return;
         }
