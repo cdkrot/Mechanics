@@ -162,11 +162,9 @@ public class TileEntityAllocator extends TileEntity implements IInventory, ISide
      * INPUT! Returns an item (index) from the container, using the same rule as
      * the dispenser
      */
-    private int getItemIndexFromContainer(IInventory inventory, Random rand, int side) {
+    private int getItemIndexFromContainer(IInventory inventory, int side) {
         if (inventory == null)
             return -1;
-
-        int ret = -1;
 
         if (inventory instanceof ISidedInventory) {
             // TODO: check.
@@ -175,20 +173,18 @@ public class TileEntityAllocator extends TileEntity implements IInventory, ISide
             for (int k = 0; k < list.length; k++) {
                 ItemStack s = inventory.getStackInSlot(list[k]);
                 if ((s != null) && passesFilter(s)) {
-                    ret = list[k];
-                    break;
+                    return list[k];
                 }
             }
         } else {
             for (int k = 0; k < inventory.getSizeInventory(); k++) {
                 ItemStack s = inventory.getStackInSlot(k);
                 if ((s != null) && passesFilter(s)) {
-                    ret = k;
-                    break;
+                    return k;
                 }
             }
         }
-        return ret;
+        return -1;
     }
 
     /**
@@ -249,7 +245,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory, ISide
             }
         }
         // TODO: inline
-        int itemIndex = getItemIndexFromContainer(input, random, front);
+        int itemIndex = getItemIndexFromContainer(input, front);
 
         if (itemIndex < 0)
             return; // no item
