@@ -4,7 +4,8 @@ A mechanical mod for Minecraft!
 
 ### Contibutors
 * cdkrot: main contibutor
-* T145: will not be committing to this repository as frequently, as he has primarily turned his attention to developing Magistics: http://www.minecraftforum.net/topic/2424249-/
+* T145: will not be committing to this repository as frequently, as he has primarily turned his attention to developing [Magistics](http://www.minecraftforum.net/topic/2424249-/).
+* kenzierocks: Secondary contributor, works on [Crystalix](http://www.minecraftforum.net/topic/2496310-) as well.
 * Want to become a contibutor? Contact me (cdkrot)!
 
 ## Latest News
