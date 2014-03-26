@@ -159,14 +159,14 @@ public class TileEntityAllocator extends TileEntity implements IInventory, ISide
     }
 
     /**
-     * INPUT! Returns a random item (index) from the container, using the same
-     * rule as the dispenser
+     * INPUT! Returns an item (index) from the container, using the same rule as
+     * the dispenser
      */
-    private int getRandomItemIndexFromContainer(IInventory inventory, Random rand, int side) {
+    private int getItemIndexFromContainer(IInventory inventory, Random rand, int side) {
         if (inventory == null)
             return -1;
 
-        int ret = -1, j = 1;
+        int ret = -1;
 
         if (inventory instanceof ISidedInventory) {
             // TODO: check.
@@ -174,17 +174,17 @@ public class TileEntityAllocator extends TileEntity implements IInventory, ISide
 
             for (int k = 0; k < list.length; k++) {
                 ItemStack s = inventory.getStackInSlot(list[k]);
-                if ((s != null) && passesFilter(s) && rand.nextInt(j) == 0) {
+                if ((s != null) && passesFilter(s)) {
                     ret = list[k];
-                    j++;
+                    break;
                 }
             }
         } else {
             for (int k = 0; k < inventory.getSizeInventory(); k++) {
                 ItemStack s = inventory.getStackInSlot(k);
-                if ((s != null) && passesFilter(s) && (rand.nextInt(j) == 0)) {
+                if ((s != null) && passesFilter(s)) {
                     ret = k;
-                    j++;
+                    break;
                 }
             }
         }
@@ -249,7 +249,7 @@ public class TileEntityAllocator extends TileEntity implements IInventory, ISide
             }
         }
         // TODO: inline
-        int itemIndex = getRandomItemIndexFromContainer(input, random, front);
+        int itemIndex = getItemIndexFromContainer(input, random, front);
 
         if (itemIndex < 0)
             return; // no item
