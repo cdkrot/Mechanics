@@ -1,5 +1,7 @@
 package com.cdkrot.mechanics;
 
+import com.cdkrot.mechanics.net.PacketBenchmarkIO;
+import com.cdkrot.mechanics.net.PacketRequestBenchmarkText;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -95,8 +97,12 @@ public class Mechanics {
         TileEntity.addMapping(TileEntityLightSensor.class, "pfaeffs_lsensor");
         TileEntity.addMapping(TileEntityFanON.class, "cdkrot_fan");
         TileEntity.addMapping(TileEntityBenchmark.class, "mechanics::benchmark");
+
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+
         networkHandler.initalise();
+        networkHandler.registerPacket(PacketBenchmarkIO.class);
+        networkHandler.registerPacket(PacketRequestBenchmarkText.class);
     }
 
     @EventHandler

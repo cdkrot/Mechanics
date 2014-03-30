@@ -1,5 +1,6 @@
 package com.cdkrot.mechanics.net;
 
+import com.cdkrot.mechanics.Mechanics;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;

@@ -33,7 +33,6 @@ public class PacketRequestBenchmarkText extends BasicPacket {
     }
 
     @Override
-    @SideOnly(Side.SERVER)
     public void handleServerSide(EntityPlayerMP player) {
         TileEntityBenchmark tile = (TileEntityBenchmark) MinecraftServer.getServer().worldServers[pos.worldid].getTileEntity(pos.x, pos.y, pos.z);
         if (BenchmarkRegistry.instance.requestEditor(tile, player)) {

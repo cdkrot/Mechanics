@@ -4,8 +4,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -17,6 +20,8 @@ import com.cdkrot.mechanics.tileentity.TileEntityBenchmark;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class BlockBenchmark extends BlockContainer {
     @SideOnly(Side.CLIENT)
@@ -68,7 +73,9 @@ public class BlockBenchmark extends BlockContainer {
 
             if (!BenchmarkRegistry.instance.onBenchmark(tile, string))
                 return;
-
+            List<ICommandSender> list = (List<ICommandSender>) world.getEntitiesWithinAABB(ICommandSender.class, AxisAlignedBB.getBoundingBox(x - radius, y - radius, z - radius, x + radius, y + radius, z + radius));
+            for (ICommandSender sender: list)
+                sender.addChatMessage(new ChatComponentText(string));
             world.setBlockMetadataWithNotify(x, y, z, 1, 4);
         } else
             world.setBlockMetadataWithNotify(x, y, z, 0, 4);

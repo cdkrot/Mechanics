@@ -51,6 +51,5 @@ public abstract class BasicPacket {
      * @param player
      *            the player reference
      */
-    @SideOnly(Side.SERVER)
     public abstract void handleServerSide(EntityPlayerMP player);
 }
