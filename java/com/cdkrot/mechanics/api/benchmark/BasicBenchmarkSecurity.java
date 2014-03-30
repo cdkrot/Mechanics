@@ -23,7 +23,7 @@ public class BasicBenchmarkSecurity implements INetworkBenchmarkProcessor {
     @Override
     public boolean requestEditor(TileEntityBenchmark tile, EntityPlayerMP p) {
         // 16 blocks maximum.
-        return p.posX * p.posX + p.posY * p.posY + p.posZ * p.posZ <= 256;
+        return p.posX * p.posX + p.posY * p.posY + p.posZ * p.posZ > 256;
     }
 
 }

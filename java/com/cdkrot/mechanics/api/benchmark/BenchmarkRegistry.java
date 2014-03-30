@@ -38,7 +38,7 @@ public class BenchmarkRegistry implements INetworkBenchmarkProcessor {
         if (processors != null)
             for (INetworkBenchmarkProcessor proc : processors)
                 if (!proc.onBenchmark(tile, echotext)) {
-                    Mechanics.modLogger.warn("[BenchmarkSecurity] Security addon %s canceled onBenchmark event, tile=%s, echotext=%s", proc.toString(), echotext);
+                    Mechanics.modLogger.warn(String.format("[BenchmarkSecurity] Security addon %s canceled onBenchmark event, tile=%s, echotext=%s", proc.toString(), tile.toString(), echotext));
                     return false;
                 }
         return true;
@@ -49,7 +49,7 @@ public class BenchmarkRegistry implements INetworkBenchmarkProcessor {
         if (processors != null)
             for (INetworkBenchmarkProcessor proc : processors)
                 if (!proc.requestEditor(tile, p)) {
-                    Mechanics.modLogger.warn("[BenchmarkSecurity] Security addon %s canceled RequestEditor event, tile=%s, player=%s", proc.toString(), p.toString());
+                    Mechanics.modLogger.warn(String.format("[BenchmarkSecurity] Security addon %s canceled RequestEditor event, tile=%s, player=%s", proc.toString(), tile.toString(), p.toString()));
                     return false;
                 }
         return true;
